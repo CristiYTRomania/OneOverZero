@@ -32,7 +32,9 @@ long long factorial(int n)                        /// Functia care returneaza fa
 }                                                 /// Returns (long long)(1/0.0) if we want to return a factorial of a negative number or a number that generates overflow
 struct FormaStiintifica                           /// Structura reprezinta forma stiintifica a unui numar real (x*10^y), cu coeficientul si exponentul numere intregi de tip long long
 {                                                 /// This structure returns scientific form of a real number  (x*10^y), with coefficient and exponent which are long long integers
-    long long coeficient,exponent,numitor,shiftari;                  /// numaratorul = coeficient
+    long long coeficient,exponent,shiftari;       /// numaratorul = coeficient
+    unsigned long long numitor;
+    complex<double> x1,x2;
 };
 FormaStiintifica float_to_int(long double f)      /// Returneaza forma stiintifica a unui numar real | Return scientific form of a real number
 {
@@ -67,6 +69,7 @@ FormaStiintifica div_int(long long x,long long y) /// In aceasta functie vrem sa
     FormaStiintifica n1;
     long long n,p,ct;
     n1.exponent=0;
+    bool ok=0;
     if(y==0)
     {
         n1.coeficient=x;
@@ -74,6 +77,26 @@ FormaStiintifica div_int(long long x,long long y) /// In aceasta functie vrem sa
     }
     else
     {
+        if(x<0 && y<0)
+        {
+            x=-x;
+            y=-y;
+        }
+        else if(x<0)
+        {
+            x=-x;
+            ok=1;
+        }
+        else if(y<0)
+        {
+            y=-y;
+            ok=1;
+        }
+        while(x<=1000*1000*10&&y<=1000*1000*10&&x>=-1000*1000*10&&y>=-1000*1000*10)
+        {
+            x*=10;
+            y*=10;
+        }
         for(long long i=2; i<=x or i<=y; i++)
         {
             while(y%i==0)
@@ -102,6 +125,8 @@ FormaStiintifica div_int(long long x,long long y) /// In aceasta functie vrem sa
             n1.exponent++;
             x=x/10;
         }
+        if(ok==1)
+            x=-x;
         n1.coeficient=x;
     }
     return n1;
@@ -134,9 +159,11 @@ void show_floated_int(FormaStiintifica n)         /// Afiseaza forma stiinfica a
     }
     else if(n.exponent<0)
     {
+        if(n.coeficient<0)
+            cout<<'-';
         for(long long i=-1; i>=n.exponent; i--)
             p=p*10;
-        cout<<n.coeficient/p<<'.';
+        cout<<abs(n.coeficient/p)<<'.';
         x=n.coeficient%p;
         while(x!=0)
         {
@@ -295,15 +322,63 @@ double frecventa(string c, long long n)           /// Functia care returneaza fr
     else if(c=="A#"||c=="a#"||c=="Bb"||c=="bb")f=3729*p;
     return f;
 }
+void afisare_memorie(unsigned long long n)
+{
+    if       (n<1024)
+        cout<<n<<" bytes | ";
+    else if  (n<1024*1024)
+        cout<<n/1024.0<<" KiB | ";
+    else if  (n<1024*1024*1024)
+        cout<<n/1024.0/1024.0<<" MiB | ";
+    else if  (n<(long long)1024*1024*1024*1024)
+        cout<<n/1024.0/1024.0/1024.0<<" GiB | ";
+    else
+        cout<<n/1024.0/1024.0/1024.0/1024.0<<" TiB | ";
+}
+FormaStiintifica ecuatie(double a,double b,double c)
+{
+    FormaStiintifica solutie;
+    if(a!=0)
+    {
+        complex<double> delta=b*b-4*a*c;
+        delta=sqrt(delta);
+        solutie.x1=(-b+delta)/(2*a);
+        solutie.x2=(-b-delta)/(2*a);
+    }
+    else if(b!=0)
+        solutie.x1=solutie.x2=-c/b;
+    else
+        solutie.x1=solutie.x2=0/0.0;
+    return solutie;
+}
 int main()
 {
     bool ok=1;                                    /// Daca ok este 1, programul va rula, daca ok este 0, programul se va incheia | If ok=1, the program will run. If not, the program will stop
     string s;
     cout<<"Type 'help' for instructions! \n";
     cout<<"Introduceti 'ajutor' pentru instructiuni! \n";
+    ifstream fin("memory.txt");
+    int partitii;
+    fin>>partitii;
+    string nume_partitie[partitii];
+    unsigned long long mem_totala[partitii],mem_libera[partitii],MEM_TOTALA=0,MEM_LIBERA=0;
+    for(int i=0;i<partitii;i++)
+    {
+        fin>>nume_partitie[i]>>mem_totala[i]>>mem_libera[i];
+        MEM_TOTALA+=mem_totala[i];
+        MEM_LIBERA+=mem_libera[i];
+    }
+    for(int i=0;i<partitii-1;i++)
+        for(int j=i+1;j<partitii;j++)
+            if(mem_libera[i]<mem_libera[j])
+            {
+                swap(mem_libera[i],mem_libera[j]);
+                swap(mem_totala[i],mem_totala[j]);
+                swap(nume_partitie[i],nume_partitie[j]);
+            }
     while(ok==1)
     {
-        cout<<endl<<"Meniu principal | Main: ";            /// Suntem in meniul principal           | We are in the main menu
+        cout<<fixed<<endl<<"Meniu principal | Main: ";     /// Suntem in meniul principal           | We are in the main menu
         cin>>s;
         int nr_caractere=s.length();                       /// Numarul de caractere al comenzii citite de la tastatura | The string length command of the keyboard input
         for(int i=0;i<nr_caractere;i++)                    /// Transformam orice litera mare din comanda in litera mica pentru ca comanda sa nu fie case sensitive
@@ -321,7 +396,7 @@ int main()
             unsigned int n;
             cin>>x>>n;
             double v[n+1];
-            for(unsigned int i=n;i>=0;i++)
+            for(unsigned int i=n;i<=n;i--)
                 cin>>v[i];
             cout<<f(x,n,v)<<endl;
         }
@@ -371,8 +446,8 @@ int main()
             cout<<"The value stored in float              is: "        <<real_float      <<" | "<<sizeof(real_float)      <<" bytes"<<endl;
             cout<<"The value stored in double             is: "        <<real_double     <<" | "<<sizeof(real_double)     <<" bytes"<<endl;
             cout<<"The value stored in long double        is: "        <<real_long_double<<" | "<<sizeof(real_long_double)<<" bytes"<<endl;
-            cout<<"The difference between the values stored in double      and float  is: " <<real_double-real_float            <<endl;
-            cout<<"The difference between the values stored in long double and double is: " <<real_long_double-real_double      <<endl;
+            cout<<"The difference between the values stored in double      and float  is: "     <<real_double-real_float            <<endl;
+            cout<<"The difference between the values stored in long double and double is: "     <<real_long_double-real_double      <<endl;
             cout<<"The value stored in float       represented in scientific notation is: ";
             show_floated_int(float_to_int(real_float));
             cout<<"The value stored in double      represented in scientific notation is: ";
@@ -405,19 +480,18 @@ int main()
             cout    <<"Valoarea stocata in long double        este: "     <<real_long_double<<" | "<<sizeof(real_long_double)<<" bytes"<<endl;
             cout    <<"Diferenta dintre valorile stocate in double, respectiv float, este:       " <<real_double-real_float            <<endl;
             cout    <<"Diferenta dintre valorile stocate in long double, respectiv double, este: " <<real_long_double-real_double      <<endl;
-            cout<<"Valoarea stocata in float         reprezentata in forma stiintifica este: "; /// TO DO: identare + translate + comentarii + github
+            cout<<"Valoarea stocata in float         reprezentata in forma stiintifica este: ";
             show_floated_int(float_to_int(real_float));
-            cout<<"Valoarea stocata in double        reprezentata in forma stiintifica este: "; /// int/int, complex, hexa si cout fixed setprecision, de scris definitii int_max,long_max etc.
+            cout<<"Valoarea stocata in double        reprezentata in forma stiintifica este: ";
             show_floated_int(float_to_int(real_double));
             cout<<"Valoarea stocata in long double   reprezentata in forma stiintifica este: ";
             show_floated_int(float_to_int(real_long_double));
         }
-        else if(s=="div")
+        else if(s=="div"||s=="division"||s=="impartire")
         {
             FormaStiintifica n;
-            long long x,y;
-            cin>>x>>y;
-            n=div_int(x,y);                                /// Apelez functia care returneaza forma stiintifica a rezultatului real al lui x/y
+            cin>>n.coeficient>>n.numitor;
+            n=div_int(n.coeficient,n.numitor);             /// Apelez functia care returneaza forma stiintifica a rezultatului real al lui x/y
                                                            /// Calling the funtion which returns scientific form of real result of x/y
             show_floated_int(n);                           /// Afiseaza forma stiinfica a numarului real: coeficient  * 10^exponent
         }                                                  /// Shows the scientific form of  real number: coefficient * 10^exponent
@@ -433,13 +507,64 @@ int main()
             n=shift_bits(n,p);                             /// Here we want to shift the number n with p bits to the right, which has been shifted before with p2 bits tot the right
             cout<<n.coeficient<<' '<<n.shiftari<<endl;
         }
-    } /// TO DO: calculator cu char, int, float, double, real, intreg etc., de forma a+b, cu a si b sa fie char, functia eval() si sa verific proiectul in codeblocks 20.03, programiz si onlinegdb
-    /**
-    baze de date in fisiere                           -> prima data o sa facem in fisiere text
-    intreg/int 5                                      -> citim textul "intreg" si dupa aceea numarul intreg 5
-    ecuatii grad 1 si 2                               -> de facut ecuatii de gradele 1 si 2 (coeficientii numere reale si solutiile numere complexe)
-    **/
-
-
+        else if(s=="ecuatie")
+        {
+            double a,b,c;
+            cin>>a>>b>>c;
+            FormaStiintifica solutie=ecuatie(a,b,c);
+            cout<<solutie.x1<<' '<<solutie.x2;
+        }
+        else if(s=="calculator"||s=="calc")
+        {
+            string a,b;
+            char operator_;
+            cin>>a>>operator_>>b;
+            if(operator_=='+')
+            {
+                cout<<stold(a)+stold(b);
+            }
+            else if(operator_=='-')
+            {
+                cout<<stold(a)-stold(b);
+            }
+            else if(operator_=='*')
+            {
+                cout<<stold(a)*stold(b);
+            }
+            else if(operator_=='/')
+            {
+                cout<<stold(a)/stold(b);
+            }
+            else if(operator_=='%')
+            {
+                cout<<stoll(a)%stoll(b);
+            }
+        }
+        else if(s=="hexadecimal"||s=="hex"||s=="hexa")
+        {
+            long long n;
+            double d;
+            cin>>n>>d;
+            cout<<hex<<n<<' '<<d;
+        }
+        else
+        {
+            cout<<endl<<"Nume partitie | Memorie totala | Memorie libera | Memorie utilizata | Procent utilizat"<<endl<<endl;
+            for(int i=0;i<partitii;i++)
+            {
+                unsigned long long mem_utilizata=mem_totala[i]-mem_libera[i];
+                cout<<nume_partitie[i]<<" | ";
+                afisare_memorie(mem_totala[i]);
+                afisare_memorie(mem_libera[i]);
+                afisare_memorie(mem_utilizata);
+                cout<<(long double)mem_utilizata/mem_totala[i]<<'%'<<endl;
+            }
+            cout<<endl<<"Total______ | ";
+            afisare_memorie(MEM_TOTALA);
+            afisare_memorie(MEM_LIBERA);
+            afisare_memorie(MEM_TOTALA-MEM_LIBERA);
+            cout<<(long double)(MEM_TOTALA-MEM_LIBERA)/MEM_TOTALA<<'%'<<endl;
+        }
+    }
     return 0; /// Se va inchide programul si se va returna valoarea 0 | The program will close and the value returned will be 0
 }
