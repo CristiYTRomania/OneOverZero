@@ -7,8 +7,8 @@
 #include<cmath>                                                      /// Pentru functii matematice precum functia putere si modulul unui numar | For math functions like power and module functions
 #include<complex>                                                                                                   /// Numere complexe cu coeficienti reali | Complex numbers with real coefficients
 #include<fstream>                                                                                                   /// Pentru a citi din fisiere si a scrie in ele | To read and write files
-#define pi 3.141592653589793238462643383279502884197                                                                /// Definim constanta pi   | Define constant pi
-#define e 2.7182818284590452353602874713526624977572470936999595749669676277240766303535475945713821785251664274    /// Definim constanta e    | Define constant e
+#define pi "3.141592653589793238462643383279502884197"                                                                /// Definim constanta pi | Define constant pi
+#define e  "2.7182818284590452353602874713526624977572470936999595749669676277240766303535475945713821785251664274"   /// Definim constanta e  | Define constant e
 using namespace std;                              /// Pentru cin si cout | For cin and cout -> C++
 long long FactorialVector[22];                    /// Vectorul care stocheaza factorialul fiecarui numar natural mai mic sau egal cu 20 (de la 0 la 20 sunt 21 de elemente)
                                                   /// The vector which store factorial of each natural number between 0 and 20 (in total are 21 elements)
@@ -32,9 +32,9 @@ long long factorial(int n)                        /// Functia care returneaza fa
 }                                                 /// Returns (long long)(1/0.0) if we want to return a factorial of a negative number or a number that generates overflow
 struct FormaStiintifica                           /// Structura reprezinta forma stiintifica a unui numar real (x*10^y), cu coeficientul si exponentul numere intregi de tip long long
 {                                                 /// This structure returns scientific form of a real number  (x*10^y), with coefficient and exponent which are long long integers
-    long long coeficient,exponent,shiftari;       /// numaratorul = coeficient
-    unsigned long long numitor;
-    complex<double> x1,x2;
+    long long coeficient,exponent;                /// numaratorul = coeficient
+    long long numitor;
+    complex<long double> x1,x2;
 };
 FormaStiintifica float_to_int(long double f)      /// Returneaza forma stiintifica a unui numar real | Return scientific form of a real number
 {
@@ -51,12 +51,20 @@ FormaStiintifica float_to_int(long double f)      /// Returneaza forma stiintifi
         n.exponent=LLONG_MAX-1;
         n.coeficient=1;
     }
-    while(f>LLONG_MAX||f<LLONG_MIN)
+    else if(f!=f)
     {
-        f/=10;
-        n.exponent++;
+        n.exponent=LLONG_MAX;
+        n.coeficient=0;
     }
-    n.coeficient=f;
+    else
+    {
+        while(f>LLONG_MAX||f<LLONG_MIN)
+        {
+            f/=10;
+            n.exponent++;
+        }
+        n.coeficient=f;
+    }
     while(n.coeficient%10==0 && n.coeficient!=0)  /// Daca numarul n e de forma 100*10^2, structura repetitiva va incerca sa faca sa fie de forma 1*10^4
     {                                             /// If n number is like 100*10^2, the repetitive structure tries to be like 1*10^4
         n.exponent++;
@@ -64,91 +72,24 @@ FormaStiintifica float_to_int(long double f)      /// Returneaza forma stiintifi
     }
     return n;
 }
-FormaStiintifica div_int(long long x,long long y) /// In aceasta functie vrem sa returnam forma stiintifica a rezultatului real al lui x/y | This function returns scientific form of real result x/y
-{
-    FormaStiintifica n1;
-    long long n,p,ct;
-    n1.exponent=0;
-    bool ok=0;
-    if(y==0)
-    {
-        n1.coeficient=x;
-        n1.exponent=LLONG_MAX;
-    }
-    else
-    {
-        if(x<0 && y<0)
-        {
-            x=-x;
-            y=-y;
-        }
-        else if(x<0)
-        {
-            x=-x;
-            ok=1;
-        }
-        else if(y<0)
-        {
-            y=-y;
-            ok=1;
-        }
-        while(x<=1000*1000*10&&y<=1000*1000*10&&x>=-1000*1000*10&&y>=-1000*1000*10)
-        {
-            x*=10;
-            y*=10;
-        }
-        for(long long i=2; i<=x or i<=y; i++)
-        {
-            while(y%i==0)
-            {
-                if(x%i==0)
-                    x=x/i;
-                else
-                {
-                    p=1;
-                    n=i;
-                    ct=0;
-                    while(n!=0)
-                    {
-                        p=p*10;
-                        ct++;
-                        n=n/10;
-                    }
-                    x=x*p/i;
-                    n1.exponent-=ct;
-                }
-                y=y/i;
-            }
-        }
-        while(x%10==0 and x!=0)
-        {
-            n1.exponent++;
-            x=x/10;
-        }
-        if(ok==1)
-            x=-x;
-        n1.coeficient=x;
-    }
-    return n1;
-}
-void show_floated_int(FormaStiintifica n)         /// Afiseaza forma stiinfica a numarului real   | Shows scientific form of real number
+void show_floated_int(FormaStiintifica n)         /// Afiseaza forma stiinfica a numarului real      | Shows scientific form of real number
 {
     long long p=1,x,ct=0;
-    if(n.exponent==LLONG_MAX)                     /// In loc de x*10^y este x impartit la 0       | Instead of x*10^y is x over 0
+    if(n.exponent==LLONG_MAX)                     /// In loc de x*10^y este x impartit la 0          | Instead of x*10^y is x over 0
     {
         if(n.coeficient==0)
             cout<<0/0.0;
         else
             cout<<"cinf";
     }
-    else if(n.exponent==LLONG_MAX-1)              /// In loc de x*10^y este x inmultit cu infinit | Instead of x*10^y is x times infinity
+    else if(n.exponent==LLONG_MAX-1)              /// In loc de x*10^y este x inmultit cu infinit    | Instead of x*10^y is x times infinity
     {
         if(n.coeficient==0)
             cout<<0;
         else
             cout<<n.coeficient/0.0;
     }
-    else if(n.exponent==LLONG_MIN)                /// In loc de x*10^y este x impartit la infinit | Instead of x*10^y is x over infinity
+    else if(n.exponent==LLONG_MIN)                /// In loc de x*10^y este x impartit la infinit    | Instead of x*10^y is x over infinity
     {
         if(n.coeficient==0)
             cout<<0;
@@ -201,25 +142,28 @@ void ascii()                                      /// Afiseaza toate caracterele
     for(int i=284;i<=511;i++)
         cout<<"char("<<i<<") = "<<char(i)<<"\n";
 }
-FormaStiintifica shift_bits(FormaStiintifica n, long long p)  /// Aceasta functie va shifta bitii unui numar in mod circular | This function will shift the bits in circular way
+long long shift_bits(long long n, long long p)    /// Aceasta functie va shifta bitii unui numar in mod circular | This function will shift the bits in circular way
 {
     bool b;
-    n.shiftari+=p;
+    while(p>0)
+        p-=64;
+    while(p<0)
+        p+=64;
     while(p>0)                                    /// Shiftare circulara la dreapta cu un pas | Circular shifting to the right with one step
     {
-        b=n.coeficient%2;
-        n.coeficient=n.coeficient>>1;
+        b=n%2;
+        n=n>>1;
         if(b==0)
-            n.coeficient=n.coeficient & (((long long)1<<63)^(-1));
+            n=n & (((long long)1<<63)^(-1));
         else if(b==1)
-            n.coeficient=n.coeficient |  ((long long)1<<63);
+            n=n |  ((long long)1<<63);
         p--;
     }
     while(p<0)                                    /// Shiftare circulara la stanga  cu un pas | Circular shifting to the left  with one step
     {
-        b=(n.coeficient>>63)&1;
-        n.coeficient=n.coeficient<<1;
-        n.coeficient=n.coeficient|b;
+        b=(n>>63)&1;
+        n=n<<1;
+        n=n|b;
         p++;
     }
     return n;
@@ -335,12 +279,12 @@ void afisare_memorie(unsigned long long n)
     else
         cout<<n/1024.0/1024.0/1024.0/1024.0<<" TiB | ";
 }
-FormaStiintifica ecuatie(double a,double b,double c)
+FormaStiintifica ecuatie(long double a,long double b,long double c)
 {
     FormaStiintifica solutie;
     if(a!=0)
     {
-        complex<double> delta=b*b-4*a*c;
+        complex<long double> delta=b*b-4*a*c;
         delta=sqrt(delta);
         solutie.x1=(-b+delta)/(2*a);
         solutie.x2=(-b-delta)/(2*a);
@@ -350,6 +294,107 @@ FormaStiintifica ecuatie(double a,double b,double c)
     else
         solutie.x1=solutie.x2=0/0.0;
     return solutie;
+}
+string operatie(string a, string b, string operator_)              /// Pentru a+b si a-b | For a+b and a-b
+{                                  /// TODO: In cazul in care a-b,a,b>=0 | When a-b,a,b>=0 (Nu am implementat 0,(3) si +-inf/cinf/nan | Didn't implement 0.3 with 3 repeating and +-inf/cinf/nan)
+    string rezultat,capat;         /// TODO: Am uitat sa sterg 0 de la stanga si de la dreapta la final | I forgot to delete 0 from the left and the right (01.110)
+    unsigned long long punct1 = a.find("."), punct2 = b.find("."); /// TODO: As putea pune if-urile cu nan, inf si cinf in functie | I can put the ifs with nan, inf and cinf in this function
+    if(punct1==string::npos)
+        a.append(".0"), punct1 = a.find(".");
+    if(punct2==string::npos)
+        b.append(".0"), punct2 = b.find(".");
+    string zero="0";
+    bool ok=0;
+    if(punct1<punct2)
+        for(unsigned long long i=punct1;i<punct2;i++)
+        {
+            zero.append(a);
+            a=zero;
+            zero="0";
+        }
+    else if(punct1>punct2)
+        for(unsigned long long i=punct2;i<punct1;i++)
+        {
+            zero.append(b);
+            b=zero;
+            zero="0";
+        }
+    punct1=a.length();
+    punct2=b.length();
+    if(punct1<punct2)
+    {
+        for(unsigned long long i=punct1;i<punct2;i++)
+            a.append("0");
+        punct1=punct2;
+    }
+    else if(punct1>punct2)
+        for(unsigned long long i=punct2;i<punct1;i++)
+            b.append("0");
+    for(unsigned long long i=punct1-1;i<punct1;i--)
+    {
+        if(a[i]>='0'&&a[i]<='9')
+        {
+            int nr;
+            if(operator_=="-")
+                nr=a[i]-b[i]-ok;
+            else if(operator_=="+")
+                nr=a[i]+b[i]+ok-96;
+            ok=0;
+            if(nr<0)
+            {
+                nr+=10;
+                ok=1;
+            }
+            else if(nr>9)
+            {
+                nr-=10;
+                ok=1;
+            }
+            capat=to_string(nr);
+        }
+        else
+            capat=".";
+        capat.append(rezultat);
+        rezultat=capat;
+    }
+    if(ok==1&&operator_=="+")
+    {
+        string unu="1";
+        unu.append(rezultat);
+        rezultat=unu;
+    }
+    if(operator_=="+"||operator_=="-")
+        return rezultat;
+    else
+        return "nan";
+}
+struct perecheCantor
+{
+    long long x,y;
+};
+long long bijectieCantor(perecheCantor n)
+{
+    long long suma=n.x+n.y;
+    return (suma*(suma+1))/2+n.y;
+}
+perecheCantor bijectieCantor(long long n)
+{
+    perecheCantor n1;
+    long long p=0;
+    while((p*(p+1))/2<=n)
+        p++;
+    p--;
+    n1.y=n-(p*(p+1))/2;
+    n1.x=p-n1.y;
+    return n1;
+}
+string convertire(string a)
+{
+    if(a=="pi")
+        a=pi;
+    else if(a=="e")
+        a=e;
+    return a;
 }
 int main()
 {
@@ -365,6 +410,9 @@ int main()
     for(int i=0;i<partitii;i++)
     {
         fin>>nume_partitie[i]>>mem_totala[i]>>mem_libera[i];
+        int nr_caractere=nume_partitie[i].length();
+        for(int j=1;j<=11-nr_caractere;j++)
+            nume_partitie[i].append(" ");
         MEM_TOTALA+=mem_totala[i];
         MEM_LIBERA+=mem_libera[i];
     }
@@ -422,7 +470,10 @@ int main()
             cout<<frecventa(c,n)<<" Hz"<<endl;
         }
         else if(s=="pi-e")
-            cout<<"pi - e = "<<pi<<" - "<<e<<" = "<<pi-e<<endl;    /// Aici afisam rezultatul scaderii lui pi la e | This shows result of pi - e
+        {
+            cout<<"pi - e = "<<pi<<" - "<<e<<" = "<<endl;
+            cout<<"       = "<<operatie(pi,e,"-")<<" ~= "<<stold(pi)-stold(e)<<endl;      /// Aici afisam rezultatul scaderii lui pi la e | This shows result of pi - e
+        }
         else if(s=="no"||s=="no."||s=="number")
         {
             string n;
@@ -491,53 +542,129 @@ int main()
         {
             FormaStiintifica n;
             cin>>n.coeficient>>n.numitor;
-            n=div_int(n.coeficient,n.numitor);             /// Apelez functia care returneaza forma stiintifica a rezultatului real al lui x/y
-                                                           /// Calling the funtion which returns scientific form of real result of x/y
-            show_floated_int(n);                           /// Afiseaza forma stiinfica a numarului real: coeficient  * 10^exponent
-        }                                                  /// Shows the scientific form of  real number: coefficient * 10^exponent
+            n=float_to_int((long double)n.coeficient/n.numitor);             /// Apelez functia care returneaza forma stiintifica a rezultatului real al lui x/y
+                                                                             /// Calling the funtion which returns scientific form of real result of x/y
+            show_floated_int(n);                                             /// Afiseaza forma stiinfica a numarului real: coeficient  * 10^exponent
+        }                                                                    /// Shows the scientific form of  real number: coefficient * 10^exponent
         else if(s=="shift")
         {
-            FormaStiintifica n;
-            long long p;
-            n.shiftari=0;
-            cin>>n.coeficient>>p;
-            n=shift_bits(n,p);                             /// Aici vrem sa shiftam la dreapta cu p biti numarul n care deja a fost shiftat anterior cu p2 biti la dreapta
-            cout<<n.coeficient<<' '<<n.shiftari<<endl;
+            long long n,p;
+            cin>>n>>p;
+            n=shift_bits(n,p);                                               /// Aici vrem sa shiftam la dreapta cu p biti numarul n
+            cout<<n<<endl;
             cin>>p;
-            n=shift_bits(n,p);                             /// Here we want to shift the number n with p bits to the right, which has been shifted before with p2 bits tot the right
-            cout<<n.coeficient<<' '<<n.shiftari<<endl;
+            n=shift_bits(n,p);                                               /// Here we want to shift the number n with p bits to the right
+            cout<<n<<endl;
         }
         else if(s=="ecuatie")
         {
-            double a,b,c;
+            long double a,b,c;
             cin>>a>>b>>c;
             FormaStiintifica solutie=ecuatie(a,b,c);
             cout<<solutie.x1<<' '<<solutie.x2;
         }
         else if(s=="calculator"||s=="calc")
         {
-            string a,b;
-            char operator_;
+            string a,b,operator_;
             cin>>a>>operator_>>b;
-            if(operator_=='+')
+            a=convertire(a);
+            b=convertire(b);
+            if(operator_=="+")
             {
-                cout<<stold(a)+stold(b);
+                if(a=="cinf"&&b=="cinf")
+                    cout<<"nan";
+                else if(a=="nan"||b=="nan")
+                    cout<<"nan";
+                else if(a=="inf"&&b=="-inf")
+                    cout<<"nan";
+                else if(a=="-inf"&&b=="inf")
+                    cout<<"nan";
+                else if(a=="inf"||a=="-inf")
+                    cout<<a;
+                else if(b=="inf"||b=="-inf")
+                    cout<<b;
+                else
+                    cout<<operatie(a,b,"+")<<" ~= "<<stold(a)+stold(b);
             }
-            else if(operator_=='-')
+            else if(operator_=="-")
             {
-                cout<<stold(a)-stold(b);
+                if(a=="cinf"&&b=="cinf")
+                    cout<<"nan";
+                else if(a=="nan"||b=="nan")
+                    cout<<"nan";
+                else if(a=="inf"&&b=="inf")
+                    cout<<"nan";
+                else if(a=="-inf"&&b=="-inf")
+                    cout<<"nan";
+                else if(a=="inf"||a=="-inf")
+                    cout<<a;
+                else if(b=="inf"||b=="-inf")
+                    cout<<-stold(b);
+                else
+                    cout<<operatie(a,b,"-")<<" ~= "<<stold(a)-stold(b);
             }
-            else if(operator_=='*')
+            else if(operator_=="*")
             {
-                cout<<stold(a)*stold(b);
+                if(a=="nan"||b=="nan")
+                    cout<<"nan";
+                else if(a=="cinf"&&b=="0")
+                    cout<<"nan";
+                else if(a=="0"&&b=="cinf")
+                    cout<<"nan";
+                else if(a=="cinf"||b=="cinf")
+                    cout<<"cinf";
+                else if(a=="0"||b=="0")
+                    cout<<"0";
+                else
+                    cout<<stold(a)*stold(b);
             }
-            else if(operator_=='/')
+            else if(operator_=="/"||operator_=="//")
             {
-                cout<<stold(a)/stold(b);
+                if(a=="nan"||b=="nan")
+                    cout<<"nan";
+                else if(a=="cinf"&&b=="cinf")
+                    cout<<"nan";
+                else if(b=="cinf")
+                    cout<<"0";
+                else if(a=="cinf")
+                    cout<<"cinf";
+                else if(a=="0"&&b=="0")
+                    cout<<"nan";
+                else if(b=="0")
+                    cout<<"cinf";
+                else if(a=="0")
+                    cout<<"0";
+                else if(operator_=="/")
+                    cout<<stold(a)/stold(b);
+                else if(operator_=="//")
+                    cout<<to_string(floor(stold(a)/stold(b)));
             }
-            else if(operator_=='%')
+            else if(operator_=="%")
             {
-                cout<<stoll(a)%stoll(b);
+                if(a=="nan"||b=="nan")
+                    cout<<"nan";
+                else if(a=="cinf"&&b=="cinf")
+                    cout<<"nan";
+                else if(b=="cinf")
+                    cout<<a;
+                else if(a=="cinf")
+                    cout<<"nan";
+                else if(a=="0"&&b=="0")
+                    cout<<"nan";
+                else if(b=="0")
+                    cout<<"nan";
+                else if(a=="0")
+                    cout<<"0";
+                else if(a=="inf"||a=="-inf")
+                    cout<<"nan";
+                else if(b=="inf"||b=="-inf")
+                    cout<<a;
+                else if(b=="0.0"||b=="-0.0"||b=="-0")
+                    cout<<"nan";
+                else if(a=="0.0"||a=="-0.0"||a=="-0")
+                    cout<<a;
+                else
+                    cout<<stoll(a)%stoll(b);
             }
         }
         else if(s=="hexadecimal"||s=="hex"||s=="hexa")
@@ -545,9 +672,9 @@ int main()
             long long n;
             double d;
             cin>>n>>d;
-            cout<<hex<<n<<' '<<d;
+            cout<<n<<' '<<hex<<n<<' '<<d<<dec;
         }
-        else
+        else if(s=="disk"||s=="memory"||s=="partition"||s=="partitions")
         {
             cout<<endl<<"Nume partitie | Memorie totala | Memorie libera | Memorie utilizata | Procent utilizat"<<endl<<endl;
             for(int i=0;i<partitii;i++)
@@ -557,13 +684,32 @@ int main()
                 afisare_memorie(mem_totala[i]);
                 afisare_memorie(mem_libera[i]);
                 afisare_memorie(mem_utilizata);
-                cout<<(long double)mem_utilizata/mem_totala[i]<<'%'<<endl;
+                cout<<(long double)mem_utilizata/mem_totala[i]*100<<'%'<<endl;
             }
-            cout<<endl<<"Total______ | ";
+            cout    <<endl<<"Total       | ";
             afisare_memorie(MEM_TOTALA);
             afisare_memorie(MEM_LIBERA);
             afisare_memorie(MEM_TOTALA-MEM_LIBERA);
-            cout<<(long double)(MEM_TOTALA-MEM_LIBERA)/MEM_TOTALA<<'%'<<endl;
+            cout<<(long double)(MEM_TOTALA-MEM_LIBERA)/MEM_TOTALA*100<<'%'<<endl;
+        }
+        else if(s=="complex"||s=="inf"||s=="infinity")
+        {
+            complex<string> a((string)"4",(string)"5");
+            complex<long double> b=4.0+5i;
+            cout<<fixed<<a<<' '<<b<<' '<<typeid(a).name()<<endl;
+            cout<<" inf -> Positive Infinity (1/+0.0)"<<endl;
+            cout<<"-inf -> Negative Infinity (1/-0.0)"<<endl;
+            cout<<"cinf -> Complex  Infinity (1/0)"<<endl;
+            cout<<" nan -> Not A Number      (0/0)"<<endl;
+        }
+        else if(s=="bijectie"||s=="cantor")
+        {
+            perecheCantor n;
+            cin>>n.x>>n.y;
+            long long n1=bijectieCantor(n);
+            cout<<n1<<": ";
+            n=bijectieCantor(n1);
+            cout<<n.x<<' '<<n.y<<endl;
         }
     }
     return 0; /// Se va inchide programul si se va returna valoarea 0 | The program will close and the value returned will be 0
