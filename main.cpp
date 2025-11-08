@@ -1,3 +1,5 @@
+/// OneOverZero | Tested on GDB Online (C++ 23) and CodeBlocks 20.03 | Testat pe GDB Online (C++ 23) si pe CodeBlocks 20.03
+
 #include<cstdlib>                                                    /// Pentru atoi() | For atoi() -> Convert string to integer, atof(), rand(), srand() etc.
 #include<climits>                                                    /// Pentru INT_MIN, INT_MAX, LONG_MIN etc. | For INT_MIN, INT_MAX, LONG_MIN etc.
 #include<bits/stdc++.h>                                              /// Aici se afla toate bibliotecile        | Here are all the libraries
@@ -7,6 +9,7 @@
 #include<cmath>                                                      /// Pentru functii matematice precum functia putere si modulul unui numar | For math functions like power and module functions
 #include<complex>                                                                                                   /// Numere complexe cu coeficienti reali | Complex numbers with real coefficients
 #include<fstream>                                                                                                   /// Pentru a citi din fisiere si a scrie in ele | To read and write files
+#include "bigint.h"
 #define pi "3.141592653589793238462643383279502884197"                                                                /// Definim constanta pi | Define constant pi
 #define e  "2.7182818284590452353602874713526624977572470936999595749669676277240766303535475945713821785251664274"   /// Definim constanta e  | Define constant e
 using namespace std;                              /// Pentru cin si cout | For cin and cout -> C++
@@ -32,8 +35,14 @@ long long factorial(int n)                        /// Functia care returneaza fa
 }                                                 /// Returns (long long)(1/0.0) if we want to return a factorial of a negative number or a number that generates overflow
 struct FormaStiintifica                           /// Structura reprezinta forma stiintifica a unui numar real (x*10^y), cu coeficientul si exponentul numere intregi de tip long long
 {                                                 /// This structure returns scientific form of a real number  (x*10^y), with coefficient and exponent which are long long integers
-    long long coeficient,exponent;                /// numaratorul = coeficient
-    long long numitor;
+    long long coeficient, exponent;
+};
+struct Fractie
+{
+    long long numarator, numitor;
+};
+struct SolutiiComplexe
+{
     complex<long double> x1,x2;
 };
 FormaStiintifica float_to_int(long double f)      /// Returneaza forma stiintifica a unui numar real | Return scientific form of a real number
@@ -279,9 +288,9 @@ void afisare_memorie(unsigned long long n)
     else
         cout<<n/1024.0/1024.0/1024.0/1024.0<<" TiB | ";
 }
-FormaStiintifica ecuatie(long double a,long double b,long double c)
+SolutiiComplexe ecuatie(long double a,long double b,long double c)
 {
-    FormaStiintifica solutie;
+    SolutiiComplexe solutie;
     if(a!=0)
     {
         complex<long double> delta=b*b-4*a*c;
@@ -486,7 +495,7 @@ int main()
                 cout<<"The value stored in int                is: "    <<stoi(n)         <<" | "<<sizeof(stoi(n))         <<" bytes"<<endl;
             else
                 cout<<"The value can't be stored in int"               <<endl;
-            if(real_long_double<=ULLONG_MAX&&real_long_double>=-ULLONG_MAX)
+            if(real_long_double<=ULLONG_MAX&&-real_long_double<=ULLONG_MAX)
                 cout<<"The value stored in unsigned long long is: "    <<stoull(n)       <<" | "<<sizeof(stoull(n))       <<" bytes"<<endl;
             else
                 cout<<"The value can't be stored in unsigned long long"<<endl;
@@ -540,9 +549,10 @@ int main()
         }
         else if(s=="div"||s=="division"||s=="impartire")
         {
+            Fractie f;
             FormaStiintifica n;
-            cin>>n.coeficient>>n.numitor;
-            n=float_to_int((long double)n.coeficient/n.numitor);             /// Apelez functia care returneaza forma stiintifica a rezultatului real al lui x/y
+            cin>>f.numarator>>f.numitor;
+            n=float_to_int((long double)f.numarator/f.numitor);              /// Apelez functia care returneaza forma stiintifica a rezultatului real al lui x/y
                                                                              /// Calling the funtion which returns scientific form of real result of x/y
             show_floated_int(n);                                             /// Afiseaza forma stiinfica a numarului real: coeficient  * 10^exponent
         }                                                                    /// Shows the scientific form of  real number: coefficient * 10^exponent
@@ -560,10 +570,10 @@ int main()
         {
             long double a,b,c;
             cin>>a>>b>>c;
-            FormaStiintifica solutie=ecuatie(a,b,c);
+            SolutiiComplexe solutie=ecuatie(a,b,c);
             cout<<solutie.x1<<' '<<solutie.x2;
         }
-        else if(s=="calculator"||s=="calc")
+        else if(s=="calculator"||s=="calc")   /// TODO: sa fac o variabila globala A (answer) care va retine rezultatul si sa scriu A sau ANS la tastatura
         {
             string a,b,operator_;
             cin>>a>>operator_>>b;
@@ -667,12 +677,24 @@ int main()
                     cout<<stoll(a)%stoll(b);
             }
         }
-        else if(s=="hexadecimal"||s=="hex"||s=="hexa")
+        else if(s=="hexadecimal"||s=="hex"||s=="hexa") /// TODO: a * 2^64 + b * 2^0 + c * 2^(-64) + d * 2^(-128) => (-1) * 2^64 + 979
         {
             long long n;
             double d;
             cin>>n>>d;
-            cout<<n<<' '<<hex<<n<<' '<<d<<dec;
+            cout<<endl<<n<<' '<<hex<<n<<' '<<d<<dec;
+            long long x=2,a=-1;
+            unsigned long long b=979,c=0,d1=0;
+            cout << showbase      /// show the 0x prefix
+                 << internal      /// fill between the prefix and the number
+                 << setfill('0'); /// fill with 0s
+
+            cout << hex << endl << setw(18) << x << dec << " = " << setw(0) << x << endl ;
+            cout << hex << noshowbase  << a << setw(16) << b << '.' << setw(16) << c << setw(16) << d1 << endl << setw(0) << dec;
+            /**
+                https://cplusplus.com/reference/ios/showbase/
+                https://cplusplus.com/forum/windows/51591/     - Showing all 16 digits of a hexadecimal number
+            */
         }
         else if(s=="disk"||s=="memory"||s=="partition"||s=="partitions")
         {
@@ -704,12 +726,24 @@ int main()
         }
         else if(s=="bijectie"||s=="cantor")
         {
+            /**
+                Algoritmul bijectiei lui Cantor predat de catre domnul profesor Gabriel Istrate la Facultatea de Matematica si Informatica din Bucuresti, la seminarul de Calculabilitate
+                si Complexitate
+            */
             perecheCantor n;
             cin>>n.x>>n.y;
             long long n1=bijectieCantor(n);
             cout<<n1<<": ";
             n=bijectieCantor(n1);
             cout<<n.x<<' '<<n.y<<endl;
+        }
+        else if(s=="hello")
+            printf("Hello, World!");
+        else if(s=="bigint")
+        {
+            __int128 salut=LLONG_MAX,salut2; /// https://stackoverflow.com/questions/18439520/is-there-a-128-bit-integer-in-c
+            salut2=((salut+1)*(salut+1)-1)*2+1;
+            cout<<endl<<"2^63  - 1 = "<<salut<<endl<<"2^127 - 1 = "<<salut2<<endl;
         }
     }
     return 0; /// Se va inchide programul si se va returna valoarea 0 | The program will close and the value returned will be 0
