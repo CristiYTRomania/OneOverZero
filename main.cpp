@@ -1,5 +1,5 @@
 /// OneOverZero | Tested on GDB Online (C++ 23) and CodeBlocks 20.03 | Testat pe GDB Online (C++ 23) si pe CodeBlocks 20.03
-
+/// TODO: sa fac si pentru codeblocks ubuntu, de integrat hello.cpp
 #include<cstdlib>                                                    /// Pentru atoi() | For atoi() -> Convert string to integer, atof(), rand(), srand() etc.
 #include<climits>                                                    /// Pentru INT_MIN, INT_MAX, LONG_MIN etc. | For INT_MIN, INT_MAX, LONG_MIN etc.
 #include<bits/stdc++.h>                                              /// Aici se afla toate bibliotecile        | Here are all the libraries
@@ -574,7 +574,7 @@ int main()
             cout<<solutie.x1<<' '<<solutie.x2;
         }
         else if(s=="calculator"||s=="calc")   /// TODO: sa fac o variabila globala A (answer) care va retine rezultatul si sa scriu A sau ANS la tastatura
-        {
+        {                                     /// TODO: sa nu fie case sensitive a si b, operatori noi: ^, sqrt(), log()
             string a,b,operator_;
             cin>>a>>operator_>>b;
             a=convertire(a);
@@ -677,7 +677,7 @@ int main()
                     cout<<stoll(a)%stoll(b);
             }
         }
-        else if(s=="hexadecimal"||s=="hex"||s=="hexa") /// TODO: a * 2^64 + b * 2^0 + c * 2^(-64) + d * 2^(-128) => (-1) * 2^64 + 979
+        else if(s=="hexadecimal"||s=="hex"||s=="hexa") /// TODO: de scris 0x inainte de ab.cd si de facut o functie pentru afisarea lui ab.cd (a * 2^64 + b * 2^0 + c * 2^(-64) + d * 2^(-128) => (-1) * 2^64 + 979)
         {
             long long n;
             double d;
