@@ -1,5 +1,5 @@
 /// OneOverZero | Tested on GDB Online (C++ 23) and CodeBlocks 20.03 | Testat pe GDB Online (C++ 23) si pe CodeBlocks 20.03
-/// TODO: sa fac si pentru codeblocks ubuntu, de integrat hello.cpp
+/// TODO: sa fac si pentru codeblocks ubuntu, de integrat hello.cpp, comentarii cod, descriere github, fractie+-*/^fractie, vectori de fractii si hexa (de forma ab.cd); log(fractie), log(hexa), e^fractie, e^hexa
 #include<cstdlib>                                                    /// Pentru atoi() | For atoi() -> Convert string to integer, atof(), rand(), srand() etc.
 #include<climits>                                                    /// Pentru INT_MIN, INT_MAX, LONG_MIN etc. | For INT_MIN, INT_MAX, LONG_MIN etc.
 #include<bits/stdc++.h>                                              /// Aici se afla toate bibliotecile        | Here are all the libraries
@@ -574,7 +574,7 @@ int main()
             cout<<solutie.x1<<' '<<solutie.x2;
         }
         else if(s=="calculator"||s=="calc")   /// TODO: sa fac o variabila globala A (answer) care va retine rezultatul si sa scriu A sau ANS la tastatura
-        {                                     /// TODO: sa nu fie case sensitive a si b, operatori noi: ^, sqrt(), log()
+        {                                     /// TODO: sa nu fie case sensitive a si b; operatori noi: ^, sqrt(), log()
             string a,b,operator_;
             cin>>a>>operator_>>b;
             a=convertire(a);
