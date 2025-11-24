@@ -152,8 +152,8 @@ void ascii()                                      /// Afiseaza toate caracterele
         cout<<"char("<<i<<") = "<<char(i)<<"\n";
 }
 long long shift_bits(long long n, long long p)    /// Aceasta functie va shifta bitii unui numar in mod circular | This function will shift the bits in circular way
-{
-    bool b;
+{                                                 /// TODO: shift bits(auto n) -> sizeof(int128)*8
+    bool b;                                       /// TODO: linii pentru a desparti taskurile print("-"*30) -> pentru orice comanda
     while(p>0)
         p-=64;
     while(p<0)
