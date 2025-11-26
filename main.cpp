@@ -14,7 +14,7 @@
 #define pi "3.141592653589793238462643383279502884197"                                                                /// Definim constanta pi | Define constant pi
 #define e  "2.7182818284590452353602874713526624977572470936999595749669676277240766303535475945713821785251664274"   /// Definim constanta e  | Define constant e
 using namespace std;                              /// Pentru cin si cout | For cin and cout -> C++
-int NrMaxFact = 33;                               /// Vectorul care stocheaza factorialul fiecarui numar natural mai mic sau egal cu NrMaxFact (de la 0 la NrMaxFact sunt NrMaxFact + 1 de elemente)
+int NrMaxFact = 33;                               /// Vectorul care stocheaza factorialul fiecarui numar natural mai mic sau egal cu NrMaxFact (de la 0 la NrMaxFact sunt NrMaxFact + 1 elemente)
 __int128 FactorialVector[33 + 2];                 /// The vector which store factorial of each natural number between 0 and NrMaxFact (in total are NrMaxFact + 1 elements)
 __int128 factorial(int n)                         /// Functia care returneaza factorialul unui numar si umple cu valori vectorului FactorialVector pe baza factorialului fiecarui numar
 {                                                 /// The function which returns factorial of a number and put values on FactorialVector based on factorial of each number
