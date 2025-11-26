@@ -1,5 +1,5 @@
 /// OneOverZero | Tested on GDB Online (C++ 23) and CodeBlocks 20.03 | Testat pe GDB Online (C++ 23) si pe CodeBlocks 20.03
-/// TODO: sa fac si pentru codeblocks ubuntu, de integrat hello.cpp, comentarii cod, descriere github, fractie+-*/^fractie, vectori de fractii si hexa (de forma ab.cd); log(fractie), log(hexa), e^fractie, e^hexa
+/// -------- TODO: sa fac si pentru codeblocks ubuntu, comentarii cod, descriere github, fractie+-*/^fractie, vectori de fractii si hexa (de forma ab.cd); log(fractie), log(hexa), e^fractie, e^hexa
 #include<cstdlib>                                                    /// Pentru atoi() | For atoi() -> Convert string to integer, atof(), rand(), srand() etc.
 #include<climits>                                                    /// Pentru INT_MIN, INT_MAX, LONG_MIN etc. | For INT_MIN, INT_MAX, LONG_MIN etc.
 #include<bits/stdc++.h>                                              /// Aici se afla toate bibliotecile        | Here are all the libraries
@@ -10,25 +10,26 @@
 #include<complex>                                                                                                   /// Numere complexe cu coeficienti reali | Complex numbers with real coefficients
 #include<fstream>                                                                                                   /// Pentru a citi din fisiere si a scrie in ele | To read and write files
 #include "bigint.h"
+#include "hello.h"
 #define pi "3.141592653589793238462643383279502884197"                                                                /// Definim constanta pi | Define constant pi
 #define e  "2.7182818284590452353602874713526624977572470936999595749669676277240766303535475945713821785251664274"   /// Definim constanta e  | Define constant e
 using namespace std;                              /// Pentru cin si cout | For cin and cout -> C++
-long long FactorialVector[22];                    /// Vectorul care stocheaza factorialul fiecarui numar natural mai mic sau egal cu 20 (de la 0 la 20 sunt 21 de elemente)
-                                                  /// The vector which store factorial of each natural number between 0 and 20 (in total are 21 elements)
-long long factorial(int n)                        /// Functia care returneaza factorialul unui numar si umple cu valori vectorului FactorialVector pe baza factorialului fiecarui numar
+int NrMaxFact = 33;                               /// Vectorul care stocheaza factorialul fiecarui numar natural mai mic sau egal cu NrMaxFact (de la 0 la NrMaxFact sunt NrMaxFact + 1 de elemente)
+__int128 FactorialVector[33 + 2];                 /// The vector which store factorial of each natural number between 0 and NrMaxFact (in total are NrMaxFact + 1 elements)
+__int128 factorial(int n)                         /// Functia care returneaza factorialul unui numar si umple cu valori vectorului FactorialVector pe baza factorialului fiecarui numar
 {                                                 /// The function which returns factorial of a number and put values on FactorialVector based on factorial of each number
-    if(FactorialVector[21]==0)                    /// Ultimul element al vectorului retine daca valorile factorialelor au fost atribuite (1) sau nu (0)
+    if(FactorialVector[NrMaxFact + 1]==0)         /// Ultimul element al vectorului retine daca valorile factorialelor au fost atribuite (1) sau nu (0)
     {                                             /// The last element from the vector stores if the factorial values were assigned (1) or not (0)
-        long long p=1;                            /// p este factorialul indicelui i curent | p is the factorial for current index (i)
+        __int128 p=1;                             /// p este factorialul indicelui i curent | p is the factorial for current index (i)
         FactorialVector[0]=1;
-        for(int i=1;i<=20;i++)
+        for(int i=1;i<=NrMaxFact;i++)
         {
             p=p*i;
             FactorialVector[i]=p;
         }
-        FactorialVector[21]=1;
+        FactorialVector[NrMaxFact + 1]=1;
     }
-    if(n>=0 && n<=20)
+    if(n>=0 && n<=NrMaxFact)
         return FactorialVector[n];
     else
         return LONG_LONG_MIN;                     /// Returneaza (long long)(1/0.0) in cazul factorialului unui numar negativ si in cazul returnarii unui numar care va genera overflow
@@ -152,8 +153,8 @@ void ascii()                                      /// Afiseaza toate caracterele
         cout<<"char("<<i<<") = "<<char(i)<<"\n";
 }
 long long shift_bits(long long n, long long p)    /// Aceasta functie va shifta bitii unui numar in mod circular | This function will shift the bits in circular way
-{                                                 /// TODO: shift bits(auto n) -> sizeof(int128)*8
-    bool b;                                       /// TODO: linii pentru a desparti taskurile print("-"*30) -> pentru orice comanda
+{                                                 /// ------------------------------------------------------------- TODO: shift bits(auto n) -> sizeof(int128)*8
+    bool b;
     while(p>0)
         p-=64;
     while(p<0)
@@ -304,10 +305,10 @@ SolutiiComplexe ecuatie(long double a,long double b,long double c)
         solutie.x1=solutie.x2=0/0.0;
     return solutie;
 }
-string operatie(string a, string b, string operator_)              /// Pentru a+b si a-b | For a+b and a-b
-{                                  /// TODO: In cazul in care a-b,a,b>=0 | When a-b,a,b>=0 (Nu am implementat 0,(3) si +-inf/cinf/nan | Didn't implement 0.3 with 3 repeating and +-inf/cinf/nan)
-    string rezultat,capat;         /// TODO: Am uitat sa sterg 0 de la stanga si de la dreapta la final | I forgot to delete 0 from the left and the right (01.110)
-    unsigned long long punct1 = a.find("."), punct2 = b.find("."); /// TODO: As putea pune if-urile cu nan, inf si cinf in functie | I can put the ifs with nan, inf and cinf in this function
+string operatie(string a="0", string b="0", string operator_="-")              /// Pentru a+b si a-b | For a+b and a-b
+{                                  /// ---- TODO: In cazul in care a-b,a,b>=0 | When a-b,a,b>=0 (Nu am implementat 0,(3) si +-inf/cinf/nan | Didn't implement 0.3 with 3 repeating and +-inf/cinf/nan)
+    string rezultat,capat;         /// -------------------------- TODO: Am uitat sa sterg 0 de la stanga si de la dreapta la final | I forgot to delete 0 from the left and the right (01.110)
+    unsigned long long punct1 = a.find("."), punct2 = b.find("."); /// ------ TODO: As putea pune if-urile cu nan, inf si cinf in functie | I can put the ifs with nan, inf and cinf in this function
     if(punct1==string::npos)
         a.append(".0"), punct1 = a.find(".");
     if(punct2==string::npos)
@@ -405,12 +406,16 @@ string convertire(string a)
         a=e;
     return a;
 }
+void afisare_linii()
+{
+    for(int i=1;i<=115;i++)
+        cout<<"-";
+    cout<<endl;
+}
 int main()
 {
     bool ok=1;                                    /// Daca ok este 1, programul va rula, daca ok este 0, programul se va incheia | If ok=1, the program will run. If not, the program will stop
     string s;
-    cout<<"Type 'help' for instructions! \n";
-    cout<<"Introduceti 'ajutor' pentru instructiuni! \n";
     ifstream fin("memory.txt");
     int partitii;
     fin>>partitii;
@@ -435,7 +440,10 @@ int main()
             }
     while(ok==1)
     {
-        cout<<fixed<<endl<<"Meniu principal | Main: ";     /// Suntem in meniul principal           | We are in the main menu
+        cout<<"Type 'help' for instructions! \n";
+        cout<<"Introduceti 'ajutor' pentru instructiuni! \n";
+        afisare_linii();
+        cout<<fixed<<"Meniu principal | Main: ";           /// Suntem in meniul principal           | We are in the main menu
         cin>>s;
         int nr_caractere=s.length();                       /// Numarul de caractere al comenzii citite de la tastatura | The string length command of the keyboard input
         for(int i=0;i<nr_caractere;i++)                    /// Transformam orice litera mare din comanda in litera mica pentru ca comanda sa nu fie case sensitive
@@ -451,11 +459,19 @@ int main()
         {
             double x;
             unsigned int n;
-            cin>>x>>n;
+            cout<<"x = ";
+            cin>>x;
+            cout<<"n = ";
+            cin>>n;
             double v[n+1];
             for(unsigned int i=n;i<=n;i--)
+            {
+                cout<<"a["<<i<<"] = ";
                 cin>>v[i];
-            cout<<f(x,n,v)<<endl;
+            }
+            for(unsigned int i=n;i>0;i--)
+                cout<<v[i]<<" * x^"<<i<<" + ";
+            cout<<v[0]<<" * x^0 = "<<f(x,n,v)<<endl;
         }
         else if(s=="help")                                 /// Comanda "help"   va genera comenzile in limba engleza | "help"   command will generate the commands in English  language
             cout<<"Help options: \n"<<"'game' for starting the game; \n"<<"'quit' (or 'exit') for quitting the app; \n";
@@ -480,8 +496,10 @@ int main()
         }
         else if(s=="pi-e")
         {
-            cout<<"pi - e = "<<pi<<" - "<<e<<" = "<<endl;
-            cout<<"       = "<<operatie(pi,e,"-")<<" ~= "<<stold(pi)-stold(e)<<endl;      /// Aici afisam rezultatul scaderii lui pi la e | This shows result of pi - e
+            cout<<"pi - e =  "<<pi<<endl;
+            cout<<"       -  "<<e <<endl;
+            cout<<"       =  "<<operatie(pi,e,"-")<<endl;
+            cout<<"       ~= "<<stold(pi)-stold(e)<<endl;  /// Aici afisam rezultatul scaderii lui pi la e | This shows result of pi - e
         }
         else if(s=="no"||s=="no."||s=="number")
         {
@@ -508,9 +526,9 @@ int main()
             cout<<"The value stored in long double        is: "        <<real_long_double<<" | "<<sizeof(real_long_double)<<" bytes"<<endl;
             cout<<"The difference between the values stored in double      and float  is: "     <<real_double-real_float            <<endl;
             cout<<"The difference between the values stored in long double and double is: "     <<real_long_double-real_double      <<endl;
-            cout<<"The value stored in float       represented in scientific notation is: ";
+            cout<<"The value stored in float  represented in scientific notation is: ";
             show_floated_int(float_to_int(real_float));
-            cout<<"The value stored in double      represented in scientific notation is: ";
+            cout<<"The value stored in double represented in scientific notation is: ";
             show_floated_int(float_to_int(real_double));
             cout<<"The value stored in long double represented in scientific notation is: ";
             show_floated_int(float_to_int(real_long_double));
@@ -540,9 +558,9 @@ int main()
             cout    <<"Valoarea stocata in long double        este: "     <<real_long_double<<" | "<<sizeof(real_long_double)<<" bytes"<<endl;
             cout    <<"Diferenta dintre valorile stocate in double, respectiv float, este:       " <<real_double-real_float            <<endl;
             cout    <<"Diferenta dintre valorile stocate in long double, respectiv double, este: " <<real_long_double-real_double      <<endl;
-            cout<<"Valoarea stocata in float         reprezentata in forma stiintifica este: ";
+            cout<<"Valoarea stocata in float reprezentata in forma stiintifica este: ";
             show_floated_int(float_to_int(real_float));
-            cout<<"Valoarea stocata in double        reprezentata in forma stiintifica este: ";
+            cout<<"Valoarea stocata in double reprezentata in forma stiintifica este: ";
             show_floated_int(float_to_int(real_double));
             cout<<"Valoarea stocata in long double   reprezentata in forma stiintifica este: ";
             show_floated_int(float_to_int(real_long_double));
@@ -569,9 +587,16 @@ int main()
         else if(s=="ecuatie")
         {
             long double a,b,c;
-            cin>>a>>b>>c;
+            cout<<"a = ";
+            cin>>a;
+            cout<<"b = ";
+            cin>>b;
+            cout<<"c = ";
+            cin>>c;
             SolutiiComplexe solutie=ecuatie(a,b,c);
-            cout<<solutie.x1<<' '<<solutie.x2;
+            cout<<a<<" * x^2 + "<<b<<" * x^1 + "<<c<<" * x^0 = 0"<<endl;
+            cout<<"x[1] = "<<solutie.x1<<endl;
+            cout<<"x[2] = "<<solutie.x2<<endl;
         }
         else if(s=="calculator"||s=="calc")   /// TODO: sa fac o variabila globala A (answer) care va retine rezultatul si sa scriu A sau ANS la tastatura
         {                                     /// TODO: sa nu fie case sensitive a si b; operatori noi: ^, sqrt(), log()
@@ -676,13 +701,14 @@ int main()
                 else
                     cout<<stoll(a)%stoll(b);
             }
+            cout<<endl;
         }
-        else if(s=="hexadecimal"||s=="hex"||s=="hexa") /// TODO: de scris 0x inainte de ab.cd si de facut o functie pentru afisarea lui ab.cd (a * 2^64 + b * 2^0 + c * 2^(-64) + d * 2^(-128) => (-1) * 2^64 + 979)
+        else if(s=="hexadecimal"||s=="hex"||s=="hexa") /// TODO: de facut o functie pentru afisarea lui ab.cd (a * 2^64 + b * 2^0 + c * 2^(-64) + d * 2^(-128) => (-1) * 2^64 + 979)
         {
             long long n;
             double d;
             cin>>n>>d;
-            cout<<endl<<n<<' '<<hex<<n<<' '<<d<<dec;
+            cout<<n<<' '<<hex<<n<<' '<<d<<dec;
             long long x=2,a=-1;
             unsigned long long b=979,c=0,d1=0;
             cout << showbase      /// show the 0x prefix
@@ -690,7 +716,7 @@ int main()
                  << setfill('0'); /// fill with 0s
 
             cout << hex << endl << setw(18) << x << dec << " = " << setw(0) << x << endl ;
-            cout << hex << noshowbase  << a << setw(16) << b << '.' << setw(16) << c << setw(16) << d1 << endl << setw(0) << dec;
+            cout << hex << a << setw(16) << b << '.' << setw(16) << c << setw(16) << d1 << endl << noshowbase << setw(0) << dec;
             /**
                 https://cplusplus.com/reference/ios/showbase/
                 https://cplusplus.com/forum/windows/51591/     - Showing all 16 digits of a hexadecimal number
@@ -738,13 +764,25 @@ int main()
             cout<<n.x<<' '<<n.y<<endl;
         }
         else if(s=="hello")
-            printf("Hello, World!");
+        {
+            printf("Hello, World! \n");
+            main2();
+        }
         else if(s=="bigint")
         {
             __int128 salut=LLONG_MAX,salut2; /// https://stackoverflow.com/questions/18439520/is-there-a-128-bit-integer-in-c
             salut2=((salut+1)*(salut+1)-1)*2+1;
             cout<<endl<<"2^63  - 1 = "<<salut<<endl<<"2^127 - 1 = "<<salut2<<endl;
         }
+        else if(s=="factorial")
+        {
+            int n;
+            cin>>n;
+            cout<<factorial(n)<<endl;
+        }
+        else
+            cout<<"Comanda necunoscuta | Unknown command \n";
+        afisare_linii();
     }
     return 0; /// Se va inchide programul si se va returna valoarea 0 | The program will close and the value returned will be 0
 }
