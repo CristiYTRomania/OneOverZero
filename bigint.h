@@ -30,6 +30,27 @@ operator<<( std::ostream& dest, __int128_t value )  /// https://stackoverflow.co
     }
     return dest;
 }
+__int128 StringToInt(string s)
+{
+    __int128 nr = 0, p = 1;
+    int n = s.size();
+    for(int i = n-1; i>=0; i--)
+    {
+        if(s[i] == '-' && i == 0)
+            nr = -nr;
+        else if(s[i]>='0' && s[i]<='9')
+        {
+            nr += p * (s[i] - 48);
+            p *= 10;
+        }
+        else
+        {
+            nr = 0;
+            p = 1;
+        }
+    }
+    return nr;
+}
 struct FormaStiintifica                             /// Structura reprezinta forma stiintifica a unui numar real (x*10^y), cu coeficientul si exponentul numere intregi de tip __int128
 {                                                   /// This structure returns scientific form of a real number  (x*10^y), with coefficient and exponent which are __int128 integers
     __int128 coeficient, exponent;
@@ -160,9 +181,11 @@ FormaStiintifica factorial(int n)                  /// Functia care returneaza f
     else if(n>NrMaxFact)
     {
         long double x = FactorialVector[33];
+        if(n > 1755)
+            n = 1755;
         for(int i=34;i<=n;i++)
             x*=i;
-        cout<<x<<endl;
+        cout<<"Precizie pierduta la calcularea factorialului | Precision lost at calculating this factorial"<<endl;
         nr=float_to_int(x);
     }
     else

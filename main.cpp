@@ -521,8 +521,8 @@ int main()
             cout<<"x[1] = "<<solutie.x1<<endl;
             cout<<"x[2] = "<<solutie.x2<<endl;
         }
-        else if(s=="calculator"||s=="calc")   /// TODO: De pus Answer la toate operatiile | To put Answer at every operation
-        {                                     /// TODO: sa nu fie case sensitive a si b; operatori noi: ^, sqrt(), log() | To not be case sensitive (a and b); New operators: ^, sqrt(), log()
+        else if(s=="calculator"||s=="calc")   /// TODO: sa nu fie case sensitive a si b; operatori noi: ^, sqrt(), log() | To not be case sensitive (a and b); New operators: ^, sqrt(), log()
+        {
             string a,b,operator_;
             cin>>a>>operator_>>b;
             a=convertire(a);
@@ -699,7 +699,15 @@ int main()
             show_floated_int(f);
         }
         else
+        {
             cout<<"Comanda necunoscuta | Unknown command \n";
+            /// continue;
+            string a;
+            __int128 n;
+            cin>>a;
+            n=StringToInt(a);
+            cout<<n<<endl;
+        }
         afisare_linii();
     }
     return 0; /// Se va inchide programul si se va returna valoarea 0 | The program will close and the value returned will be 0
