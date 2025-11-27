@@ -299,6 +299,19 @@ struct Hexazecimal
     long long a;
     unsigned long long b,c,d;
 };
+Hexazecimal citire_hexa()
+{
+    Hexazecimal n;
+    cout<<"0xAB.CD (-2^63 <= A <= 2^63 - 1; 0 <= B, C, D <= 2^64 - 1)"<<endl<<"A = ";
+    cin>>n.a;
+    cout<<"B = ";
+    cin>>n.b;
+    cout<<"C = ";
+    cin>>n.c;
+    cout<<"D = ";
+    cin>>n.d;
+    return n;
+}
 void afisare_hexa(Hexazecimal n)
 {
     cout<<n.a<<" * 2^64 + "<<n.b<<" * 2^0 + "<<n.c<<" * 2^-64 + "<<n.d<<" * 2^-128 = \n";
@@ -310,6 +323,11 @@ void afisare_hexa(Hexazecimal n)
         https://cplusplus.com/reference/ios/showbase/
         https://cplusplus.com/forum/windows/51591/     -> Afiseaza toate cele 16 cifre ale numarului in baza 16 | Showing all 16 digits of a hexadecimal number
     */
+}
+void CalcAnswer(string s)
+{
+    Answer = s;
+    cout << s;
 }
 int main()
 {
@@ -512,35 +530,17 @@ int main()
             if(operator_=="+")
             {
                 if(a=="cinf"&&b=="cinf")
-                {
-                    Answer="nan";
-                    cout<<"nan";
-                }
+                    CalcAnswer("nan");
                 else if(a=="nan"||b=="nan")
-                {
-                    Answer="nan";
-                    cout<<"nan";
-                }
+                    CalcAnswer("nan");
                 else if(a=="inf"&&b=="-inf")
-                {
-                    Answer="nan";
-                    cout<<"nan";
-                }
+                    CalcAnswer("nan");
                 else if(a=="-inf"&&b=="inf")
-                {
-                    Answer="nan";
-                    cout<<"nan";
-                }
+                    CalcAnswer("nan");
                 else if(a=="inf"||a=="-inf")
-                {
-                    Answer=a;
-                    cout<<a;
-                }
+                    CalcAnswer(a);
                 else if(b=="inf"||b=="-inf")
-                {
-                    Answer=b;
-                    cout<<b;
-                }
+                    CalcAnswer(b);
                 else
                 {
                     Answer = operatie(a,b,"+");
@@ -550,35 +550,19 @@ int main()
             else if(operator_=="-")
             {
                 if(a=="cinf"&&b=="cinf")
-                {
-                    Answer="nan";
-                    cout<<"nan";
-                }
+                    CalcAnswer("nan");
                 else if(a=="nan"||b=="nan")
-                {
-                    Answer="nan";
-                    cout<<"nan";
-                }
+                    CalcAnswer("nan");
                 else if(a=="inf"&&b=="inf")
-                {
-                    Answer="nan";
-                    cout<<"nan";
-                }
+                    CalcAnswer("nan");
                 else if(a=="-inf"&&b=="-inf")
-                {
-                    Answer="nan";
-                    cout<<"nan";
-                }
+                    CalcAnswer("nan");
                 else if(a=="inf"||a=="-inf")
-                {
-                    Answer=a;
-                    cout<<a;
-                }
-                else if(b=="inf"||b=="-inf")
-                {
-                    Answer=-stold(b);
-                    cout<<Answer;
-                }
+                    CalcAnswer(a);
+                else if(b=="inf")
+                    CalcAnswer("-inf");
+                else if(b=="-inf")
+                    CalcAnswer("inf");
                 else
                 {
                     Answer = operatie(a,b,"-");
@@ -588,72 +572,72 @@ int main()
             else if(operator_=="*")
             {
                 if(a=="nan"||b=="nan")
-                    cout<<"nan";
+                    CalcAnswer("nan");
                 else if(a=="cinf"&&b=="0")
-                    cout<<"nan";
+                    CalcAnswer("nan");
                 else if(a=="0"&&b=="cinf")
-                    cout<<"nan";
+                    CalcAnswer("nan");
                 else if(a=="cinf"||b=="cinf")
-                    cout<<"cinf";
+                    CalcAnswer("cinf");
                 else if(a=="0"||b=="0")
-                    cout<<"0";
+                    CalcAnswer("0");
                 else
-                    cout<<stold(a)*stold(b);
+                    CalcAnswer( to_string(stold(a)*stold(b)) );
             }
             else if(operator_=="/"||operator_=="//")
             {
                 if(a=="nan"||b=="nan")
-                    cout<<"nan";
+                    CalcAnswer("nan");
                 else if(a=="cinf"&&b=="cinf")
-                    cout<<"nan";
+                    CalcAnswer("nan");
                 else if(b=="cinf")
-                    cout<<"0";
+                    CalcAnswer("0");
                 else if(a=="cinf")
-                    cout<<"cinf";
+                    CalcAnswer("cinf");
                 else if(a=="0"&&b=="0")
-                    cout<<"nan";
+                    CalcAnswer("nan");
                 else if(b=="0")
-                    cout<<"cinf";
+                    CalcAnswer("cinf");
                 else if(a=="0")
-                    cout<<"0";
+                    CalcAnswer("0");
                 else if(operator_=="/")
-                    cout<<stold(a)/stold(b);
+                    CalcAnswer( to_string(stold(a)/stold(b)) );
                 else if(operator_=="//")
-                    cout<<to_string(floor(stold(a)/stold(b)));
+                    CalcAnswer( to_string(floor(stold(a)/stold(b))) );
             }
             else if(operator_=="%")
             {
                 if(a=="nan"||b=="nan")
-                    cout<<"nan";
+                    CalcAnswer("nan");
                 else if(a=="cinf"&&b=="cinf")
-                    cout<<"nan";
+                    CalcAnswer("nan");
                 else if(b=="cinf")
-                    cout<<a;
+                    CalcAnswer(a);
                 else if(a=="cinf")
-                    cout<<"nan";
+                    CalcAnswer("nan");
                 else if(a=="0"&&b=="0")
-                    cout<<"nan";
+                    CalcAnswer("nan");
                 else if(b=="0")
-                    cout<<"nan";
+                    CalcAnswer("nan");
                 else if(a=="0")
-                    cout<<"0";
+                    CalcAnswer("0");
                 else if(a=="inf"||a=="-inf")
-                    cout<<"nan";
+                    CalcAnswer("nan");
                 else if(b=="inf"||b=="-inf")
-                    cout<<a;
+                    CalcAnswer(a);
                 else if(b=="0.0"||b=="-0.0"||b=="-0")
-                    cout<<"nan";
+                    CalcAnswer("nan");
                 else if(a=="0.0"||a=="-0.0"||a=="-0")
-                    cout<<a;
+                    CalcAnswer(a);
                 else
-                    cout<<stoll(a)%stoll(b);
+                    CalcAnswer( to_string(stoll(a)%stoll(b)) );
             }
             cout<<endl;
         }
         else if(s=="hexadecimal"||s=="hex"||s=="hexa")
         {
             Hexazecimal n;
-            cin>>n.a>>n.b>>n.c>>n.d;
+            n=citire_hexa();
             afisare_hexa(n);
         }
         else if(s=="disk"||s=="memory"||s=="partition"||s=="partitions")

@@ -154,7 +154,7 @@ FormaStiintifica factorial(int n)                  /// Functia care returneaza f
     FormaStiintifica nr;
     if(n>=0 && n<=NrMaxFact)
     {
-        nr.coeficient = FactorialVector[n];
+        nr.coeficient = FactorialVector[n];        /// https://zeptomath.com/calculators/factorial.php
         nr.exponent = 0;
     }
     else if(n>NrMaxFact)
@@ -162,6 +162,7 @@ FormaStiintifica factorial(int n)                  /// Functia care returneaza f
         long double x = FactorialVector[33];
         for(int i=34;i<=n;i++)
             x*=i;
+        cout<<x<<endl;
         nr=float_to_int(x);
     }
     else
