@@ -97,22 +97,22 @@ FormaStiintifica float_to_int(long double f)       /// Returneaza forma stiintif
 }
 void show_floated_int(FormaStiintifica n)          /// Afiseaza forma stiinfica a numarului real      | Shows scientific form of real number
 {
-    long long p=1,x,ct=0;
-    if(n.exponent==INT128_MAX)                    /// In loc de x*10^y este x impartit la 0          | Instead of x*10^y is x over 0
+    __int128 p=1,x,ct=0;
+    if(n.exponent==INT128_MAX)                     /// In loc de x*10^y este x impartit la 0          | Instead of x*10^y is x over 0
     {
         if(n.coeficient==0)
             cout<<0/0.0;
         else
             cout<<"cinf";
     }
-    else if(n.exponent==INT128_MAX-1)             /// In loc de x*10^y este x inmultit cu infinit    | Instead of x*10^y is x times infinity
+    else if(n.exponent==INT128_MAX-1)              /// In loc de x*10^y este x inmultit cu infinit    | Instead of x*10^y is x times infinity
     {
         if(n.coeficient==0)
             cout<<0;
         else
             cout<<n.coeficient/0.0;
     }
-    else if(n.exponent==INT128_MAX)               /// In loc de x*10^y este x impartit la infinit    | Instead of x*10^y is x over infinity
+    else if(n.exponent==INT128_MAX)                /// In loc de x*10^y este x impartit la infinit    | Instead of x*10^y is x over infinity
     {
         if(n.coeficient==0)
             cout<<0;
@@ -125,7 +125,7 @@ void show_floated_int(FormaStiintifica n)          /// Afiseaza forma stiinfica 
     {
         if(n.coeficient<0)
             cout<<'-';
-        for(long long i=-1; i>=n.exponent; i--)
+        for(__int128 i=-1; i>=n.exponent; i--)
             p=p*10;
         cout<<abs(n.coeficient/p)<<'.';
         x=n.coeficient%p;
@@ -134,14 +134,14 @@ void show_floated_int(FormaStiintifica n)          /// Afiseaza forma stiinfica 
             x=x/10;
             ct--;
         }
-        for(long long i=n.exponent;i<ct;i++)
+        for(__int128 i=n.exponent;i<ct;i++)
             cout<<0;
         cout<<abs(n.coeficient%p);
     }
     else if(n.exponent>=0)
     {
         cout<<n.coeficient;
-        for(long long i=1; i<=n.exponent; i++)
+        for(__int128 i=1; i<=n.exponent; i++)
             cout<<0;
     }
     cout<<" = "<<n.coeficient;
@@ -194,4 +194,73 @@ FormaStiintifica factorial(int n)                  /// Functia care returneaza f
         nr.exponent = INT128_MAX;                  /// Returns complex infinity (cinf = 1/0) if we want to return a factorial of a negative number
     }
     return nr;
+}
+FormaStiintifica div_int(Fractie fr) /// In aceasta functie vrem sa returnam forma stiintifica a rezultatului real al lui x/y | This function returns scientific form of real result x/y
+{
+    FormaStiintifica n1;
+    __int128 n,p,ct;
+    n1.exponent=0;
+    bool ok=0;
+    __int128 x=fr.numarator;
+    __int128 y=fr.numitor;
+    if(y==0)
+    {
+        n1.coeficient=x;
+        n1.exponent=INT128_MAX;
+    }
+    else
+    {
+        if(x<0 && y<0)
+        {
+            x=-x;
+            y=-y;
+        }
+        else if(x<0)
+        {
+            x=-x;
+            ok=1;
+        }
+        else if(y<0)
+        {
+            y=-y;
+            ok=1;
+        }
+        while(x<=1000*1000*10&&y<=1000*1000*10)
+        {
+            x*=10;
+            y*=10;
+        }
+        for(__int128 i=2; i<=x or i<=y; i++)
+        {
+            while(y%i==0)
+            {
+                if(x%i==0)
+                    x=x/i;
+                else
+                {
+                    p=1;
+                    n=i;
+                    ct=0;
+                    while(n!=0)
+                    {
+                        p=p*10;
+                        ct++;
+                        n=n/10;
+                    }
+                    x=x*p/i;
+                    n1.exponent-=ct;
+                }
+                y=y/i;
+            }
+        }
+        while(x%10==0 and x!=0)
+        {
+            n1.exponent++;
+            x=x/10;
+        }
+        if(ok==1)
+            x=-x;
+        n1.coeficient=x;
+    }
+    return n1;
 }

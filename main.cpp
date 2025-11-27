@@ -360,7 +360,7 @@ int main()
         cout<<"Type 'help' for instructions! \n";
         cout<<"Introduceti 'ajutor' pentru instructiuni! \n";
         afisare_linii();
-        cout<<fixed<<setprecision(10)<<"Meniu principal | Main: ";   /// Suntem in meniul principal | We are in the main menu
+        cout<<fixed<<setprecision(30)<<"Meniu principal | Main: ";   /// Suntem in meniul principal | We are in the main menu
         cin>>s;
         int nr_caractere=s.length();                       /// Numarul de caractere al comenzii citite de la tastatura | The string length command of the keyboard input
         for(int i=0;i<nr_caractere;i++)                    /// Transformam orice litera mare din comanda in litera mica pentru ca comanda sa nu fie case sensitive
@@ -447,7 +447,7 @@ int main()
             cout<<"The value stored in long double        is: "        <<real_long_double<<" | "<<sizeof(real_long_double)<<" bytes"<<endl;
             cout<<"The difference between the values stored in double      and float  is: "     <<real_double-real_float            <<endl;
             cout<<"The difference between the values stored in long double and double is: "     <<real_long_double-real_double      <<endl;
-            cout<<"The value stored in float  represented in scientific notation is: ";
+            cout<<"The value stored in float represented in scientific notation is: ";
             show_floated_int(float_to_int(real_float));
             cout<<"The value stored in double represented in scientific notation is: ";
             show_floated_int(float_to_int(real_double));
@@ -703,10 +703,13 @@ int main()
             cout<<"Comanda necunoscuta | Unknown command \n";
             /// continue;
             string a;
-            __int128 n;
+            Fractie n;
             cin>>a;
-            n=StringToInt(a);
-            cout<<n<<endl;
+            n.numarator=StringToInt(a);
+            cin>>a;
+            n.numitor=StringToInt(a);
+            FormaStiintifica x=div_int(n);
+            show_floated_int(x);
         }
         afisare_linii();
     }
