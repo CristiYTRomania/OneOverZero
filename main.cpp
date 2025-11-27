@@ -1,146 +1,25 @@
 /// OneOverZero | Tested on GDB Online (C++ 23) and CodeBlocks 20.03 | Testat pe GDB Online (C++ 23) si pe CodeBlocks 20.03
-/// -------- TODO: sa fac si pentru codeblocks ubuntu, comentarii cod, descriere github, fractie+-*/^fractie, vectori de fractii si hexa (de forma ab.cd); log(fractie), log(hexa), e^fractie, e^hexa
+/// TODO: sa fac si pentru codeblocks ubuntu, fractie+-*/^fractie, vectori de fractii si hexa (de forma ab.cd); log(fractie), log(hexa), e^fractie, e^hexa
+///       to do for codeblocks ubuntu, fraction+-*/fraction, fraction vectors and hexadecimal number vectors (ab.cd); log(fraction), log(hexa), e^fraction, e^hexa
 #include<cstdlib>                                                    /// Pentru atoi() | For atoi() -> Convert string to integer, atof(), rand(), srand() etc.
 #include<climits>                                                    /// Pentru INT_MIN, INT_MAX, LONG_MIN etc. | For INT_MIN, INT_MAX, LONG_MIN etc.
 #include<bits/stdc++.h>                                              /// Aici se afla toate bibliotecile        | Here are all the libraries
-#include<iostream>                                                   /// Pentru cin si cout         | For cin and cout         -> C++
-#include<stdio.h>                                                    /// Pentru printf() si scanf() | For printf() and scanf() -> C
+#include<iostream>                                                   /// Pentru cin si cout                     | For cin and cout         -> C++
+#include<stdio.h>                                                    /// Pentru printf() si scanf()             | For printf() and scanf() -> C
 #include<ctime>                                                      /// Pentru setarea seed-ului timpului actual pentru randomizer dinamic | For setting the actual time seed for dynamic randomizer
 #include<cmath>                                                      /// Pentru functii matematice precum functia putere si modulul unui numar | For math functions like power and module functions
-#include<complex>                                                                                                   /// Numere complexe cu coeficienti reali | Complex numbers with real coefficients
-#include<fstream>                                                                                                   /// Pentru a citi din fisiere si a scrie in ele | To read and write files
-#include "bigint.h"
-#include "hello.h"
-#define pi "3.141592653589793238462643383279502884197"                                                                /// Definim constanta pi | Define constant pi
-#define e  "2.7182818284590452353602874713526624977572470936999595749669676277240766303535475945713821785251664274"   /// Definim constanta e  | Define constant e
+#include<complex>                                                    /// Numere complexe cu coeficienti reali         | Complex numbers with real coefficients
+#include<fstream>                                                    /// Pentru a citi din fisiere si a scrie in ele  | To read and write files
+#include "bigint.h"                                                  /// Integrarea operatorului de afisare pentru intregul pe 128 de biti | Cout operator integration of 128-bit integer
+#include "hello.h"                                                   /// Numere complexe si functii vectoriale        | Complex numbers and vectorial functions
+#define pi "3.141592653589793238462643383279502884197"                                                              /// Definim constanta pi | Define constant pi
+#define e  "2.7182818284590452353602874713526624977572470936999595749669676277240766303535475945713821785251664274" /// Definim constanta e  | Define constant e
 using namespace std;                              /// Pentru cin si cout | For cin and cout -> C++
-int NrMaxFact = 33;                               /// Vectorul care stocheaza factorialul fiecarui numar natural mai mic sau egal cu NrMaxFact (de la 0 la NrMaxFact sunt NrMaxFact + 1 elemente)
-__int128 FactorialVector[33 + 2];                 /// The vector which store factorial of each natural number between 0 and NrMaxFact (in total are NrMaxFact + 1 elements)
-__int128 factorial(int n)                         /// Functia care returneaza factorialul unui numar si umple cu valori vectorului FactorialVector pe baza factorialului fiecarui numar
-{                                                 /// The function which returns factorial of a number and put values on FactorialVector based on factorial of each number
-    if(FactorialVector[NrMaxFact + 1]==0)         /// Ultimul element al vectorului retine daca valorile factorialelor au fost atribuite (1) sau nu (0)
-    {                                             /// The last element from the vector stores if the factorial values were assigned (1) or not (0)
-        __int128 p=1;                             /// p este factorialul indicelui i curent | p is the factorial for current index (i)
-        FactorialVector[0]=1;
-        for(int i=1;i<=NrMaxFact;i++)
-        {
-            p=p*i;
-            FactorialVector[i]=p;
-        }
-        FactorialVector[NrMaxFact + 1]=1;
-    }
-    if(n>=0 && n<=NrMaxFact)
-        return FactorialVector[n];
-    else
-        return LONG_LONG_MIN;                     /// Returneaza (long long)(1/0.0) in cazul factorialului unui numar negativ si in cazul returnarii unui numar care va genera overflow
-}                                                 /// Returns (long long)(1/0.0) if we want to return a factorial of a negative number or a number that generates overflow
-struct FormaStiintifica                           /// Structura reprezinta forma stiintifica a unui numar real (x*10^y), cu coeficientul si exponentul numere intregi de tip long long
-{                                                 /// This structure returns scientific form of a real number  (x*10^y), with coefficient and exponent which are long long integers
-    long long coeficient, exponent;
-};
-struct Fractie
-{
-    long long numarator, numitor;
-};
+string Answer = "0";                              /// Ultimul rezultat al calculatorului virtual | The last answer of the virtual calculator
 struct SolutiiComplexe
 {
     complex<long double> x1,x2;
 };
-FormaStiintifica float_to_int(long double f)      /// Returneaza forma stiintifica a unui numar real | Return scientific form of a real number
-{
-    FormaStiintifica n;
-    n.exponent=0;
-    while(f!=(long long)f                         /// Ca sa extragem zecimalele din numarul real intr-un intreg            | To extract decimals from real number to a integer
-          && f*10<=LLONG_MAX && f*10>=LLONG_MIN)  /// Ca sa nu dea underflow sau overflow                                  | To not get overflow or underflow
-    {
-        f*=10;
-        n.exponent--;
-    }
-    if(f==1/0.0||f==-1/0.0)
-    {
-        n.exponent=LLONG_MAX-1;
-        n.coeficient=1;
-    }
-    else if(f!=f)
-    {
-        n.exponent=LLONG_MAX;
-        n.coeficient=0;
-    }
-    else
-    {
-        while(f>LLONG_MAX||f<LLONG_MIN)
-        {
-            f/=10;
-            n.exponent++;
-        }
-        n.coeficient=f;
-    }
-    while(n.coeficient%10==0 && n.coeficient!=0)  /// Daca numarul n e de forma 100*10^2, structura repetitiva va incerca sa faca sa fie de forma 1*10^4
-    {                                             /// If n number is like 100*10^2, the repetitive structure tries to be like 1*10^4
-        n.exponent++;
-        n.coeficient/=10;
-    }
-    return n;
-}
-void show_floated_int(FormaStiintifica n)         /// Afiseaza forma stiinfica a numarului real      | Shows scientific form of real number
-{
-    long long p=1,x,ct=0;
-    if(n.exponent==LLONG_MAX)                     /// In loc de x*10^y este x impartit la 0          | Instead of x*10^y is x over 0
-    {
-        if(n.coeficient==0)
-            cout<<0/0.0;
-        else
-            cout<<"cinf";
-    }
-    else if(n.exponent==LLONG_MAX-1)              /// In loc de x*10^y este x inmultit cu infinit    | Instead of x*10^y is x times infinity
-    {
-        if(n.coeficient==0)
-            cout<<0;
-        else
-            cout<<n.coeficient/0.0;
-    }
-    else if(n.exponent==LLONG_MIN)                /// In loc de x*10^y este x impartit la infinit    | Instead of x*10^y is x over infinity
-    {
-        if(n.coeficient==0)
-            cout<<0;
-        else if(n.coeficient<0)
-            cout<<"-0.0";
-        else if(n.coeficient>0)
-            cout<<"0.0";
-    }
-    else if(n.exponent<0)
-    {
-        if(n.coeficient<0)
-            cout<<'-';
-        for(long long i=-1; i>=n.exponent; i--)
-            p=p*10;
-        cout<<abs(n.coeficient/p)<<'.';
-        x=n.coeficient%p;
-        while(x!=0)
-        {
-            x=x/10;
-            ct--;
-        }
-        for(long long i=n.exponent;i<ct;i++)
-            cout<<0;
-        cout<<abs(n.coeficient%p);
-    }
-    else if(n.exponent>=0)
-    {
-        cout<<n.coeficient;
-        for(long long i=1; i<=n.exponent; i++)
-            cout<<0;
-    }
-    cout<<" = "<<n.coeficient;
-    if(n.exponent==LLONG_MAX)
-        cout<<" * cinf"<<endl;
-    else if(n.exponent==LLONG_MAX-1)
-        cout<<" * 10 ^ "<< 1/0.0<<endl;
-    else if(n.exponent==LLONG_MIN)
-        cout<<" * 10 ^ "<<-1/0.0<<endl;
-    else
-        cout<<" * 10 ^ "<<n.exponent<<endl;
-}
 void ascii()                                      /// Afiseaza toate caracterele ASCII | Shows all ASCII characters
 {
     for(int i=0;i<=26;i++)
@@ -152,26 +31,27 @@ void ascii()                                      /// Afiseaza toate caracterele
     for(int i=284;i<=511;i++)
         cout<<"char("<<i<<") = "<<char(i)<<"\n";
 }
-long long shift_bits(long long n, long long p)    /// Aceasta functie va shifta bitii unui numar in mod circular | This function will shift the bits in circular way
-{                                                 /// ------------------------------------------------------------- TODO: shift bits(auto n) -> sizeof(int128)*8
+auto shift_bits(auto n, long long p)              /// Aceasta functie va shifta bitii unui numar in mod circular | This function will shift the bits in circular way
+{
+    int dimensiune = sizeof(n) * 8;
     bool b;
     while(p>0)
-        p-=64;
+        p-=dimensiune;
     while(p<0)
-        p+=64;
+        p+=dimensiune;
     while(p>0)                                    /// Shiftare circulara la dreapta cu un pas | Circular shifting to the right with one step
     {
         b=n%2;
         n=n>>1;
         if(b==0)
-            n=n & (((long long)1<<63)^(-1));
+            n=n & (((long long)1<<(dimensiune-1))^(-1));
         else if(b==1)
-            n=n |  ((long long)1<<63);
+            n=n |  ((long long)1<<(dimensiune-1));
         p--;
     }
     while(p<0)                                    /// Shiftare circulara la stanga  cu un pas | Circular shifting to the left  with one step
     {
-        b=(n>>63)&1;
+        b=(n>>(dimensiune-1))&1;
         n=n<<1;
         n=n|b;
         p++;
@@ -306,9 +186,9 @@ SolutiiComplexe ecuatie(long double a,long double b,long double c)
     return solutie;
 }
 string operatie(string a="0", string b="0", string operator_="-")              /// Pentru a+b si a-b | For a+b and a-b
-{                                  /// ---- TODO: In cazul in care a-b,a,b>=0 | When a-b,a,b>=0 (Nu am implementat 0,(3) si +-inf/cinf/nan | Didn't implement 0.3 with 3 repeating and +-inf/cinf/nan)
-    string rezultat,capat;         /// -------------------------- TODO: Am uitat sa sterg 0 de la stanga si de la dreapta la final | I forgot to delete 0 from the left and the right (01.110)
-    unsigned long long punct1 = a.find("."), punct2 = b.find("."); /// ------ TODO: As putea pune if-urile cu nan, inf si cinf in functie | I can put the ifs with nan, inf and cinf in this function
+{                                  /// TODO: In cazul in care a-b,a,b>=0 | When a-b,a,b>=0 (Nu am implementat 0,(3) si +-inf/cinf/nan | Didn't implement 0.3 with 3 repeating and +-inf/cinf/nan)
+    string rezultat,capat;         /// TODO: Am uitat sa sterg 0 de la stanga si de la dreapta la final | I forgot to delete 0 from the left and the right (01.110)
+    unsigned long long punct1 = a.find("."), punct2 = b.find("."); /// TODO: As putea pune if-urile cu nan, inf si cinf in functie | I can put the ifs with nan, inf and cinf in this function
     if(punct1==string::npos)
         a.append(".0"), punct1 = a.find(".");
     if(punct2==string::npos)
@@ -404,6 +284,8 @@ string convertire(string a)
         a=pi;
     else if(a=="e")
         a=e;
+    else if(a=="a" || a=="ans" || a=="answer" || a=="rez" || a=="rezultat")
+        a=Answer;
     return a;
 }
 void afisare_linii()
@@ -411,6 +293,23 @@ void afisare_linii()
     for(int i=1;i<=115;i++)
         cout<<"-";
     cout<<endl;
+}
+struct Hexazecimal
+{
+    long long a;
+    unsigned long long b,c,d;
+};
+void afisare_hexa(Hexazecimal n)
+{
+    cout<<n.a<<" * 2^64 + "<<n.b<<" * 2^0 + "<<n.c<<" * 2^-64 + "<<n.d<<" * 2^-128 = \n";
+    cout << showbase      /// afiseaza prefixul 0x          | show the 0x prefix
+         << internal      /// acopera intre prefix si numar | fill between the prefix and the number
+         << setfill('0'); /// acopera cu cifre de 0         | fill with 0s
+    cout << hex << setw(18) << n.a << noshowbase << setw(16) << n.b << '.' << setw(16) << n.c << setw(16) << n.d << endl << setw(0) << dec;
+    /**
+        https://cplusplus.com/reference/ios/showbase/
+        https://cplusplus.com/forum/windows/51591/     -> Afiseaza toate cele 16 cifre ale numarului in baza 16 | Showing all 16 digits of a hexadecimal number
+    */
 }
 int main()
 {
@@ -443,7 +342,7 @@ int main()
         cout<<"Type 'help' for instructions! \n";
         cout<<"Introduceti 'ajutor' pentru instructiuni! \n";
         afisare_linii();
-        cout<<fixed<<"Meniu principal | Main: ";           /// Suntem in meniul principal           | We are in the main menu
+        cout<<fixed<<setprecision(10)<<"Meniu principal | Main: ";   /// Suntem in meniul principal | We are in the main menu
         cin>>s;
         int nr_caractere=s.length();                       /// Numarul de caractere al comenzii citite de la tastatura | The string length command of the keyboard input
         for(int i=0;i<nr_caractere;i++)                    /// Transformam orice litera mare din comanda in litera mica pentru ca comanda sa nu fie case sensitive
@@ -474,9 +373,13 @@ int main()
             cout<<v[0]<<" * x^0 = "<<f(x,n,v)<<endl;
         }
         else if(s=="help")                                 /// Comanda "help"   va genera comenzile in limba engleza | "help"   command will generate the commands in English  language
+        {
             cout<<"Help options: \n"<<"'game' for starting the game; \n"<<"'quit' (or 'exit') for quitting the app; \n";
+        }
         else if(s=="ajutor")                               /// Comanda "ajutor" va genera comenzile in limba romana  | "ajutor" command will generate the commands in Romanian language
+        {
             cout<<"Optiuni pentru ajutor: \n"<<"'iesire' pentru iesirea din aplicatie; \n"<<"'joc' pentru a incepe jocul; \n";
+        }
         else if(s=="numere" or s=="numbers")               /// Aceasta comanda va genera cateva numere si simboluri in ordine crescatoare, marginile fiind predominate de infinitul complex
         {                                                  /// This command will generate some numbers and symbols in in ascending order,  the edges being dominated by complex infinity
             printf("%s %s %d %d %d %d %d %d %d %d %d %d %s ","cinf","-inf",-10,-9,-8,-7,-6,-5,-4,-3,-2,-1,"-0.0");
@@ -565,24 +468,26 @@ int main()
             cout<<"Valoarea stocata in long double   reprezentata in forma stiintifica este: ";
             show_floated_int(float_to_int(real_long_double));
         }
-        else if(s=="div"||s=="division"||s=="impartire")
+        else if(s == "div" || s == "division" || s == "impartire")
         {
             Fractie f;
             FormaStiintifica n;
-            cin>>f.numarator>>f.numitor;
-            n=float_to_int((long double)f.numarator/f.numitor);              /// Apelez functia care returneaza forma stiintifica a rezultatului real al lui x/y
-                                                                             /// Calling the funtion which returns scientific form of real result of x/y
+            long double nr;
+            long long x, y;
+            cin >> x >>  y;
+            f.numarator = x;
+            f.numitor   = y;
+            nr = (long double)f.numarator/f.numitor;
+            n  = float_to_int(nr);                                           /// Apelez functia care returneaza forma stiintifica a rezultatului real al lui x/y
+            cout << nr <<endl;                                               /// Calling the funtion which returns scientific form of real result of x/y
             show_floated_int(n);                                             /// Afiseaza forma stiinfica a numarului real: coeficient  * 10^exponent
         }                                                                    /// Shows the scientific form of  real number: coefficient * 10^exponent
         else if(s=="shift")
         {
             long long n,p;
             cin>>n>>p;
-            n=shift_bits(n,p);                                               /// Aici vrem sa shiftam la dreapta cu p biti numarul n
-            cout<<n<<endl;
-            cin>>p;
-            n=shift_bits(n,p);                                               /// Here we want to shift the number n with p bits to the right
-            cout<<n<<endl;
+            n=shift_bits(n,p);                             /// Aici vrem sa shiftam la dreapta cu p biti numarul n | Here we want to shift the number n with p bits to the right
+            cout<<n<<" ("<<sizeof(shift_bits(n,p))<<" bytes)"<<endl;
         }
         else if(s=="ecuatie")
         {
@@ -598,8 +503,8 @@ int main()
             cout<<"x[1] = "<<solutie.x1<<endl;
             cout<<"x[2] = "<<solutie.x2<<endl;
         }
-        else if(s=="calculator"||s=="calc")   /// TODO: sa fac o variabila globala A (answer) care va retine rezultatul si sa scriu A sau ANS la tastatura
-        {                                     /// TODO: sa nu fie case sensitive a si b; operatori noi: ^, sqrt(), log()
+        else if(s=="calculator"||s=="calc")   /// TODO: De pus Answer la toate operatiile | To put Answer at every operation
+        {                                     /// TODO: sa nu fie case sensitive a si b; operatori noi: ^, sqrt(), log() | To not be case sensitive (a and b); New operators: ^, sqrt(), log()
             string a,b,operator_;
             cin>>a>>operator_>>b;
             a=convertire(a);
@@ -607,36 +512,78 @@ int main()
             if(operator_=="+")
             {
                 if(a=="cinf"&&b=="cinf")
+                {
+                    Answer="nan";
                     cout<<"nan";
+                }
                 else if(a=="nan"||b=="nan")
+                {
+                    Answer="nan";
                     cout<<"nan";
+                }
                 else if(a=="inf"&&b=="-inf")
+                {
+                    Answer="nan";
                     cout<<"nan";
+                }
                 else if(a=="-inf"&&b=="inf")
+                {
+                    Answer="nan";
                     cout<<"nan";
+                }
                 else if(a=="inf"||a=="-inf")
+                {
+                    Answer=a;
                     cout<<a;
+                }
                 else if(b=="inf"||b=="-inf")
+                {
+                    Answer=b;
                     cout<<b;
+                }
                 else
-                    cout<<operatie(a,b,"+")<<" ~= "<<stold(a)+stold(b);
+                {
+                    Answer = operatie(a,b,"+");
+                    cout<<Answer<<" ~= "<<stold(a)+stold(b);
+                }
             }
             else if(operator_=="-")
             {
                 if(a=="cinf"&&b=="cinf")
+                {
+                    Answer="nan";
                     cout<<"nan";
+                }
                 else if(a=="nan"||b=="nan")
+                {
+                    Answer="nan";
                     cout<<"nan";
+                }
                 else if(a=="inf"&&b=="inf")
+                {
+                    Answer="nan";
                     cout<<"nan";
+                }
                 else if(a=="-inf"&&b=="-inf")
+                {
+                    Answer="nan";
                     cout<<"nan";
+                }
                 else if(a=="inf"||a=="-inf")
+                {
+                    Answer=a;
                     cout<<a;
+                }
                 else if(b=="inf"||b=="-inf")
-                    cout<<-stold(b);
+                {
+                    Answer=-stold(b);
+                    cout<<Answer;
+                }
                 else
-                    cout<<operatie(a,b,"-")<<" ~= "<<stold(a)-stold(b);
+                {
+                    Answer = operatie(a,b,"-");
+                    cout<<Answer<<" ~= "<<stold(a)-stold(b);
+                }
             }
             else if(operator_=="*")
             {
@@ -703,24 +650,11 @@ int main()
             }
             cout<<endl;
         }
-        else if(s=="hexadecimal"||s=="hex"||s=="hexa") /// TODO: de facut o functie pentru afisarea lui ab.cd (a * 2^64 + b * 2^0 + c * 2^(-64) + d * 2^(-128) => (-1) * 2^64 + 979)
+        else if(s=="hexadecimal"||s=="hex"||s=="hexa")
         {
-            long long n;
-            double d;
-            cin>>n>>d;
-            cout<<n<<' '<<hex<<n<<' '<<d<<dec;
-            long long x=2,a=-1;
-            unsigned long long b=979,c=0,d1=0;
-            cout << showbase      /// show the 0x prefix
-                 << internal      /// fill between the prefix and the number
-                 << setfill('0'); /// fill with 0s
-
-            cout << hex << endl << setw(18) << x << dec << " = " << setw(0) << x << endl ;
-            cout << hex << a << setw(16) << b << '.' << setw(16) << c << setw(16) << d1 << endl << noshowbase << setw(0) << dec;
-            /**
-                https://cplusplus.com/reference/ios/showbase/
-                https://cplusplus.com/forum/windows/51591/     - Showing all 16 digits of a hexadecimal number
-            */
+            Hexazecimal n;
+            cin>>n.a>>n.b>>n.c>>n.d;
+            afisare_hexa(n);
         }
         else if(s=="disk"||s=="memory"||s=="partition"||s=="partitions")
         {
@@ -755,6 +689,8 @@ int main()
             /**
                 Algoritmul bijectiei lui Cantor predat de catre domnul profesor Gabriel Istrate la Facultatea de Matematica si Informatica din Bucuresti, la seminarul de Calculabilitate
                 si Complexitate
+
+                Cantor's bijection algorithm taught by Professor Gabriel Istrate at the Faculty of Mathematics and Computer Science in Bucharest, at the Computability and Complexity seminar
             */
             perecheCantor n;
             cin>>n.x>>n.y;
@@ -768,17 +704,15 @@ int main()
             printf("Hello, World! \n");
             main2();
         }
-        else if(s=="bigint")
-        {
-            __int128 salut=LLONG_MAX,salut2; /// https://stackoverflow.com/questions/18439520/is-there-a-128-bit-integer-in-c
-            salut2=((salut+1)*(salut+1)-1)*2+1;
-            cout<<endl<<"2^63  - 1 = "<<salut<<endl<<"2^127 - 1 = "<<salut2<<endl;
-        }
-        else if(s=="factorial")
+        else if(s=="bigint") /// https://stackoverflow.com/questions/18439520/is-there-a-128-bit-integer-in-c
+            cout<<"2^63  - 1 =  "<<LONGLONG_MAX<<endl<<"2^127 - 1 =  "<<INT128_MAX<<endl<<"-2^63     = " <<LONGLONG_MIN<<endl<<"-2^127    = " <<INT128_MIN<<endl;
+        else if(s=="factorial" || s=="fact")
         {
             int n;
             cin>>n;
-            cout<<factorial(n)<<endl;
+            FormaStiintifica f;
+            f = factorial(n);
+            show_floated_int(f);
         }
         else
             cout<<"Comanda necunoscuta | Unknown command \n";
