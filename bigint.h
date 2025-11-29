@@ -112,7 +112,7 @@ void show_floated_int(FormaStiintifica n)          /// Afiseaza forma stiinfica 
         else
             cout<<n.coeficient/0.0;
     }
-    else if(n.exponent==INT128_MAX)                /// In loc de x*10^y este x impartit la infinit    | Instead of x*10^y is x over infinity
+    else if(n.exponent==INT128_MIN)                /// In loc de x*10^y este x impartit la infinit    | Instead of x*10^y is x over infinity
     {
         if(n.coeficient==0)
             cout<<0;
@@ -208,4 +208,34 @@ FormaStiintifica div_int(Fractie fr) /// In aceasta functie vrem sa returnam for
     nr = (long double)fr.numarator/fr.numitor;
     n  = float_to_int(nr);
     return n;
+}
+Fractie int_div(FormaStiintifica n)
+{
+    Fractie f;
+    f.numarator = -n.coeficient;
+    f.numitor = -1;
+    if(n.coeficient == 0 && n.exponent == INT128_MAX)
+    {
+        f.numitor=0;
+        return f;
+    }
+    while(n.exponent<0 && f.numarator != 0)
+    {
+        if(f.numitor <= INT128_MAX / 10 && f.numitor >= INT128_MIN / 10)
+            f.numitor*=10;
+        else
+            f.numarator/=10;
+        n.exponent+=1;
+    }
+    while(n.exponent>0 && f.numitor != 0)
+    {
+        if(f.numarator <= INT128_MAX / 10 && f.numarator >= INT128_MIN / 10)
+            f.numarator*=10;
+        else
+            f.numitor/=10;
+        n.exponent-=1;
+    }
+    f.numarator=-f.numarator;
+    f.numitor=-f.numitor;
+    return f;
 }

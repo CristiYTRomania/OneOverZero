@@ -694,6 +694,17 @@ int main()
             f = factorial(n);
             show_floated_int(f);
         }
+        else if(s=="fractie" || s=="fraction")
+        {
+            FormaStiintifica f;
+            string a;
+            cin>>a;
+            f.coeficient=StringToInt(a);
+            cin>>a;
+            f.exponent=StringToInt(a);
+            Fractie fr = int_div(f);
+            cout<<fr.numarator<<'/'<<fr.numitor<<endl;
+        }
         else
             cout<<"Comanda necunoscuta | Unknown command \n";
         afisare_linii();
