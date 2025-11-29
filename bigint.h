@@ -195,3 +195,11 @@ FormaStiintifica factorial(int n)                  /// Functia care returneaza f
     }
     return nr;
 }
+FormaStiintifica div_int(Fractie fr) /// In aceasta functie vrem sa returnam forma stiintifica a rezultatului real al lui x/y | This function returns scientific form of real result x/y
+{
+    long double nr;
+    FormaStiintifica n;
+    nr = (long double)fr.numarator/fr.numitor;
+    n  = float_to_int(nr);
+    return n;
+}

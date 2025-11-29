@@ -290,7 +290,7 @@ string convertire(string a)
 }
 void afisare_linii()
 {
-    for(int i=1;i<=115;i++)
+    for(int i=1;i<=80;i++)
         cout<<"-";
     cout<<endl;
 }
@@ -364,7 +364,7 @@ int main()
         cin>>s;
         int nr_caractere=s.length();                       /// Numarul de caractere al comenzii citite de la tastatura | The string length command of the keyboard input
         for(int i=0;i<nr_caractere;i++)                    /// Transformam orice litera mare din comanda in litera mica pentru ca comanda sa nu fie case sensitive
-            if(s[i]>='A'&&s[i]<='Z')                       /// We convert any uppercase letter in the command to lowercase so that the command to be not case sensitive.
+            if(s[i]>='A' && s[i]<='Z')                     /// We convert any uppercase letter in the command to lowercase so that the command to be not case sensitive.
                 s[i]+=32;
         if(s=="game")                                      /// Jocul de matematica in limba engleza | Math game in English  language
             math_game(0);
@@ -488,17 +488,15 @@ int main()
         }
         else if(s == "div" || s == "division" || s == "impartire")
         {
-            Fractie f;
-            FormaStiintifica n;
-            long double nr;
-            long long x, y;
-            cin >> x >>  y;
-            f.numarator = x;
-            f.numitor   = y;
-            nr = (long double)f.numarator/f.numitor;
-            n  = float_to_int(nr);                                           /// Apelez functia care returneaza forma stiintifica a rezultatului real al lui x/y
-            cout << nr <<endl;                                               /// Calling the funtion which returns scientific form of real result of x/y
-            show_floated_int(n);                                             /// Afiseaza forma stiinfica a numarului real: coeficient  * 10^exponent
+            string a;
+            Fractie n;                                                       /// https://stackoverflow.com/questions/18439520/is-there-a-128-bit-integer-in-c
+            cin>>a;
+            n.numarator=StringToInt(a);
+            cin>>a;
+            n.numitor=StringToInt(a);
+            FormaStiintifica x = div_int(n);                                 /// Apelez functia care returneaza forma stiintifica a rezultatului real al lui x/y
+                                                                             /// Calling the funtion which returns scientific form of real result of x/y
+            show_floated_int(x);                                             /// Afiseaza forma stiinfica a numarului real: coeficient  * 10^exponent
         }                                                                    /// Shows the scientific form of  real number: coefficient * 10^exponent
         else if(s=="shift")
         {
@@ -688,8 +686,6 @@ int main()
             printf("Hello, World! \n");
             main2();
         }
-        else if(s=="bigint") /// https://stackoverflow.com/questions/18439520/is-there-a-128-bit-integer-in-c
-            cout<<"2^63  - 1 =  "<<LONGLONG_MAX<<endl<<"2^127 - 1 =  "<<INT128_MAX<<endl<<"-2^63     = " <<LONGLONG_MIN<<endl<<"-2^127    = " <<INT128_MIN<<endl;
         else if(s=="factorial" || s=="fact")
         {
             int n;
@@ -699,18 +695,7 @@ int main()
             show_floated_int(f);
         }
         else
-        {
             cout<<"Comanda necunoscuta | Unknown command \n";
-            /// continue;
-            string a;
-            Fractie n;
-            cin>>a;
-            n.numarator=StringToInt(a);
-            cin>>a;
-            n.numitor=StringToInt(a);
-            FormaStiintifica x=div_int(n);
-            show_floated_int(x);
-        }
         afisare_linii();
     }
     return 0; /// Se va inchide programul si se va returna valoarea 0 | The program will close and the value returned will be 0
