@@ -127,7 +127,10 @@ void show_floated_int(FormaStiintifica n)          /// Afiseaza forma stiinfica 
             cout<<'-';
         for(__int128 i=-1; i>=n.exponent; i--)
             p=p*10;
-        cout<<abs(n.coeficient/p)<<'.';
+        if(n.coeficient<0)
+            cout<<-n.coeficient/p<<'.';
+        else
+            cout<<n.coeficient/p<<'.';
         x=n.coeficient%p;
         while(x!=0)
         {
@@ -136,7 +139,10 @@ void show_floated_int(FormaStiintifica n)          /// Afiseaza forma stiinfica 
         }
         for(__int128 i=n.exponent;i<ct;i++)
             cout<<0;
-        cout<<abs(n.coeficient%p);
+        if(n.coeficient<0)
+            cout<<-n.coeficient%p;
+        else
+            cout<<n.coeficient%p;
     }
     else if(n.exponent>=0)
     {

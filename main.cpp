@@ -1,6 +1,6 @@
-/// OneOverZero | Tested on GDB Online (C++ 23) and CodeBlocks 20.03 | Testat pe GDB Online (C++ 23) si pe CodeBlocks 20.03
-/// TODO: sa fac si pentru codeblocks ubuntu, fractie+-*/^fractie, vectori de fractii si hexa (de forma ab.cd); log(fractie), log(hexa), e^fractie, e^hexa
-///       to do for codeblocks ubuntu, fraction+-*/fraction, fraction vectors and hexadecimal number vectors (ab.cd); log(fraction), log(hexa), e^fraction, e^hexa
+/// OneOverZero | Tested on GDB Online (C++ 23) and CodeBlocks 20.03 (Windows 10 si Ubuntu 22.04.5 LTS) | Testat pe GDB Online (C++ 23) si pe CodeBlocks 20.03 (Windows 10 and Ubuntu 22.04.5 LTS)
+/// TODO: fractie+-*/^fractie, vectori de fractii si hexa (de forma ab.cd); log(fractie), log(hexa), e^fractie, e^hexa
+///       fraction+-*/fraction, fraction vectors and hexadecimal number vectors (ab.cd); log(fraction), log(hexa), e^fraction, e^hexa
 #include<cstdlib>                                                    /// Pentru atoi() | For atoi() -> Convert string to integer, atof(), rand(), srand() etc.
 #include<climits>                                                    /// Pentru INT_MIN, INT_MAX, LONG_MIN etc. | For INT_MIN, INT_MAX, LONG_MIN etc.
 #include<bits/stdc++.h>                                              /// Aici se afla toate bibliotecile        | Here are all the libraries
