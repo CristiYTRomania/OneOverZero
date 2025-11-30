@@ -1,4 +1,4 @@
-/// OneOverZero | Tested on GDB Online (C++ 23) and CodeBlocks 20.03 (Windows 10 si Ubuntu 22.04.5 LTS) | Testat pe GDB Online (C++ 23) si pe CodeBlocks 20.03 (Windows 10 and Ubuntu 22.04.5 LTS)
+/// OneOverZero | Tested on GDB Online (C++ 23) and CodeBlocks 20.03 (Windows 10 22H2 si Ubuntu 22.04.5 LTS) | Testat pe GDB Online (C++ 23) si pe CodeBlocks 20.03 (Windows 10 22H2 and Ubuntu 22.04.5 LTS)
 /// TODO: fractie+-*/^fractie, vectori de fractii si hexa (de forma ab.cd); log(fractie), log(hexa), e^fractie, e^hexa
 ///       fraction+-*/fraction, fraction vectors and hexadecimal number vectors (ab.cd); log(fraction), log(hexa), e^fraction, e^hexa
 #include<cstdlib>                                                    /// Pentru atoi() | For atoi() -> Convert string to integer, atof(), rand(), srand() etc.
@@ -129,13 +129,16 @@ void math_game(bool language)                     /// Acesta este un joc in roma
             level=1;
     }
 }
-double f(double x, unsigned int n, double v[])    /// Returnam rezultatul unui polinom de grad, x si coeficienti cunoscuti
+long double f(long double x, unsigned int n, long double v[])    /// Returnam rezultatul unui polinom de grad n, x si coeficienti cunoscuti | Returning the result of a grade n polynomial, x and known coefficients
 {
-    double s=0,p=1;
+    long double s=0,p=1;
     for(unsigned int i=0;i<=n;i++)
     {
-        s=s+p*v[i];
+        if(v[i] != 0)
+            s=s+p*v[i];
         p=p*x;
+        if(i==INT_MAX*2+1)
+            break;
     }
     return s;
 }
@@ -329,6 +332,34 @@ void CalcAnswer(string s)
     Answer = s;
     cout << s;
 }
+long double CitireNrReal()
+{
+    string n;
+    long double x;
+    cin>>n;
+    if(n=="cinf")
+        x=stold("inf");
+    else
+        x=stold(n);
+    return x;
+}
+bool lHospital(long double v[], unsigned int n)
+{
+    bool ok=0;
+    if(v[0] != 0)
+        ok=1;
+    v[0] = 0;
+    for(unsigned int i=1;i<=n;i++)
+    {
+        if(v[i] != 0)
+            ok=1;
+        v[i-1] = v[i] * i;
+        v[i] = 0;
+        if(i==0)
+            break;
+    }
+    return ok;
+}
 int main()
 {
     bool ok=1;                                    /// Daca ok este 1, programul va rula, daca ok este 0, programul se va incheia | If ok=1, the program will run. If not, the program will stop
@@ -372,19 +403,21 @@ int main()
             math_game(1);
         else if(s=="quit" or s=="exit" or s=="iesire")     /// Iesire din program                   | Exiting the program
             ok=0;
-        else if(s=="f" or s=="function" or s=="functie")   /// Apelarea functiei polinomiale        | Calling polinomial function
+        else if(s=="f" or s=="function" or s=="functie")   /// Apelarea functiei polinomiale        | Calling polynomial function
         {
-            double x;
+            long double x;
             unsigned int n;
             cout<<"x = ";
-            cin>>x;
+            x=CitireNrReal();
             cout<<"n = ";
             cin>>n;
-            double v[n+1];
+            long double v[n+1];
             for(unsigned int i=n;i<=n;i--)
             {
                 cout<<"a["<<i<<"] = ";
-                cin>>v[i];
+                v[i]=CitireNrReal();
+                if(i==0)
+                    break;
             }
             for(unsigned int i=n;i>0;i--)
                 cout<<v[i]<<" * x^"<<i<<" + ";
@@ -704,6 +737,51 @@ int main()
             f.exponent=StringToInt(a);
             Fractie fr = int_div(f);
             cout<<fr.numarator<<'/'<<fr.numitor<<endl;
+        }
+        else if(s=="polinomialraport"||s=="polinomial_raport"||s=="raport"||s=="poli"||s=="polinomial"||s=="poly"||s=="polynomial")
+        {
+            long double x,numarator,numitor;
+            unsigned int n1,n2;
+            cout<<"x = ";
+            x=CitireNrReal();
+            cout<<"n[1] = ";
+            cin>>n1;
+            cout<<"n[2] = ";
+            cin>>n2;
+            long double a[n1+1],b[n2+1];
+            for(unsigned int i=n1;i<=n1;i--)
+            {
+                cout<<"a["<<i<<"] = ";
+                a[i]=CitireNrReal();
+                if(i==0)
+                    break;
+            }
+            for(unsigned int i=n2;i<=n2;i--)
+            {
+                cout<<"b["<<i<<"] = ";
+                b[i]=CitireNrReal();
+                if(i==0)
+                    break;
+            }
+            cout<<"( ";
+            for(unsigned int i=n1;i>0;i--)
+                cout<<a[i]<<" * x^"<<i<<" + ";
+            cout<<a[0]<<" * x^0 ) / ( ";
+            for(unsigned int i=n2;i>0;i--)
+                cout<<b[i]<<" * x^"<<i<<" + ";
+            numarator=f(x,n1,a);
+            numitor  =f(x,n2,b);
+            cout<<b[0]<<" * x^0 ) = ";
+            while( (1/numarator==0 && 1/numitor==0) || (numarator==0 && numitor==0) )
+            {
+                bool ok1 = lHospital(a,n1);
+                bool ok2 = lHospital(b,n2);
+                numarator=f(x,n1,a);
+                numitor  =f(x,n2,b);
+                if(ok1==0 && ok2==0)
+                    break;
+            }
+            cout<<numarator<<" / "<<numitor<<" = "<<numarator/numitor<<endl;
         }
         else
             cout<<"Comanda necunoscuta | Unknown command \n";

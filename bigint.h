@@ -212,8 +212,8 @@ FormaStiintifica div_int(Fractie fr) /// In aceasta functie vrem sa returnam for
 Fractie int_div(FormaStiintifica n)
 {
     Fractie f;
-    f.numarator = -n.coeficient;
-    f.numitor = -1;
+    f.numarator = n.coeficient;
+    f.numitor = 1;
     if(n.coeficient == 0 && n.exponent == INT128_MAX)
     {
         f.numitor=0;
@@ -221,7 +221,7 @@ Fractie int_div(FormaStiintifica n)
     }
     while(n.exponent<0 && f.numarator != 0)
     {
-        if(f.numitor <= INT128_MAX / 10 && f.numitor >= INT128_MIN / 10)
+        if(f.numitor <= (INT128_MAX) / 10 && f.numitor >= INT128_MIN / 10)
             f.numitor*=10;
         else
             f.numarator/=10;
@@ -229,13 +229,11 @@ Fractie int_div(FormaStiintifica n)
     }
     while(n.exponent>0 && f.numitor != 0)
     {
-        if(f.numarator <= INT128_MAX / 10 && f.numarator >= INT128_MIN / 10)
+        if(f.numarator <= (INT128_MAX) / 10 && f.numarator >= INT128_MIN / 10)
             f.numarator*=10;
         else
             f.numitor/=10;
         n.exponent-=1;
     }
-    f.numarator=-f.numarator;
-    f.numitor=-f.numitor;
     return f;
 }
