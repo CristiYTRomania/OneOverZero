@@ -11,25 +11,58 @@
 #include<complex>                                                    /// Numere complexe cu coeficienti reali         | Complex numbers with real coefficients
 #include<fstream>                                                    /// Pentru a citi din fisiere si a scrie in ele  | To read and write files
 #include "bigint.h"                                                  /// Integrarea operatorului de afisare pentru intregul pe 128 de biti | Cout operator integration of 128-bit integer
-#include "hello.h"                                                   /// Numere complexe si functii vectoriale        | Complex numbers and vectorial functions
-#define pi "3.141592653589793238462643383279502884197"                                                              /// Definim constanta pi | Define constant pi
-#define e  "2.7182818284590452353602874713526624977572470936999595749669676277240766303535475945713821785251664274" /// Definim constanta e  | Define constant e
-using namespace std;                              /// Pentru cin si cout | For cin and cout -> C++
-string Answer = "0";                              /// Ultimul rezultat al calculatorului virtual | The last answer of the virtual calculator
+using namespace std;                                                 /// Pentru cin si cout | For cin and cout -> C++
+int level = 1;
 struct SolutiiComplexe
 {
     complex<long double> x1,x2;
 };
+void AfisareNrReal(long double r, unsigned int n = 6)
+{
+    __int128 i = floor(r);
+    if(r == i)
+        cout<<i;
+    else if(r >= INT128_MAX || r <= INT128_MIN)
+    {
+        cout<<setprecision(0);
+        cout<<r;
+        cout<<setprecision(6);
+    }
+    else
+    {
+        cout<<setprecision(n);
+        cout<<r;
+        cout<<setprecision(6);
+    }
+}
+complex<long double> CitireNrComplex()
+{
+    long double a,b;
+    cout<<"a = ";
+    cin>>a;
+    cout<<"b = ";
+    cin>>b;
+    complex<long double> n(a,b);
+    return n;
+}
+void AfisareNrComplex(complex<long double> n)
+{
+    AfisareNrReal(real(n));
+    cout<<" + ";
+    AfisareNrReal(imag(n));
+    cout<<" * i";
+}
 void ascii()                                      /// Afiseaza toate caracterele ASCII | Shows all ASCII characters
 {
-    for(int i=0;i<=26;i++)
+    for(int i=0;i<=511;i++)
+    {
+        if(i==27||i==283)
+        {
+            cout<<"char("<<i<<") = ESC\n";
+            continue;
+        }
         cout<<"char("<<i<<") = "<<char(i)<<"\n";
-    cout<<"char(27) = ESC\n";
-    for(int i=28;i<=282;i++)
-        cout<<"char("<<i<<") = "<<char(i)<<"\n";
-    cout<<"char(283) = ESC\n";
-    for(int i=284;i<=511;i++)
-        cout<<"char("<<i<<") = "<<char(i)<<"\n";
+    }
 }
 auto shift_bits(auto n, long long p)              /// Aceasta functie va shifta bitii unui numar in mod circular | This function will shift the bits in circular way
 {
@@ -58,36 +91,40 @@ auto shift_bits(auto n, long long p)              /// Aceasta functie va shifta 
     }
     return n;
 }
-void math_game(bool language)                     /// Acesta este un joc in romana si engleza in care va trebui sa punem raspunsul corect pentru niste operatii aritmetice
+void afisare_linii()
 {
+    for(int i=1;i<=80;i++)
+        cout<<"-";
+    cout<<endl;
+}
+void math_game(bool language)                     /// Acesta este un joc in romana si engleza in care va trebui sa punem raspunsul corect pentru niste operatii aritmetice
+{                                                 /// This is a game in Romanian in English in which you need to put the right answer for arithmetic oprations
     srand(time(0));
-    int level=1,n,x,y,total,correct;
+    int n,x,y,total,correct,lives;
     string s;
-    bool ok=1;
-    while(ok==1)
+    while(level>=1 and level<=6)
     {
         correct=0;
         if(level>=1 and level<=5)
             total=5;
         else if(level==6)
             total=6;
+        afisare_linii();
         if(language==1)
-            cout<<"Nivelul "<<level<<endl;
+            cout<<"Nivelul ";
         else if(language==0)
-            cout<<"Level "<<level<<endl;
-        while(level>=1 and level<=6)
+            cout<<"Level ";
+        cout<<level<<endl;
+        cout<<"Help options: \n"<<"'play' for playing; \n"<<"'quit' (or 'exit') for quitting the game. \n";
+        afisare_linii();
+        cin>>s;
+        s=NotCaseSensitive(s);
+        if(s=="quit" or s=="exit")
+            break;
+        else if(s=="play")
         {
-            cin>>s;
-            if(s=="quit" or s=="exit")
-            {
-                ok=0;
-                break;
-            }
-            else if(s=="help")
-            {
-                cout<<"Help options: \n"<<"'play' for playing; \n"<<"'quit' (or 'exit') for quitting the game. \n";
-            }
-            else if(s=="play")
+            lives = 3;
+            while(correct<total && lives > 0)
             {
                 if(level>=0 and level<=5)
                 {
@@ -105,10 +142,16 @@ void math_game(bool language)                     /// Acesta este un joc in roma
                 {
                     correct++;
                     cout<<"Correct answer! (";
+                    if(lives<3)
+                        lives++;
                 }
                 else
+                {
                     cout<<"Wrong answer! (";
+                    lives--;
+                }
                 cout<<correct<<"/"<<total<<")\n";
+                cout<<"Lives: "<<lives<<endl;
             }
             if(correct==total)
             {
@@ -121,12 +164,15 @@ void math_game(bool language)                     /// Acesta este un joc in roma
                 {
                     cout<<"Level 7 coming soon! \n";
                     level=1;
-                    ok=0;
                 }
             }
+            else
+                cout<<"Good luck next time! \n";
         }
-        if(level<1 and level>6)
-            level=1;
+        else if(language==1)
+            cout<<"Comanda necunoscuta \n";
+        else
+            cout<<"Unknown command \n";
     }
 }
 long double f(long double x, unsigned int n, long double v[])    /// Returnam rezultatul unui polinom de grad n, x si coeficienti cunoscuti | Returning the result of a grade n polynomial, x and known coefficients
@@ -137,7 +183,7 @@ long double f(long double x, unsigned int n, long double v[])    /// Returnam re
         if(v[i] != 0)
             s=s+p*v[i];
         p=p*x;
-        if(i==INT_MAX*2+1)
+        if(i==(unsigned int)INT_MAX*2+1)
             break;
     }
     return s;
@@ -281,22 +327,6 @@ perecheCantor bijectieCantor(long long n)
     n1.x=p-n1.y;
     return n1;
 }
-string convertire(string a)
-{
-    if(a=="pi")
-        a=pi;
-    else if(a=="e")
-        a=e;
-    else if(a=="a" || a=="ans" || a=="answer" || a=="rez" || a=="rezultat")
-        a=Answer;
-    return a;
-}
-void afisare_linii()
-{
-    for(int i=1;i<=80;i++)
-        cout<<"-";
-    cout<<endl;
-}
 struct Hexazecimal
 {
     long long a;
@@ -335,6 +365,7 @@ void CalcAnswer(string s)
 long double CitireNrReal()
 {
     string n;
+    n = NotCaseSensitive(n);
     long double x;
     cin>>n;
     if(n=="cinf")
@@ -369,6 +400,7 @@ int main()
     fin>>partitii;
     string nume_partitie[partitii];
     unsigned long long mem_totala[partitii],mem_libera[partitii],MEM_TOTALA=0,MEM_LIBERA=0;
+    cout<<fixed;
     for(int i=0;i<partitii;i++)
     {
         fin>>nume_partitie[i]>>mem_totala[i]>>mem_libera[i];
@@ -391,12 +423,9 @@ int main()
         cout<<"Type 'help' for instructions! \n";
         cout<<"Introduceti 'ajutor' pentru instructiuni! \n";
         afisare_linii();
-        cout<<fixed<<setprecision(30)<<"Meniu principal | Main: ";   /// Suntem in meniul principal | We are in the main menu
+        cout<<"Meniu principal | Main: ";                  /// Suntem in meniul principal | We are in the main menu
         cin>>s;
-        int nr_caractere=s.length();                       /// Numarul de caractere al comenzii citite de la tastatura | The string length command of the keyboard input
-        for(int i=0;i<nr_caractere;i++)                    /// Transformam orice litera mare din comanda in litera mica pentru ca comanda sa nu fie case sensitive
-            if(s[i]>='A' && s[i]<='Z')                     /// We convert any uppercase letter in the command to lowercase so that the command to be not case sensitive.
-                s[i]+=32;
+        s = NotCaseSensitive(s);
         if(s=="game")                                      /// Jocul de matematica in limba engleza | Math game in English  language
             math_game(0);
         else if(s=="joc")                                  /// Jocul de matematica in limba romana  | Math game in Romanian language
@@ -431,10 +460,17 @@ int main()
         {
             cout<<"Optiuni pentru ajutor: \n"<<"'iesire' pentru iesirea din aplicatie; \n"<<"'joc' pentru a incepe jocul; \n";
         }
-        else if(s=="numere" or s=="numbers")               /// Aceasta comanda va genera cateva numere si simboluri in ordine crescatoare, marginile fiind predominate de infinitul complex
+        else if(s=="numere"||s=="numbers"||s=="inf"||s=="infinity") /// Aceasta comanda va genera cateva numere si simboluri in ordine crescatoare, marginile fiind predominate de infinitul complex
         {                                                  /// This command will generate some numbers and symbols in in ascending order,  the edges being dominated by complex infinity
             printf("%s %s %d %d %d %d %d %d %d %d %d %d %s ","cinf","-inf",-10,-9,-8,-7,-6,-5,-4,-3,-2,-1,"-0.0");
             printf("%d %s %d %d %d %d %d %d %d %d %d %d %s %s \n",0,"0.0",1,2,3,4,5,6,7,8,9,10,"inf","cinf");
+            cout<<" inf -> Positive Infinity (1/+0.0)"<<endl;
+            cout<<"-inf -> Negative Infinity (1/-0.0)"<<endl;
+            cout<<"cinf -> Complex  Infinity (1/0)"<<endl;
+            cout<<" nan -> Not A Number      (0/0)"<<endl;
+            cout<<"112 is a integer ("<<typeid(112).name()<<")"<<endl;
+            complex<string> a((string)"4",(string)"5");
+            cout<<a<<endl;
         }
         else if(s=="ascii")                                /// Apelam functia ce va afisa toate caracterele ASCII | Calling the function which shows all ASCII characters
             ascii();
@@ -460,6 +496,7 @@ int main()
             string n;
             cout<<"Enter the real number: ";
             cin>>n;
+            n = convertire(n);
             float       real_float      =stof (n);
             double      real_double     =stod (n);
             long double real_long_double=stold(n);
@@ -492,6 +529,7 @@ int main()
             string n;
             cout<<"Introduceti numarul real: ";
             cin>>n;
+            n = convertire(n);
             float       real_float      =stof (n);
             double      real_double     =stod (n);
             long double real_long_double=stold(n);
@@ -521,12 +559,8 @@ int main()
         }
         else if(s == "div" || s == "division" || s == "impartire")
         {
-            string a;
-            Fractie n;                                                       /// https://stackoverflow.com/questions/18439520/is-there-a-128-bit-integer-in-c
-            cin>>a;
-            n.numarator=StringToInt(a);
-            cin>>a;
-            n.numitor=StringToInt(a);
+            Fractie n;
+            n = CitireFractie();
             FormaStiintifica x = div_int(n);                                 /// Apelez functia care returneaza forma stiintifica a rezultatului real al lui x/y
                                                                              /// Calling the funtion which returns scientific form of real result of x/y
             show_floated_int(x);                                             /// Afiseaza forma stiinfica a numarului real: coeficient  * 10^exponent
@@ -538,7 +572,7 @@ int main()
             n=shift_bits(n,p);                             /// Aici vrem sa shiftam la dreapta cu p biti numarul n | Here we want to shift the number n with p bits to the right
             cout<<n<<" ("<<sizeof(shift_bits(n,p))<<" bytes)"<<endl;
         }
-        else if(s=="ecuatie")
+        else if(s=="ecuatie"||s=="equation")
         {
             long double a,b,c;
             cout<<"a = ";
@@ -548,11 +582,20 @@ int main()
             cout<<"c = ";
             cin>>c;
             SolutiiComplexe solutie=ecuatie(a,b,c);
-            cout<<a<<" * x^2 + "<<b<<" * x^1 + "<<c<<" * x^0 = 0"<<endl;
-            cout<<"x[1] = "<<solutie.x1<<endl;
-            cout<<"x[2] = "<<solutie.x2<<endl;
+            AfisareNrReal(a);
+            cout<<" * x^2 + ";
+            AfisareNrReal(b);
+            cout<<" * x^1 + ";
+            AfisareNrReal(c);
+            cout<<" * x^0 = 0"<<endl;
+            cout<<"x[1] = ";
+            AfisareNrComplex(solutie.x1);
+            cout<<endl;
+            cout<<"x[2] = ";
+            AfisareNrComplex(solutie.x2);
+            cout<<endl;
         }
-        else if(s=="calculator"||s=="calc")   /// TODO: sa nu fie case sensitive a si b; operatori noi: ^, sqrt(), log() | To not be case sensitive (a and b); New operators: ^, sqrt(), log()
+        else if(s=="calculator"||s=="calc")   /// TODO: Operatori noi: ^, sqrt(), log() | New operators: ^, sqrt(), log()
         {
             string a,b,operator_;
             cin>>a>>operator_>>b;
@@ -689,15 +732,12 @@ int main()
             afisare_memorie(MEM_TOTALA-MEM_LIBERA);
             cout<<(long double)(MEM_TOTALA-MEM_LIBERA)/MEM_TOTALA*100<<'%'<<endl;
         }
-        else if(s=="complex"||s=="inf"||s=="infinity")
+        else if(s=="complex")                 /// TODO: complex<string>
         {
-            complex<string> a((string)"4",(string)"5");
-            complex<long double> b=4.0+5i;
-            cout<<fixed<<a<<' '<<b<<' '<<typeid(a).name()<<endl;
-            cout<<" inf -> Positive Infinity (1/+0.0)"<<endl;
-            cout<<"-inf -> Negative Infinity (1/-0.0)"<<endl;
-            cout<<"cinf -> Complex  Infinity (1/0)"<<endl;
-            cout<<" nan -> Not A Number      (0/0)"<<endl;
+            complex<long double> c=4.0+5i;
+            c = CitireNrComplex();
+            AfisareNrComplex(c);
+            cout<<endl;
         }
         else if(s=="bijectie"||s=="cantor")
         {
@@ -717,7 +757,7 @@ int main()
         else if(s=="hello")
         {
             printf("Hello, World! \n");
-            main2();
+            vectori();
         }
         else if(s=="factorial" || s=="fact")
         {
@@ -730,11 +770,7 @@ int main()
         else if(s=="fractie" || s=="fraction")
         {
             FormaStiintifica f;
-            string a;
-            cin>>a;
-            f.coeficient=StringToInt(a);
-            cin>>a;
-            f.exponent=StringToInt(a);
+            f = CitireFormaStiintifica();
             Fractie fr = int_div(f);
             cout<<fr.numarator<<'/'<<fr.numitor<<endl;
         }
@@ -765,13 +801,21 @@ int main()
             }
             cout<<"( ";
             for(unsigned int i=n1;i>0;i--)
-                cout<<a[i]<<" * x^"<<i<<" + ";
-            cout<<a[0]<<" * x^0 ) / ( ";
+            {
+                AfisareNrReal(a[i]);
+                cout<<" * x^"<<i<<" + ";
+            }
+            AfisareNrReal(a[0]);
+            cout<<" * x^0 ) / ( ";
             for(unsigned int i=n2;i>0;i--)
-                cout<<b[i]<<" * x^"<<i<<" + ";
+            {
+                AfisareNrReal(b[i]);
+                cout<<" * x^"<<i<<" + ";
+            }
+            AfisareNrReal(b[0]);
+            cout<<" * x^0 ) = ";
             numarator=f(x,n1,a);
             numitor  =f(x,n2,b);
-            cout<<b[0]<<" * x^0 ) = ";
             while( (1/numarator==0 && 1/numitor==0) || (numarator==0 && numitor==0) )
             {
                 bool ok1 = lHospital(a,n1);
@@ -781,7 +825,12 @@ int main()
                 if(ok1==0 && ok2==0)
                     break;
             }
-            cout<<numarator<<" / "<<numitor<<" = "<<numarator/numitor<<endl;
+            AfisareNrReal(numarator);
+            cout<<" / ";
+            AfisareNrReal(numitor);
+            cout<<" = ";
+            AfisareNrReal(numarator/numitor);
+            cout<<endl;
         }
         else
             cout<<"Comanda necunoscuta | Unknown command \n";

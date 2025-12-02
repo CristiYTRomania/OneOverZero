@@ -1,10 +1,8 @@
 #include <cstdint>
 #include <iomanip>
-#define LONGLONG_MAX (__int128)LLONG_MAX
-#define LONGLONG_MIN (__int128)LLONG_MIN
-#define INT128_MAX ((LONGLONG_MAX+1)*(LONGLONG_MAX+1)-1)*2+1
-#define INT128_MIN LONGLONG_MIN * -LONGLONG_MIN * 2
+#include "define.h"
 using namespace std;
+string Answer = "0";                                /// Ultimul rezultat al calculatorului virtual | The last answer of the virtual calculator
 std::ostream&
 operator<<( std::ostream& dest, __int128_t value )  /// https://stackoverflow.com/questions/25114597/how-to-print-int128-in-g
 {
@@ -236,4 +234,51 @@ Fractie int_div(FormaStiintifica n)
         n.exponent-=1;
     }
     return f;
+}
+string NotCaseSensitive(string s)
+{
+    int nr_caractere=s.length();                  /// Numarul de caractere al comenzii citite de la tastatura | The string length command of the keyboard input
+    for(int i=0;i<nr_caractere;i++)               /// Transformam orice litera mare din comanda in litera mica pentru ca comanda sa nu fie case sensitive
+        if(s[i]>='A' && s[i]<='Z')                /// We convert any uppercase letter in the command to lowercase so that the command to be not case sensitive
+            s[i]+=32;
+    return s;
+}
+string convertire(string a)
+{
+    a = NotCaseSensitive(a);
+    if(a=="pi")
+        a=pi;
+    else if(a=="e")
+        a=e;
+    else if(a=="a" || a=="ans" || a=="answer" || a=="rez" || a=="rezultat")
+        a=Answer;
+    return a;
+}
+FormaStiintifica CitireFormaStiintifica()
+{
+    FormaStiintifica f;
+    string a;
+    cin>>a;
+    a = convertire(a);
+    f.coeficient=StringToInt(a);
+    cin>>a;
+    a = convertire(a);
+    f.exponent=StringToInt(a);
+    return f;
+}
+Fractie CitireFractie()
+{
+    string a;
+    Fractie n;
+    cin>>a;
+    a = convertire(a);
+    n.numarator=StringToInt(a);
+    cin>>a;
+    a = convertire(a);
+    n.numitor=StringToInt(a);
+    return n;
+}
+void vectori()
+{
+    main2();
 }
