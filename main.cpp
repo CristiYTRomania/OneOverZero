@@ -1,6 +1,6 @@
 /// OneOverZero | Tested on GDB Online (C++ 23) and CodeBlocks 20.03 (Windows 10 22H2 si Ubuntu 22.04.5 LTS) | Testat pe GDB Online (C++ 23) si pe CodeBlocks 20.03 (Windows 10 22H2 and Ubuntu 22.04.5 LTS)
 /// TODO: fractie+-*/^fractie, vectori de fractii si hexa (de forma ab.cd); log(fractie), log(hexa), e^fractie, e^hexa
-///       fraction+-*/fraction, fraction vectors and hexadecimal number vectors (ab.cd); log(fraction), log(hexa), e^fraction, e^hexa
+/// TODO: fraction+-*/fraction, fraction vectors and hexadecimal number vectors (ab.cd); log(fraction), log(hexa), e^fraction, e^hexa
 #include<cstdlib>                                                    /// Pentru atoi() | For atoi() -> Convert string to integer, atof(), rand(), srand() etc.
 #include<climits>                                                    /// Pentru INT_MIN, INT_MAX, LONG_MIN etc. | For INT_MIN, INT_MAX, LONG_MIN etc.
 #include<bits/stdc++.h>                                              /// Aici se afla toate bibliotecile        | Here are all the libraries
@@ -306,6 +306,81 @@ string operatie(string a="0", string b="0", string operator_="-")              /
         return rezultat;
     else
         return "nan";
+}
+Fractie operatie(Fractie a, Fractie b, string operator_="+")
+{
+    Fractie rezultat;
+    if(operator_=="+")
+    {
+        AcelasiNumitor(a,b);
+        if(a.numitor != 0 && b.numitor != 0)
+        {
+            rezultat.numarator = a.numarator + b.numarator;
+            rezultat.numitor   = a.numitor;
+        }
+        else if(a.numitor == 0 && b.numitor == 0)
+        {
+            rezultat.numarator=0;
+            rezultat.numitor=0;
+        }
+        else if(a.numitor==0)
+        {
+            rezultat.numarator=a.numarator;
+            rezultat.numitor=0;
+        }
+        else if(b.numitor==0)
+        {
+            rezultat.numarator=b.numarator;
+            rezultat.numitor=0;
+        }
+    }
+    else if(operator_=="-")
+    {
+        AcelasiNumitor(a,b);
+        if(a.numitor != 0 && b.numitor != 0)
+        {
+            rezultat.numarator = a.numarator - b.numarator;
+            rezultat.numitor   = a.numitor;
+        }
+        else if(a.numitor == 0 && b.numitor == 0)
+        {
+            rezultat.numarator=0;
+            rezultat.numitor=0;
+        }
+        else if(a.numitor==0)
+        {
+            rezultat.numarator=a.numarator;
+            rezultat.numitor=0;
+        }
+        else if(b.numitor==0)
+        {
+            rezultat.numarator=-b.numarator;
+            rezultat.numitor=0;
+        }
+    }
+    else if(operator_=="*")
+    {
+        rezultat.numarator = a.numarator * b.numarator;
+        rezultat.numitor   = a.numitor   * b.numitor;
+    }
+    else if(operator_=="/")
+    {
+        rezultat.numarator = a.numarator * b.numitor;
+        rezultat.numitor   = a.numitor   * b.numarator;
+    }
+    else if(operator_=="^")
+    {
+        rezultat.numarator=0;
+        rezultat.numitor=0;
+        cout<<"Nu este gata | It's not done"<<endl;
+    }
+    else
+    {
+        rezultat.numarator=0;
+        rezultat.numitor=0;
+    }
+    rezultat = simplificare(rezultat);
+    return rezultat;
 }
 struct perecheCantor
 {
@@ -757,7 +832,7 @@ int main()
         else if(s=="hello")
         {
             printf("Hello, World! \n");
-            vectori();
+            main2();
         }
         else if(s=="factorial" || s=="fact")
         {
@@ -830,6 +905,22 @@ int main()
             AfisareNrReal(numitor);
             cout<<" = ";
             AfisareNrReal(numarator/numitor);
+            cout<<endl;
+        }
+        else if(s=="fractii")
+        {
+            Fractie a, b;
+            string operator_;
+            a=CitireFractie();
+            cin>>operator_;
+            b=CitireFractie();
+            Fractie rez = operatie(a,b,operator_);
+            cout<<"( ";
+            AfisareFractie(a);
+            cout<<" ) "<<operator_<<" ( ";
+            AfisareFractie(b);
+            cout<<" ) = ";
+            AfisareFractie(rez);
             cout<<endl;
         }
         else

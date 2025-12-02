@@ -14,12 +14,12 @@
 using namespace std;
 int main2()
 {
-	vector<complex<long double>> v;                 /// Numere complexe si functii vectoriale        | Complex numbers and vectorial functions
+	vector<complex<long double>> v;                 /// Numere complexe si functii vectoriale | Complex numbers and vectorial functions
 	complex<long double>sum = 0;
 	vector<complex<long double>>::iterator it;
 	v.push_back((long double)0);
 	v.push_back((long double)LLONG_MAX);
-	size_t n = v.size(); /// size_t = unsigned long long
+	size_t n = v.size();                            /// size_t = unsigned long long
 	for (auto& x : v)
 		x += (long double)LLONG_MAX;
 	cout << fixed;
@@ -33,8 +33,8 @@ int main2()
 		sum += *it;
 	}
 	cout << endl << "Media numerelor este: " << sum / (long double)n << endl;
-	cout << "1/0 = " << sum / (long double)0 << endl;
-	cout << "0/0 = " << (sum * (long double)0.0) / (long double)0 << endl;
+	cout << "1/0 = " << complex<long double>(1,0) / (long double)0 << endl;
+	cout << "0/0 = " << complex<long double>(0,0) / (long double)0 << endl;
 	cout << "LLONG_MAX = " << *find(v.begin(), v.end(), (long double)LLONG_MAX) << endl;
 	cout << "Exista LLONG_MAX: " << (find(v.begin(), v.end(), (long double)LLONG_MAX) != v.end());
 	cout<<" (TRUE)"<<endl;

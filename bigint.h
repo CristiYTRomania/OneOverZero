@@ -199,7 +199,7 @@ FormaStiintifica factorial(int n)                  /// Functia care returneaza f
     }
     return nr;
 }
-FormaStiintifica div_int(Fractie fr) /// In aceasta functie vrem sa returnam forma stiintifica a rezultatului real al lui x/y | This function returns scientific form of real result x/y
+FormaStiintifica div_int(Fractie fr)           /// In aceasta functie vrem sa returnam forma stiintifica a rezultatului real al lui x/y | This function returns scientific form of real result x/y
 {
     long double nr;
     FormaStiintifica n;
@@ -264,7 +264,62 @@ FormaStiintifica CitireFormaStiintifica()
     cin>>a;
     a = convertire(a);
     f.exponent=StringToInt(a);
+    while(f.coeficient%10==0 && f.coeficient!=0)   /// Daca numarul n e de forma 100*10^2, structura repetitiva va incerca sa faca sa fie de forma 1*10^4
+    {                                              /// If n number is like 100*10^2, the repetitive structure tries to be like 1*10^4
+        f.exponent++;
+        f.coeficient/=10;
+    }
     return f;
+}
+__int128 CMMDC (__int128 a, __int128 b)            /// https://www.pbinfo.ro/articole/73/cmmdc-si-cmmmc-algoritmul-lui-euclid
+{
+    if(a==0 || b==0)
+    {
+        __int128 maxim = max(a,b);
+        maxim = max(maxim,(__int128)1);
+        return maxim;
+    }
+    __int128 r;
+    while(b != 0)
+    {
+        r = a % b;
+        a = b;
+        b = r;
+    }
+    return a;
+}
+Fractie simplificare(Fractie n)
+{
+    bool ok = 0;
+    if(n.numarator > 0 && n.numitor > 0)
+    {
+        n.numarator = -n.numarator;
+        n.numitor   = -n.numitor;
+    }
+    else if(n.numarator > 0)
+    {
+        ok = 1;
+        n.numarator = -n.numarator;
+    }
+    else if(n.numitor > 0)
+    {
+        ok = 1;
+        n.numitor = -n.numitor;
+    }
+    __int128 cmmdc = CMMDC(n.numarator,n.numitor);
+    n.numarator /= cmmdc;
+    n.numitor   /= cmmdc;
+    if(n.numarator != INT128_MIN && ok == 1)       /// __int128 nu poate retine -INT128_MIN | __int128 can't store -INT128_MIN
+    {
+        n.numarator = -n.numarator;
+        ok = 0;
+    }
+    else if(n.numitor != INT128_MIN && ok == 1)
+    {
+        n.numitor = -n.numitor;
+        ok = 0;
+    }
+    return n;
 }
 Fractie CitireFractie()
 {
@@ -276,9 +331,23 @@ Fractie CitireFractie()
     cin>>a;
     a = convertire(a);
     n.numitor=StringToInt(a);
+    n = simplificare(n);
     return n;
 }
-void vectori()
+void AfisareFractie(Fractie f)
 {
-    main2();
+    cout<<f.numarator<<" / "<<f.numitor;
+}
+void AcelasiNumitor(Fractie &a, Fractie &b)
+{
+    if(a.numitor != 0 && b.numitor != 0)
+    {
+        __int128 cmmdc = CMMDC(a.numitor,b.numitor);
+        __int128 factor1 = a.numitor/cmmdc;
+        __int128 factor2 = b.numitor/cmmdc;
+        a.numarator *= factor2;
+        a.numitor   *= factor2;
+        b.numarator *= factor1;
+        b.numitor   *= factor1;
+    }
 }
