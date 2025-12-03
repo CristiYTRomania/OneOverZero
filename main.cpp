@@ -1,17 +1,12 @@
 /// OneOverZero | Tested on GDB Online (C++ 23) and CodeBlocks 20.03 (Windows 10 22H2 si Ubuntu 22.04.5 LTS) | Testat pe GDB Online (C++ 23) si pe CodeBlocks 20.03 (Windows 10 22H2 and Ubuntu 22.04.5 LTS)
-/// TODO: fractie+-*/^fractie, vectori de fractii si hexa (de forma ab.cd); log(fractie), log(hexa), e^fractie, e^hexa
+
+/// TODO: fractie +-*/^fractie, vectori de fractii si hexa (de forma ab.cd);             log(fractie),  log(hexa), e^fractie,  e^hexa
 /// TODO: fraction+-*/fraction, fraction vectors and hexadecimal number vectors (ab.cd); log(fraction), log(hexa), e^fraction, e^hexa
-#include<cstdlib>                                                    /// Pentru atoi() | For atoi() -> Convert string to integer, atof(), rand(), srand() etc.
-#include<climits>                                                    /// Pentru INT_MIN, INT_MAX, LONG_MIN etc. | For INT_MIN, INT_MAX, LONG_MIN etc.
-#include<bits/stdc++.h>                                              /// Aici se afla toate bibliotecile        | Here are all the libraries
-#include<iostream>                                                   /// Pentru cin si cout                     | For cin and cout         -> C++
-#include<stdio.h>                                                    /// Pentru printf() si scanf()             | For printf() and scanf() -> C
-#include<ctime>                                                      /// Pentru setarea seed-ului timpului actual pentru randomizer dinamic | For setting the actual time seed for dynamic randomizer
-#include<cmath>                                                      /// Pentru functii matematice precum functia putere si modulul unui numar | For math functions like power and module functions
-#include<complex>                                                    /// Numere complexe cu coeficienti reali         | Complex numbers with real coefficients
-#include<fstream>                                                    /// Pentru a citi din fisiere si a scrie in ele  | To read and write files
+
 #include "bigint.h"                                                  /// Integrarea operatorului de afisare pentru intregul pe 128 de biti | Cout operator integration of 128-bit integer
+
 using namespace std;                                                 /// Pentru cin si cout | For cin and cout -> C++
+
 int level = 1;
 struct SolutiiComplexe
 {
@@ -235,9 +230,9 @@ SolutiiComplexe ecuatie(long double a,long double b,long double c)
     return solutie;
 }
 string operatie(string a="0", string b="0", string operator_="-")              /// Pentru a+b si a-b | For a+b and a-b
-{                                  /// TODO: In cazul in care a-b,a,b>=0 | When a-b,a,b>=0 (Nu am implementat 0,(3) si +-inf/cinf/nan | Didn't implement 0.3 with 3 repeating and +-inf/cinf/nan)
-    string rezultat,capat;         /// TODO: Am uitat sa sterg 0 de la stanga si de la dreapta la final | I forgot to delete 0 from the left and the right (01.110)
-    unsigned long long punct1 = a.find("."), punct2 = b.find("."); /// TODO: As putea pune if-urile cu nan, inf si cinf in functie | I can put the ifs with nan, inf and cinf in this function
+{                                                 /// TODO: In cazul in care a-b,a,b>=0 | When a-b,a,b>=0 (Nu am implementat 0,(3) si +-inf/cinf/nan | Didn't implement 0.3 with 3 repeating and +-inf/cinf/nan)
+    string rezultat,capat;                        /// TODO: Am uitat sa sterg 0 de la stanga si de la dreapta la final | I forgot to delete 0 from the left and the right (01.110)
+    unsigned long long punct1 = a.find("."), punct2 = b.find(".");             /// TODO: As putea pune if-urile cu nan, inf si cinf in functie | I can put the ifs with nan, inf and cinf in this function
     if(punct1==string::npos)
         a.append(".0"), punct1 = a.find(".");
     if(punct2==string::npos)
@@ -468,7 +463,7 @@ bool lHospital(long double v[], unsigned int n)
 }
 int main()
 {
-    bool ok=1;                                    /// Daca ok este 1, programul va rula, daca ok este 0, programul se va incheia | If ok=1, the program will run. If not, the program will stop
+    bool ok = 1;                                           /// Daca ok este 1, programul va rula, daca ok este 0, programul se va incheia | If ok=1, the program will run. If not, the program will stop
     string s;
     ifstream fin("memory.txt");
     int partitii;
@@ -498,7 +493,10 @@ int main()
         cout<<"Type 'help' for instructions! \n";
         cout<<"Introduceti 'ajutor' pentru instructiuni! \n";
         afisare_linii();
-        cout<<"Meniu principal | Main: ";                  /// Suntem in meniul principal | We are in the main menu
+        if(language == 1)
+            cout<<"Meniu principal: ";                     /// Suntem in meniul principal
+        else
+            cout<<"Main menu: ";                           /// We are in the main menu
         cin>>s;
         s = NotCaseSensitive(s);
         if(s=="game")                                      /// Jocul de matematica in limba engleza | Math game in English  language
@@ -670,7 +668,7 @@ int main()
             AfisareNrComplex(solutie.x2);
             cout<<endl;
         }
-        else if(s=="calculator"||s=="calc")   /// TODO: Operatori noi: ^, sqrt(), log() | New operators: ^, sqrt(), log()
+        else if(s=="calculator"||s=="calc")                /// TODO: Operatori noi: ^, sqrt(), log() | New operators: ^, sqrt(), log()
         {
             string a,b,operator_;
             cin>>a>>operator_>>b;
@@ -807,7 +805,7 @@ int main()
             afisare_memorie(MEM_TOTALA-MEM_LIBERA);
             cout<<(long double)(MEM_TOTALA-MEM_LIBERA)/MEM_TOTALA*100<<'%'<<endl;
         }
-        else if(s=="complex")                 /// TODO: complex<string>
+        else if(s=="complex")                              /// TODO: complex<string>
         {
             complex<long double> c=4.0+5i;
             c = CitireNrComplex();
@@ -923,8 +921,60 @@ int main()
             AfisareFractie(rez);
             cout<<endl;
         }
+        else if(s=="language")
+        {
+            language = 1 - language;
+            if(language == 0)
+                cout<<"Language set to English! \n";
+            else
+                cout<<"Language set to Romanian! \n";
+        }
+        else if(s=="limba")
+        {
+            language = 1 - language;
+            if(language == 0)
+                cout<<"Limba setata este limba engleza! \n";
+            else
+                cout<<"Limba setata este limba romana! \n";
+        }
+        else if(s=="debug" || s=="debugging")
+        {
+            debug = 1 - debug;
+            if(language == 0)
+            {
+                cout<<"Debug mode ";
+                if(debug == 1)
+                    cout<<"enabled! \n";
+                else
+                    cout<<"disabled! \n";
+            }
+            else
+            {
+                cout<<"Modul de debugging ";
+                if(debug == 1)
+                    cout<<"activat! \n";
+                else
+                    cout<<"dezactivat! \n";
+            }
+        }
+        else if(s=="cmmdc")
+        {
+            __int128 a, b;
+            a = CitireNrIntreg();
+            b = CitireNrIntreg();
+            cout<<CMMDC(a,b)<<endl;
+        }
+        else if(s=="cmmmc")
+        {
+            __int128 a, b;
+            a = CitireNrIntreg();
+            b = CitireNrIntreg();
+            cout<<a/CMMDC(a,b)*b<<endl;
+        }
+        else if(language == 1)
+            cout<<"Comanda necunoscuta \n";
         else
-            cout<<"Comanda necunoscuta | Unknown command \n";
+            cout<<"Unknown command \n";
         afisare_linii();
     }
     return 0; /// Se va inchide programul si se va returna valoarea 0 | The program will close and the value returned will be 0

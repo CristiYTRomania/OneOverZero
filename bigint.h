@@ -2,9 +2,8 @@
 #include <iomanip>
 #include "define.h"
 using namespace std;
-string Answer = "0";                                /// Ultimul rezultat al calculatorului virtual | The last answer of the virtual calculator
 std::ostream&
-operator<<( std::ostream& dest, __int128_t value )  /// https://stackoverflow.com/questions/25114597/how-to-print-int128-in-g
+operator<<( std::ostream& dest, __int128_t value ) /// https://stackoverflow.com/questions/25114597/how-to-print-int128-in-g
 {
     std::ostream::sentry s( dest );
     if ( s ) {
@@ -49,8 +48,36 @@ __int128 StringToInt(string s)
     }
     return nr;
 }
-struct FormaStiintifica                             /// Structura reprezinta forma stiintifica a unui numar real (x*10^y), cu coeficientul si exponentul numere intregi de tip __int128
-{                                                   /// This structure returns scientific form of a real number  (x*10^y), with coefficient and exponent which are __int128 integers
+string NotCaseSensitive(string s)
+{
+    int nr_caractere=s.length();                  /// Numarul de caractere al comenzii citite de la tastatura | The string length command of the keyboard input
+    for(int i=0;i<nr_caractere;i++)               /// Transformam orice litera mare din comanda in litera mica pentru ca comanda sa nu fie case sensitive
+        if(s[i]>='A' && s[i]<='Z')                /// We convert any uppercase letter in the command to lowercase so that the command to be not case sensitive
+            s[i]+=32;
+    return s;
+}
+string convertire(string a)
+{
+    a = NotCaseSensitive(a);
+    if(a=="pi")
+        a=pi;
+    else if(a=="e")
+        a=e;
+    else if(a=="a" || a=="ans" || a=="answer" || a=="rez" || a=="rezultat")
+        a=Answer;
+    return a;
+}
+__int128 CitireNrIntreg()
+{
+    __int128 n;
+    string a;
+    cin>>a;
+    a = convertire(a);
+    n = StringToInt(a);
+    return n;
+}
+struct FormaStiintifica                            /// Structura reprezinta forma stiintifica a unui numar real (x*10^y), cu coeficientul si exponentul numere intregi de tip __int128
+{                                                  /// This structure returns scientific form of a real number  (x*10^y), with coefficient and exponent which are __int128 integers
     __int128 coeficient, exponent;
 };
 struct Fractie
@@ -160,9 +187,12 @@ void show_floated_int(FormaStiintifica n)          /// Afiseaza forma stiinfica 
 }
 bool InitializareFactorial = 0;                    /// Aceasta variabila retine daca valorile factorialelor au fost atribuite (1) sau nu (0)
                                                    /// This variable stores if the factorial values were assigned (1) or not (0)
-int NrMaxFact = 33;                                /// Cel mai mare numar caruia pot sa ii calculez factorialul | The biggest number that I can calculate its factorial
+
+int NrMaxFact = 33;                                /// Cel mai mare numar caruia pot sa ii calculez factorialul (33) | The biggest number that I can calculate its factorial (33)
+
 __int128 FactorialVector[33 + 1];                  /// Vectorul care stocheaza factorialul fiecarui numar natural mai mic sau egal cu NrMaxFact (de la 0 la NrMaxFact sunt NrMaxFact + 1 elemente)
                                                    /// The vector which store factorial of each natural number between 0 and NrMaxFact (in total are NrMaxFact + 1 elements)
+
 FormaStiintifica factorial(int n)                  /// Functia care returneaza factorialul unui numar si umple cu valori vectorului FactorialVector pe baza factorialului fiecarui numar
 {                                                  /// The function which returns factorial of a number and put values on FactorialVector based on factorial of each number
     if(InitializareFactorial == 0)
@@ -199,7 +229,7 @@ FormaStiintifica factorial(int n)                  /// Functia care returneaza f
     }
     return nr;
 }
-FormaStiintifica div_int(Fractie fr)           /// In aceasta functie vrem sa returnam forma stiintifica a rezultatului real al lui x/y | This function returns scientific form of real result x/y
+FormaStiintifica div_int(Fractie fr)               /// In aceasta functie vrem sa returnam forma stiintifica a rezultatului real al lui x/y | This function returns scientific form of real result x/y
 {
     long double nr;
     FormaStiintifica n;
@@ -235,35 +265,11 @@ Fractie int_div(FormaStiintifica n)
     }
     return f;
 }
-string NotCaseSensitive(string s)
-{
-    int nr_caractere=s.length();                  /// Numarul de caractere al comenzii citite de la tastatura | The string length command of the keyboard input
-    for(int i=0;i<nr_caractere;i++)               /// Transformam orice litera mare din comanda in litera mica pentru ca comanda sa nu fie case sensitive
-        if(s[i]>='A' && s[i]<='Z')                /// We convert any uppercase letter in the command to lowercase so that the command to be not case sensitive
-            s[i]+=32;
-    return s;
-}
-string convertire(string a)
-{
-    a = NotCaseSensitive(a);
-    if(a=="pi")
-        a=pi;
-    else if(a=="e")
-        a=e;
-    else if(a=="a" || a=="ans" || a=="answer" || a=="rez" || a=="rezultat")
-        a=Answer;
-    return a;
-}
 FormaStiintifica CitireFormaStiintifica()
 {
     FormaStiintifica f;
-    string a;
-    cin>>a;
-    a = convertire(a);
-    f.coeficient=StringToInt(a);
-    cin>>a;
-    a = convertire(a);
-    f.exponent=StringToInt(a);
+    f.coeficient = CitireNrIntreg();
+    f.exponent   = CitireNrIntreg();
     while(f.coeficient%10==0 && f.coeficient!=0)   /// Daca numarul n e de forma 100*10^2, structura repetitiva va incerca sa faca sa fie de forma 1*10^4
     {                                              /// If n number is like 100*10^2, the repetitive structure tries to be like 1*10^4
         f.exponent++;
@@ -321,22 +327,26 @@ Fractie simplificare(Fractie n)
     }
     return n;
 }
-Fractie CitireFractie()
-{
-    string a;
-    Fractie n;
-    cin>>a;
-    a = convertire(a);
-    n.numarator=StringToInt(a);
-    cin>>a;
-    a = convertire(a);
-    n.numitor=StringToInt(a);
-    n = simplificare(n);
-    return n;
-}
 void AfisareFractie(Fractie f)
 {
     cout<<f.numarator<<" / "<<f.numitor;
+}
+Fractie CitireFractie()
+{
+    Fractie n;
+    n.numarator = CitireNrIntreg();
+    n.numitor   = CitireNrIntreg();
+    n = simplificare(n);
+    if(debug == 1)
+    {
+        if(language == 0)
+            cout<<"The fraction from the input is: ";
+        else
+            cout<<"Fractia citita este: ";
+        AfisareFractie(n);
+        cout<<endl;
+    }
+    return n;
 }
 void AcelasiNumitor(Fractie &a, Fractie &b)
 {
