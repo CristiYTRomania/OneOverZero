@@ -12,9 +12,25 @@ Acesta este proiectul meu din C++ | This is my project on C++ | Jitescu Silviu-C
 
 When $a \ne 0$, there are two solutions to $ax^2 + bx + c = 0$ and they are:
 
+Atunci când $a \ne 0$, există două soluții la ecuația $ax^2 + bx + c = 0$ și acestea sunt:
+
 $$x_{1,2} = {-b \pm \sqrt{b^2-4ac} \over 2a} $$
 
+When $a = 0$ and $b \ne 0$, there is one unique solution to $bx + c = 0$ and it is:
+
+Atunci când $a = 0$ și $b \ne 0$, există o soluție unică la ecuația $bx + c = 0$ și aceasta este:
+
+$$x = -{c \over b} $$
+
+When $a, b = 0$, there is one *odd* solution for $x$ to $c = 0$ and it is:
+
+Atunci când $a, b = 0$, există o soluție *neobișnuită* pentru $x$ la ecuația $c = 0$ și aceasta este:
+
+$$ x = NaN \\ ( x = {0 \over 0} ) $$
+
 ## Bibliografie | Bibliography
+
+[Infinitul complex | Complex Infinity](https://www.wolframalpha.com/input?i=1%2F0)
 
 [Scrierea în cod LaTeX | Writing in LaTeX code](https://github.blog/news-insights/product-news/math-support-in-markdown/)
 
