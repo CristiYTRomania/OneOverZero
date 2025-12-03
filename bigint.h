@@ -297,7 +297,9 @@ __int128 CMMDC (__int128 a, __int128 b)            /// https://www.pbinfo.ro/art
 Fractie simplificare(Fractie n)
 {
     bool ok = 0;
-    if(n.numarator > 0 && n.numitor > 0)
+    if(n.numarator * n.numitor == 0)
+        return n;
+    else if(n.numarator > 0 && n.numitor > 0)
     {
         n.numarator = -n.numarator;
         n.numitor   = -n.numitor;

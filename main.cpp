@@ -1,7 +1,7 @@
 /// OneOverZero | Tested on GDB Online (C++ 23) and CodeBlocks 20.03 (Windows 10 22H2 si Ubuntu 22.04.5 LTS) | Testat pe GDB Online (C++ 23) si pe CodeBlocks 20.03 (Windows 10 22H2 and Ubuntu 22.04.5 LTS)
 
-/// TODO: fractie +-*/^fractie, vectori de fractii si hexa (de forma ab.cd);             log(fractie),  log(hexa), e^fractie,  e^hexa
-/// TODO: fraction+-*/fraction, fraction vectors and hexadecimal number vectors (ab.cd); log(fraction), log(hexa), e^fraction, e^hexa
+/// TODO: fractie ^fractie,  vectori de fractii si hexa (de forma ab.cd);             log(fractie),  log(hexa), e^fractie,  e^hexa
+/// TODO: fraction^fraction, fraction vectors and hexadecimal number vectors (ab.cd); log(fraction), log(hexa), e^fraction, e^hexa
 
 #include "bigint.h"                                                  /// Integrarea operatorului de afisare pentru intregul pe 128 de biti | Cout operator integration of 128-bit integer
 
@@ -156,10 +156,7 @@ void math_game(bool language)                     /// Acesta este un joc in roma
                     cout<<"You reached level "<<level<<"! \n";
                 }
                 else
-                {
                     cout<<"Level 7 coming soon! \n";
-                    level=1;
-                }
             }
             else
                 cout<<"Good luck next time! \n";
@@ -365,9 +362,14 @@ Fractie operatie(Fractie a, Fractie b, string operator_="+")
     }
     else if(operator_=="^")
     {
-        rezultat.numarator=0;
-        rezultat.numitor=0;
-        cout<<"Nu este gata | It's not done"<<endl;
+        long double exponent = 1.0/b.numitor,
+                    putere1 = pow(a.numarator,b.numarator),
+                    putere2 = pow(a.numitor,  b.numarator),
+                    numarator = pow(putere1, exponent),
+                    numitor   = pow(putere2, exponent),
+                    raport  = numarator / numitor;
+        FormaStiintifica n = float_to_int(raport);
+        rezultat = int_div(n);
     }
     else
     {
@@ -905,7 +907,7 @@ int main()
             AfisareNrReal(numarator/numitor);
             cout<<endl;
         }
-        else if(s=="fractii")
+        else if(s=="fractii"||s=="fractions")
         {
             Fractie a, b;
             string operator_;
