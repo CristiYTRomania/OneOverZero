@@ -29,6 +29,11 @@ operator<<( std::ostream& dest, __int128_t value ) /// https://stackoverflow.com
 }
 __int128 StringToInt(string s)
 {
+    if(s=="inf")
+        return INT128_MAX;
+    else if(s=="-inf")
+        return INT128_MIN;
+
     __int128 nr = 0, p = 1;
     int n = s.size();
     for(int i = n-1; i>=0; i--)
@@ -298,7 +303,41 @@ Fractie simplificare(Fractie n)
 {
     bool ok = 0;
     if(n.numarator * n.numitor == 0)
+    {
+        if(n.numarator != 0)
+            n.numarator = 1;
+        else if(n.numitor != 0)
+            n.numitor = 1;
         return n;
+    }
+    else if(n.numarator == INT128_MAX || n.numarator == INT128_MIN || n.numitor == INT128_MAX || n.numitor == INT128_MIN)
+    {
+        if(n.numarator == n.numitor)
+        {
+            n.numarator = 1;
+            n.numitor = 1;
+        }
+        else if(n.numarator == -n.numitor)
+        {
+            n.numarator = -1;
+            n.numitor = 1;
+        }
+        else if(n.numarator == INT128_MAX)
+            n.numitor = sgn(n.numitor);
+        else if(n.numarator == INT128_MIN)
+        {
+            n.numitor = -sgn(n.numitor);
+            n.numarator = INT128_MAX;
+        }
+        else if(n.numitor == INT128_MAX)
+            n.numarator = sgn(n.numarator);
+        else if(n.numitor == INT128_MIN)
+        {
+            n.numarator = -sgn(n.numarator);
+            n.numitor = INT128_MAX;
+        }
+        return n;
+    }
     else if(n.numarator > 0 && n.numitor > 0)
     {
         n.numarator = -n.numarator;
@@ -317,12 +356,12 @@ Fractie simplificare(Fractie n)
     __int128 cmmdc = CMMDC(n.numarator,n.numitor);
     n.numarator /= cmmdc;
     n.numitor   /= cmmdc;
-    if(n.numarator != INT128_MIN && ok == 1)       /// __int128 nu poate retine -INT128_MIN | __int128 can't store -INT128_MIN
+    if(n.numarator != (INT128_MIN+1) && ok == 1)
     {
         n.numarator = -n.numarator;
         ok = 0;
     }
-    else if(n.numitor != INT128_MIN && ok == 1)
+    else if(n.numitor != (INT128_MIN+1) && ok == 1)
     {
         n.numitor = -n.numitor;
         ok = 0;
@@ -331,7 +370,16 @@ Fractie simplificare(Fractie n)
 }
 void AfisareFractie(Fractie f)
 {
-    cout<<f.numarator<<" / "<<f.numitor;
+    if(f.numitor == INT128_MIN)
+        cout<<f.numarator<<" / -inf";
+    else if(f.numitor == INT128_MAX)
+        cout<<f.numarator<<" / inf";
+    else if(f.numarator == INT128_MIN)
+        cout<<"-inf / "<<f.numitor;
+    else if(f.numarator == INT128_MAX)
+        cout<<"inf / "<<f.numitor;
+    else
+        cout<<f.numarator<<" / "<<f.numitor;
 }
 Fractie CitireFractie()
 {

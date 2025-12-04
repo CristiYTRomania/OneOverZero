@@ -1,11 +1,11 @@
 /// OneOverZero | Tested on GDB Online (C++ 23) and CodeBlocks 20.03 (Windows 10 22H2 si Ubuntu 22.04.5 LTS) | Testat pe GDB Online (C++ 23) si pe CodeBlocks 20.03 (Windows 10 22H2 and Ubuntu 22.04.5 LTS)
 
-/// TODO: fractie ^fractie,  vectori de fractii si hexa (de forma ab.cd);             log(fractie),  log(hexa), e^fractie,  e^hexa
-/// TODO: fraction^fraction, fraction vectors and hexadecimal number vectors (ab.cd); log(fraction), log(hexa), e^fraction, e^hexa
+/// TODO: vectori de fractii si hexa (de forma ab.cd);             log(fractie),  log(hexa), e^fractie,  e^hexa
+/// TODO: fraction vectors and hexadecimal number vectors (ab.cd); log(fraction), log(hexa), e^fraction, e^hexa
 
-#include "bigint.h"                                                  /// Integrarea operatorului de afisare pentru intregul pe 128 de biti | Cout operator integration of 128-bit integer
+#include "bigint.h"                               /// Integrarea operatorului de afisare pentru intregul pe 128 de biti | Cout operator integration of 128-bit integer
 
-using namespace std;                                                 /// Pentru cin si cout | For cin and cout -> C++
+using namespace std;                              /// Pentru cin si cout | For cin and cout -> C++
 
 int level = 1;
 struct SolutiiComplexe
@@ -938,6 +938,22 @@ int main()
                 cout<<"Limba setata este limba engleza! \n";
             else
                 cout<<"Limba setata este limba romana! \n";
+        }
+        else if(s=="romanian"||s=="romana")
+        {
+            language = 1;
+            if(s=="romana")
+                cout<<"Limba setata este limba romana! \n";
+            else
+                cout<<"Language set to Romanian! \n";
+        }
+        else if(s=="english"||s=="engleza")
+        {
+            language = 0;
+            if(s=="engleza")
+                cout<<"Limba setata este limba engleza! \n";
+            else
+                cout<<"Language set to English! \n";
         }
         else if(s=="debug" || s=="debugging")
         {
