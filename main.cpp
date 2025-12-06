@@ -40,7 +40,7 @@ complex<long double> CitireNrComplex()
     complex<long double> n(a,b);
     return n;
 }
-void AfisareNrComplex(complex<long double> n)
+void AfisareNrComplex(complex<auto> n)
 {
     AfisareNrReal(real(n));
     cout<<" + ";
@@ -88,7 +88,7 @@ auto shift_bits(auto n, long long p)              /// Aceasta functie va shifta 
 }
 void afisare_linii()
 {
-    for(int i=1;i<=80;i++)
+    for(int i=1;i<=75;i++)
         cout<<"-";
     cout<<endl;
 }
@@ -546,6 +546,13 @@ int main()
             cout<<"112 is a integer ("<<typeid(112).name()<<")"<<endl;
             complex<string> a((string)"4",(string)"5");
             cout<<a<<endl;
+            complex<long double> c=0.0+1i;
+            cout<<c<<endl;
+            long double mic = nextafter((long double)0.0, (long double)1.0);    /// https://stackoverflow.com/questions/39746861/is-dbl-min-the-smallest-positive-double
+            AfisareNrReal(mic,10*1000);
+            cout<<endl;
+            complex<__int128> aa(5,4);AfisareNrComplex(aa+aa);cout<<endl;
+            complex<long double>a2(6/.0,7),a3(1/.0,3); AfisareNrComplex(a2);cout<<endl<<(a2 == a3)<<endl;AfisareNrComplex(a3);cout<<endl;
         }
         else if(s=="ascii")                                /// Apelam functia ce va afisa toate caracterele ASCII | Calling the function which shows all ASCII characters
             ascii();
@@ -789,7 +796,7 @@ int main()
             n=citire_hexa();
             afisare_hexa(n);
         }
-        else if(s=="disk"||s=="memory"||s=="partition"||s=="partitions")
+        else if(s=="disk"||s=="memory"||s=="partition"||s=="partitions"||s=="partitii"||s=="memorie"||s=="disc")
         {
             cout<<endl<<"Nume partitie | Memorie totala | Memorie libera | Memorie utilizata | Procent utilizat"<<endl<<endl;
             for(int i=0;i<partitii;i++)
@@ -809,7 +816,7 @@ int main()
         }
         else if(s=="complex")                              /// TODO: complex<string>
         {
-            complex<long double> c=4.0+5i;
+            complex<long double> c;
             c = CitireNrComplex();
             AfisareNrComplex(c);
             cout<<endl;
@@ -847,7 +854,8 @@ int main()
             FormaStiintifica f;
             f = CitireFormaStiintifica();
             Fractie fr = int_div(f);
-            cout<<fr.numarator<<'/'<<fr.numitor<<endl;
+            AfisareFractie(fr);
+            cout<<endl;
         }
         else if(s=="polinomialraport"||s=="polinomial_raport"||s=="raport"||s=="poli"||s=="polinomial"||s=="poly"||s=="polynomial")
         {

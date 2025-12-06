@@ -27,9 +27,29 @@ operator<<( std::ostream& dest, __int128_t value ) /// https://stackoverflow.com
     }
     return dest;
 }
+string NotCaseSensitive(string s)
+{
+    int nr_caractere=s.length();                  /// Numarul de caractere al comenzii citite de la tastatura | The string length command of the keyboard input
+    for(int i=0;i<nr_caractere;i++)               /// Transformam orice litera mare din comanda in litera mica pentru ca comanda sa nu fie case sensitive
+        if(s[i]>='A' && s[i]<='Z')                /// We convert any uppercase letter in the command to lowercase so that the command to be not case sensitive
+            s[i]+=32;
+    return s;
+}
+string convertire(string a)
+{
+    a = NotCaseSensitive(a);
+    if(a=="pi")
+        a=pi;
+    else if(a=="e")
+        a=e;
+    else if(a=="a" || a=="ans" || a=="answer" || a=="rez" || a=="rezultat")
+        a=Answer;
+    return a;
+}
 __int128 StringToInt(string s)
 {
-    if(s=="inf")
+    s=convertire(s);
+    if(s=="inf"||s=="cinf")
         return INT128_MAX;
     else if(s=="-inf")
         return INT128_MIN;
@@ -52,25 +72,6 @@ __int128 StringToInt(string s)
         }
     }
     return nr;
-}
-string NotCaseSensitive(string s)
-{
-    int nr_caractere=s.length();                  /// Numarul de caractere al comenzii citite de la tastatura | The string length command of the keyboard input
-    for(int i=0;i<nr_caractere;i++)               /// Transformam orice litera mare din comanda in litera mica pentru ca comanda sa nu fie case sensitive
-        if(s[i]>='A' && s[i]<='Z')                /// We convert any uppercase letter in the command to lowercase so that the command to be not case sensitive
-            s[i]+=32;
-    return s;
-}
-string convertire(string a)
-{
-    a = NotCaseSensitive(a);
-    if(a=="pi")
-        a=pi;
-    else if(a=="e")
-        a=e;
-    else if(a=="a" || a=="ans" || a=="answer" || a=="rez" || a=="rezultat")
-        a=Answer;
-    return a;
 }
 __int128 CitireNrIntreg()
 {
@@ -113,15 +114,17 @@ FormaStiintifica float_to_int(long double f)       /// Returneaza forma stiintif
     {
         while(f>INT128_MAX||f<INT128_MIN)
         {
-            f/=10;
-            n.exponent++;
+            f /= 10;
+            if(n.exponent != INT128_MAX)
+                n.exponent++;
         }
         n.coeficient=f;
     }
     while(n.coeficient%10==0 && n.coeficient!=0)   /// Daca numarul n e de forma 100*10^2, structura repetitiva va incerca sa faca sa fie de forma 1*10^4
     {                                              /// If n number is like 100*10^2, the repetitive structure tries to be like 1*10^4
-        n.exponent++;
-        n.coeficient/=10;
+        if(n.exponent != INT128_MAX)
+            n.exponent++;
+        n.coeficient /= 10;
     }
     return n;
 }
@@ -234,11 +237,48 @@ FormaStiintifica factorial(int n)                  /// Functia care returneaza f
     }
     return nr;
 }
+long double div_to_float(Fractie fr)
+{
+    long double nr;
+    if(fr.numarator == INT128_MAX)
+        nr = (1/0.0)/fr.numitor;
+    else if(fr.numarator == INT128_MIN)
+        nr = (-1/0.0)/fr.numitor;
+    else if(fr.numitor == INT128_MAX)
+        nr = fr.numarator/(1/0.0);
+    else if(fr.numitor == INT128_MIN)
+        nr = fr.numarator/(-1/0.0);
+    else
+    {
+        if(fr.numarator == 0 && fr.numitor != 0)
+        {
+            if(language == 0)
+                cout<<"Precision loss! 0 converted to 0.0 \n";
+            else
+                cout<<"Precizie pierduta! 0 convertit la 0.0 \n";
+        }
+        else if(fr.numitor == 0 && fr.numarator != 0)
+        {
+            if(language == 0)
+                cout<<"Precision loss! cinf converted to inf \n";
+            else
+                cout<<"Precizie pierduta! cinf convertit la inf \n";
+        }
+        nr = (long double)fr.numarator/fr.numitor;
+    }
+    return nr;
+}
 FormaStiintifica div_int(Fractie fr)               /// In aceasta functie vrem sa returnam forma stiintifica a rezultatului real al lui x/y | This function returns scientific form of real result x/y
 {
     long double nr;
     FormaStiintifica n;
-    nr = (long double)fr.numarator/fr.numitor;
+    if(fr.numarator != 0 && fr.numitor == 0)
+    {
+        n.coeficient = 1;
+        n.exponent = INT128_MAX;
+        return n;
+    }
+    nr = div_to_float(fr);
     n  = float_to_int(nr);
     return n;
 }
@@ -247,25 +287,59 @@ Fractie int_div(FormaStiintifica n)
     Fractie f;
     f.numarator = n.coeficient;
     f.numitor = 1;
-    if(n.coeficient == 0 && n.exponent == INT128_MAX)
+    if(n.exponent == INT128_MAX)
     {
         f.numitor=0;
+        if(n.coeficient == 0)
+            f.numarator = 0;
+        else if(n.coeficient != 0)
+            f.numarator = 1;
         return f;
     }
-    while(n.exponent<0 && f.numarator != 0)
+    else if(n.coeficient == 0)
     {
-        if(f.numitor <= (INT128_MAX) / 10 && f.numitor >= INT128_MIN / 10)
+        f.numarator = 0;
+        f.numitor = 1;
+        return f;
+    }
+    else if(n.exponent == INT128_MAX - 1)
+    {
+        f.numarator = INT128_MAX;
+        f.numitor = sgn(n.coeficient);
+        return f;
+    }
+    else if(n.exponent == INT128_MIN)
+    {
+        f.numitor = INT128_MAX;
+        f.numarator = sgn(n.coeficient);
+        return f;
+    }
+    while(n.exponent<0)
+    {
+        if(f.numitor <= (INT128_MAX - 1) / 10 && f.numitor >= (INT128_MIN + 1) / 10)
             f.numitor*=10;
-        else
+        else if(f.numarator / 10 != 0)
             f.numarator/=10;
+        else
+        {
+            f.numitor = INT128_MAX;
+            f.numarator = sgn(n.coeficient);
+            return f;
+        }
         n.exponent+=1;
     }
-    while(n.exponent>0 && f.numitor != 0)
+    while(n.exponent>0)
     {
-        if(f.numarator <= (INT128_MAX) / 10 && f.numarator >= INT128_MIN / 10)
+        if(f.numarator <= (INT128_MAX - 1) / 10 && f.numarator >= (INT128_MIN + 1) / 10)
             f.numarator*=10;
-        else
+        else if(f.numitor / 10 != 0)
             f.numitor/=10;
+        else
+        {
+            f.numarator = INT128_MAX;
+            f.numitor = sgn(n.coeficient);
+            return f;
+        }
         n.exponent-=1;
     }
     return f;
@@ -277,7 +351,8 @@ FormaStiintifica CitireFormaStiintifica()
     f.exponent   = CitireNrIntreg();
     while(f.coeficient%10==0 && f.coeficient!=0)   /// Daca numarul n e de forma 100*10^2, structura repetitiva va incerca sa faca sa fie de forma 1*10^4
     {                                              /// If n number is like 100*10^2, the repetitive structure tries to be like 1*10^4
-        f.exponent++;
+        if(f.exponent < INT128_MAX-1 && f.exponent > INT128_MIN)
+            f.exponent++;
         f.coeficient/=10;
     }
     return f;
@@ -400,7 +475,9 @@ Fractie CitireFractie()
 }
 void AcelasiNumitor(Fractie &a, Fractie &b)
 {
-    if(a.numitor != 0 && b.numitor != 0)
+    if( a.numitor != 0 && b.numitor != 0
+       && !(a.numarator == INT128_MAX || a.numarator == INT128_MIN || a.numitor == INT128_MAX || a.numitor == INT128_MIN)
+       && !(b.numarator == INT128_MAX || b.numarator == INT128_MIN || b.numitor == INT128_MAX || b.numitor == INT128_MIN) )
     {
         __int128 cmmdc = CMMDC(a.numitor,b.numitor);
         __int128 factor1 = a.numitor/cmmdc;
