@@ -31,7 +31,7 @@ string NotCaseSensitive(string s)
 {
     int string_length=s.length();                  /// Numarul de caractere al comenzii citite de la tastatura | The string length command of the keyboard input
     for(int i=0;i<string_length;i++)               /// Transformam orice litera mare din comanda in litera mica pentru ca comanda sa nu fie case sensitive
-        if(s[i]>='A' && s[i]<='Z')                /// We convert any uppercase letter in the command to lowercase so that the command to be not case sensitive
+        if(s[i]>='A' && s[i]<='Z')                 /// We convert any uppercase letter in the command to lowercase so that the command to be not case sensitive
             s[i]+=32;
     return s;
 }
@@ -81,7 +81,7 @@ __int128 CinIntNumber()
     n = StringToInt(a);
     return n;
 }
-struct ScientificForm                            /// Structura reprezinta forma stiintifica a unui numar real (x*10^y), cu coeficientul si exponentul numere intregi de tip __int128
+struct ScientificForm                              /// Structura reprezinta forma stiintifica a unui numar real (x*10^y), cu coeficientul si exponentul numere intregi de tip __int128
 {                                                  /// This structure returns scientific form of a real number  (x*10^y), with coefficient and exponent which are __int128 integers
     __int128 coefficient, exponent;
 };
@@ -89,7 +89,7 @@ struct Fraction
 {
     __int128 numerator, denominator;
 };
-ScientificForm float_to_int(long double f)       /// Returneaza forma stiintifica a unui numar real | Return scientific form of a real number
+ScientificForm float_to_int(long double f)         /// Returneaza forma stiintifica a unui numar real            | Return scientific form of a real number
 {
     ScientificForm n;
     n.exponent=0;
@@ -119,7 +119,7 @@ ScientificForm float_to_int(long double f)       /// Returneaza forma stiintific
         }
         n.coefficient=f;
     }
-    while(n.coefficient%10==0 && n.coefficient!=0)   /// Daca numarul n e de forma 100*10^2, structura repetitiva va incerca sa faca sa fie de forma 1*10^4
+    while(n.coefficient%10==0 && n.coefficient!=0) /// Daca numarul n e de forma 100*10^2, structura repetitiva va incerca sa faca sa fie de forma 1*10^4
     {                                              /// If n number is like 100*10^2, the repetitive structure tries to be like 1*10^4
         if(n.exponent != INT128_MAX)
             n.exponent++;
@@ -127,7 +127,7 @@ ScientificForm float_to_int(long double f)       /// Returneaza forma stiintific
     }
     return n;
 }
-void show_floated_int(ScientificForm n)          /// Afiseaza forma stiinfica a numarului real      | Shows scientific form of real number
+void show_floated_int(ScientificForm n)            /// Afiseaza forma stiinfica a numarului real      | Shows scientific form of real number
 {
     __int128 p=1,x,ct=0;
     if(n.exponent==INT128_MAX)                     /// In loc de x*10^y este x impartit la 0          | Instead of x*10^y is x over 0
@@ -195,10 +195,10 @@ void show_floated_int(ScientificForm n)          /// Afiseaza forma stiinfica a 
 bool FactorialInitialization = 0;                  /// Aceasta variabila retine daca valorile factorialelor au fost atribuite (1) sau nu (0)
                                                    /// This variable stores if the factorial values were assigned (1) or not (0)
 
-int NrMaxFact = 33;                                /// Cel mai mare numar caruia pot sa ii calculez factorialul (33) | The biggest number that I can calculate its factorial (33)
+int MaxNumberFact = 33;                            /// Cel mai mare numar caruia pot sa ii calculez factorialul (33) | The biggest number that I can calculate its factorial (33)
 
-__int128 FactorialVector[33 + 1];                  /// Vectorul care stocheaza factorialul fiecarui numar natural mai mic sau egal cu NrMaxFact (de la 0 la NrMaxFact sunt NrMaxFact + 1 elemente)
-                                                   /// The vector which store factorial of each natural number between 0 and NrMaxFact (in total are NrMaxFact + 1 elements)
+__int128 FactorialVector[33 + 1];                  /// Vectorul care stocheaza factorialul fiecarui numar natural mai mic sau egal cu MaxNumberFact (de la 0 la MaxNumberFact sunt MaxNumberFact + 1 elemente)
+                                                   /// The vector which store factorial of each natural number between 0 and MaxNumberFact (in total are MaxNumberFact + 1 elements)
 
 ScientificForm factorial(int n)                    /// Functia care returneaza factorialul unui numar si umple cu valori vectorului FactorialVector pe baza factorialului fiecarui numar
 {                                                  /// The function which returns factorial of a number and put values on FactorialVector based on factorial of each number
@@ -206,7 +206,7 @@ ScientificForm factorial(int n)                    /// Functia care returneaza f
     {
         __int128 p=1;                              /// p este factorialul indicelui i curent | p is the factorial for current index (i)
         FactorialVector[0]=1;
-        for(int i=1;i<=NrMaxFact;i++)
+        for(int i=1;i<=MaxNumberFact;i++)
         {
             p=p*i;
             FactorialVector[i]=p;
@@ -214,12 +214,12 @@ ScientificForm factorial(int n)                    /// Functia care returneaza f
         FactorialInitialization = 1;
     }
     ScientificForm nr;
-    if(n>=0 && n<=NrMaxFact)
+    if(n>=0 && n<=MaxNumberFact)
     {
         nr.coefficient = FactorialVector[n];        /// https://zeptomath.com/calculators/factorial.php
         nr.exponent = 0;
     }
-    else if(n>NrMaxFact)
+    else if(n>MaxNumberFact)
     {
         long double x = FactorialVector[33];
         if(n > 1755)
@@ -267,7 +267,7 @@ long double div_to_float(Fraction fr)
     }
     return nr;
 }
-ScientificForm div_int(Fraction fr)               /// In aceasta functie vrem sa returnam forma stiintifica a rezultatului real al lui x/y | This function returns scientific form of real result x/y
+ScientificForm div_int(Fraction fr)                /// In aceasta functie vrem sa returnam forma stiintifica a rezultatului real al lui x/y | This function returns scientific form of real result x/y
 {
     long double nr;
     ScientificForm n;
@@ -347,8 +347,8 @@ ScientificForm CinScientificForm()
 {
     ScientificForm f;
     f.coefficient = CinIntNumber();
-    f.exponent   = CinIntNumber();
-    while(f.coefficient%10==0 && f.coefficient!=0)   /// Daca numarul n e de forma 100*10^2, structura repetitiva va incerca sa faca sa fie de forma 1*10^4
+    f.exponent    = CinIntNumber();
+    while(f.coefficient%10==0 && f.coefficient!=0) /// Daca numarul n e de forma 100*10^2, structura repetitiva va incerca sa faca sa fie de forma 1*10^4
     {                                              /// If n number is like 100*10^2, the repetitive structure tries to be like 1*10^4
         if(f.exponent < INT128_MAX-1 && f.exponent > INT128_MIN)
             f.exponent++;
@@ -356,7 +356,7 @@ ScientificForm CinScientificForm()
     }
     return f;
 }
-__int128 GCD (__int128 a, __int128 b)            /// https://www.pbinfo.ro/articole/73/cmmdc-si-cmmmc-algoritmul-lui-euclid
+__int128 GCD (__int128 a, __int128 b)              /// https://www.pbinfo.ro/articole/73/cmmdc-si-cmmmc-algoritmul-lui-euclid
 {
     if(a==0 || b==0)
     {

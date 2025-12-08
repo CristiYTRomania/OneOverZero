@@ -18,17 +18,9 @@ void CoutRealNumber(long double r, unsigned int n = 6)
     if(r == i)
         cout<<i;
     else if(r >= INT128_MAX || r <= INT128_MIN)
-    {
-        cout<<setprecision(0);
-        cout<<r;
-        cout<<setprecision(6);
-    }
+        cout<<setprecision(0)<<r<<setprecision(6);
     else
-    {
-        cout<<setprecision(n);
-        cout<<r;
-        cout<<setprecision(6);
-    }
+        cout<<setprecision(n)<<r<<setprecision(6);
 }
 complex<long double> CinComplexNumber()
 {
@@ -226,9 +218,9 @@ ComplexSolutions equation(long double a,long double b,long double c)
         solution.x1=solution.x2=0/0.0;
     return solution;
 }
-string operation(string a="0", string b="0", string operator_="-")              /// Pentru a+b si a-b | For a+b and a-b
+string operation(string a="0", string b="0", string operator_="-")             /// Pentru a+b si a-b | For a+b and a-b
 {                                                 /// TODO: In cazul in care a-b,a,b>=0 | When a-b,a,b>=0 (Nu am implementat 0,(3) si +-inf/cinf/nan | Didn't implement 0.3 with 3 repeating and +-inf/cinf/nan)
-    string result,chr;                        /// TODO: Am uitat sa sterg 0 de la stanga si de la dreapta la final | I forgot to delete 0 from the left and the right (01.110)
+    string result,chr;                            /// TODO: Am uitat sa sterg 0 de la stanga si de la dreapta la final | I forgot to delete 0 from the left and the right (01.110)
     unsigned long long point1 = a.find("."), point2 = b.find(".");             /// TODO: As putea pune if-urile cu nan, inf si cinf in functie | I can put the ifs with nan, inf and cinf in this function
     if(point1==string::npos)
         a.append(".0"), point1 = a.find(".");
@@ -857,7 +849,7 @@ int main()
             CoutFraction(fr);
             cout<<endl;
         }
-        else if(s=="polinomialraport"||s=="polinomial_ratio"||s=="raport"||s=="poli"||s=="polinomial"||s=="poly"||s=="polynomial"||s=="ratio")
+        else if(s=="polinomialratio"||s=="polinomial_ratio"||s=="raport"||s=="poli"||s=="polinomial"||s=="poly"||s=="polynomial"||s=="ratio"||s=="polinomialraport"||s=="polinomial_raport")
         {
             long double x,numerator,denominator;
             unsigned int n1,n2;
