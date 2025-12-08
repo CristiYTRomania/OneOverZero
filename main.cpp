@@ -8,11 +8,11 @@
 using namespace std;                              /// Pentru cin si cout | For cin and cout -> C++
 
 int level = 1;
-struct SolutiiComplexe
+struct ComplexSolutions
 {
     complex<long double> x1,x2;
 };
-void AfisareNrReal(long double r, unsigned int n = 6)
+void CoutRealNumber(long double r, unsigned int n = 6)
 {
     __int128 i = floor(r);
     if(r == i)
@@ -30,7 +30,7 @@ void AfisareNrReal(long double r, unsigned int n = 6)
         cout<<setprecision(6);
     }
 }
-complex<long double> CitireNrComplex()
+complex<long double> CinComplexNumber()
 {
     long double a,b;
     cout<<"a = ";
@@ -40,11 +40,11 @@ complex<long double> CitireNrComplex()
     complex<long double> n(a,b);
     return n;
 }
-void AfisareNrComplex(complex<auto> n)
+void CoutComplexNumber(complex<auto> n)
 {
-    AfisareNrReal(real(n));
+    CoutRealNumber(real(n));
     cout<<" + ";
-    AfisareNrReal(imag(n));
+    CoutRealNumber(imag(n));
     cout<<" * i";
 }
 void ascii()                                      /// Afiseaza toate caracterele ASCII | Shows all ASCII characters
@@ -61,32 +61,32 @@ void ascii()                                      /// Afiseaza toate caracterele
 }
 auto shift_bits(auto n, long long p)              /// Aceasta functie va shifta bitii unui numar in mod circular | This function will shift the bits in circular way
 {
-    int dimensiune = sizeof(n) * 8;
+    int dimension = sizeof(n) * 8;
     bool b;
     while(p>0)
-        p-=dimensiune;
+        p-=dimension;
     while(p<0)
-        p+=dimensiune;
+        p+=dimension;
     while(p>0)                                    /// Shiftare circulara la dreapta cu un pas | Circular shifting to the right with one step
     {
         b=n%2;
         n=n>>1;
         if(b==0)
-            n=n & (((long long)1<<(dimensiune-1))^(-1));
+            n=n & (((long long)1<<(dimension-1))^(-1));
         else if(b==1)
-            n=n |  ((long long)1<<(dimensiune-1));
+            n=n |  ((long long)1<<(dimension-1));
         p--;
     }
     while(p<0)                                    /// Shiftare circulara la stanga  cu un pas | Circular shifting to the left  with one step
     {
-        b=(n>>(dimensiune-1))&1;
+        b=(n>>(dimension-1))&1;
         n=n<<1;
         n=n|b;
         p++;
     }
     return n;
 }
-void afisare_linii()
+void show_lines()
 {
     for(int i=1;i<=75;i++)
         cout<<"-";
@@ -104,14 +104,14 @@ void math_game(bool language)                     /// Acesta este un joc in roma
             total=5;
         else if(level==6)
             total=6;
-        afisare_linii();
+        show_lines();
         if(language==1)
             cout<<"Nivelul ";
         else if(language==0)
             cout<<"Level ";
         cout<<level<<endl;
         cout<<"Help options: \n"<<"'play' for playing; \n"<<"'quit' (or 'exit') for quitting the game. \n";
-        afisare_linii();
+        show_lines();
         cin>>s;
         s=NotCaseSensitive(s);
         if(s=="quit" or s=="exit")
@@ -180,7 +180,7 @@ long double f(long double x, unsigned int n, long double v[])    /// Returnam re
     }
     return s;
 }
-double frecventa(string c, long long n)           /// Functia care returneaza frecventa unei note muzicale | This functions returns musical note's frequency
+double frequency(string c, long long n)           /// Functia care returneaza frecventa unei note muzicale | This functions returns musical note's frequency
 {
     double p=pow(2,n-7),f=0/0.0;
          if(c=="A" ||c=="a")f=3520*p;
@@ -197,7 +197,7 @@ double frecventa(string c, long long n)           /// Functia care returneaza fr
     else if(c=="A#"||c=="a#"||c=="Bb"||c=="bb")f=3729*p;
     return f;
 }
-void afisare_memorie(unsigned long long n)
+void display_memory(unsigned long long n)
 {
     if       (n<1024)
         cout<<n<<" bytes | ";
@@ -210,58 +210,58 @@ void afisare_memorie(unsigned long long n)
     else
         cout<<n/1024.0/1024.0/1024.0/1024.0<<" TiB | ";
 }
-SolutiiComplexe ecuatie(long double a,long double b,long double c)
+ComplexSolutions equation(long double a,long double b,long double c)
 {
-    SolutiiComplexe solutie;
+    ComplexSolutions solution;
     if(a!=0)
     {
         complex<long double> delta=b*b-4*a*c;
         delta=sqrt(delta);
-        solutie.x1=(-b+delta)/(2*a);
-        solutie.x2=(-b-delta)/(2*a);
+        solution.x1=(-b+delta)/(2*a);
+        solution.x2=(-b-delta)/(2*a);
     }
     else if(b!=0)
-        solutie.x1=solutie.x2=-c/b;
+        solution.x1=solution.x2=-c/b;
     else
-        solutie.x1=solutie.x2=0/0.0;
-    return solutie;
+        solution.x1=solution.x2=0/0.0;
+    return solution;
 }
-string operatie(string a="0", string b="0", string operator_="-")              /// Pentru a+b si a-b | For a+b and a-b
+string operation(string a="0", string b="0", string operator_="-")              /// Pentru a+b si a-b | For a+b and a-b
 {                                                 /// TODO: In cazul in care a-b,a,b>=0 | When a-b,a,b>=0 (Nu am implementat 0,(3) si +-inf/cinf/nan | Didn't implement 0.3 with 3 repeating and +-inf/cinf/nan)
-    string rezultat,capat;                        /// TODO: Am uitat sa sterg 0 de la stanga si de la dreapta la final | I forgot to delete 0 from the left and the right (01.110)
-    unsigned long long punct1 = a.find("."), punct2 = b.find(".");             /// TODO: As putea pune if-urile cu nan, inf si cinf in functie | I can put the ifs with nan, inf and cinf in this function
-    if(punct1==string::npos)
-        a.append(".0"), punct1 = a.find(".");
-    if(punct2==string::npos)
-        b.append(".0"), punct2 = b.find(".");
+    string result,chr;                        /// TODO: Am uitat sa sterg 0 de la stanga si de la dreapta la final | I forgot to delete 0 from the left and the right (01.110)
+    unsigned long long point1 = a.find("."), point2 = b.find(".");             /// TODO: As putea pune if-urile cu nan, inf si cinf in functie | I can put the ifs with nan, inf and cinf in this function
+    if(point1==string::npos)
+        a.append(".0"), point1 = a.find(".");
+    if(point2==string::npos)
+        b.append(".0"), point2 = b.find(".");
     string zero="0";
     bool ok=0;
-    if(punct1<punct2)
-        for(unsigned long long i=punct1;i<punct2;i++)
+    if(point1<point2)
+        for(unsigned long long i=point1;i<point2;i++)
         {
             zero.append(a);
             a=zero;
             zero="0";
         }
-    else if(punct1>punct2)
-        for(unsigned long long i=punct2;i<punct1;i++)
+    else if(point1>point2)
+        for(unsigned long long i=point2;i<point1;i++)
         {
             zero.append(b);
             b=zero;
             zero="0";
         }
-    punct1=a.length();
-    punct2=b.length();
-    if(punct1<punct2)
+    point1=a.length();
+    point2=b.length();
+    if(point1<point2)
     {
-        for(unsigned long long i=punct1;i<punct2;i++)
+        for(unsigned long long i=point1;i<point2;i++)
             a.append("0");
-        punct1=punct2;
+        point1=point2;
     }
-    else if(punct1>punct2)
-        for(unsigned long long i=punct2;i<punct1;i++)
+    else if(point1>point2)
+        for(unsigned long long i=point2;i<point1;i++)
             b.append("0");
-    for(unsigned long long i=punct1-1;i<punct1;i--)
+    for(unsigned long long i=point1-1;i<point1;i--)
     {
         if(a[i]>='0'&&a[i]<='9')
         {
@@ -281,116 +281,116 @@ string operatie(string a="0", string b="0", string operator_="-")              /
                 nr-=10;
                 ok=1;
             }
-            capat=to_string(nr);
+            chr=to_string(nr);
         }
         else
-            capat=".";
-        capat.append(rezultat);
-        rezultat=capat;
+            chr=".";
+        chr.append(result);
+        result=chr;
     }
     if(ok==1&&operator_=="+")
     {
-        string unu="1";
-        unu.append(rezultat);
-        rezultat=unu;
+        string one="1";
+        one.append(result);
+        result=one;
     }
     if(operator_=="+"||operator_=="-")
-        return rezultat;
+        return result;
     else
         return "nan";
 }
-Fractie operatie(Fractie a, Fractie b, string operator_="+")
+Fraction operation(Fraction a, Fraction b, string operator_="+")
 {
-    Fractie rezultat;
+    Fraction result;
     if(operator_=="+")
     {
-        AcelasiNumitor(a,b);
-        if(a.numitor != 0 && b.numitor != 0)
+        SameDenominator(a,b);
+        if(a.denominator != 0 && b.denominator != 0)
         {
-            rezultat.numarator = a.numarator + b.numarator;
-            rezultat.numitor   = a.numitor;
+            result.numerator = a.numerator + b.numerator;
+            result.denominator   = a.denominator;
         }
-        else if(a.numitor == 0 && b.numitor == 0)
+        else if(a.denominator == 0 && b.denominator == 0)
         {
-            rezultat.numarator=0;
-            rezultat.numitor=0;
+            result.numerator=0;
+            result.denominator=0;
         }
-        else if(a.numitor==0)
+        else if(a.denominator==0)
         {
-            rezultat.numarator=a.numarator;
-            rezultat.numitor=0;
+            result.numerator=a.numerator;
+            result.denominator=0;
         }
-        else if(b.numitor==0)
+        else if(b.denominator==0)
         {
-            rezultat.numarator=b.numarator;
-            rezultat.numitor=0;
+            result.numerator=b.numerator;
+            result.denominator=0;
         }
     }
     else if(operator_=="-")
     {
-        AcelasiNumitor(a,b);
-        if(a.numitor != 0 && b.numitor != 0)
+        SameDenominator(a,b);
+        if(a.denominator != 0 && b.denominator != 0)
         {
-            rezultat.numarator = a.numarator - b.numarator;
-            rezultat.numitor   = a.numitor;
+            result.numerator = a.numerator - b.numerator;
+            result.denominator   = a.denominator;
         }
-        else if(a.numitor == 0 && b.numitor == 0)
+        else if(a.denominator == 0 && b.denominator == 0)
         {
-            rezultat.numarator=0;
-            rezultat.numitor=0;
+            result.numerator=0;
+            result.denominator=0;
         }
-        else if(a.numitor==0)
+        else if(a.denominator==0)
         {
-            rezultat.numarator=a.numarator;
-            rezultat.numitor=0;
+            result.numerator=a.numerator;
+            result.denominator=0;
         }
-        else if(b.numitor==0)
+        else if(b.denominator==0)
         {
-            rezultat.numarator=-b.numarator;
-            rezultat.numitor=0;
+            result.numerator=-b.numerator;
+            result.denominator=0;
         }
     }
     else if(operator_=="*")
     {
-        rezultat.numarator = a.numarator * b.numarator;
-        rezultat.numitor   = a.numitor   * b.numitor;
+        result.numerator = a.numerator * b.numerator;
+        result.denominator   = a.denominator   * b.denominator;
     }
     else if(operator_=="/")
     {
-        rezultat.numarator = a.numarator * b.numitor;
-        rezultat.numitor   = a.numitor   * b.numarator;
+        result.numerator = a.numerator * b.denominator;
+        result.denominator   = a.denominator   * b.numerator;
     }
     else if(operator_=="^")
     {
-        long double exponent = 1.0/b.numitor,
-                    putere1 = pow(a.numarator,b.numarator),
-                    putere2 = pow(a.numitor,  b.numarator),
-                    numarator = pow(putere1, exponent),
-                    numitor   = pow(putere2, exponent),
-                    raport  = numarator / numitor;
-        FormaStiintifica n = float_to_int(raport);
-        rezultat = int_div(n);
+        long double exponent = 1.0/b.denominator,
+                    power1 = pow(a.numerator,b.numerator),
+                    power2 = pow(a.denominator,  b.numerator),
+                    numerator   = pow(power1, exponent),
+                    denominator = pow(power2, exponent),
+                    ratio  = numerator / denominator;
+        ScientificForm n = float_to_int(ratio);
+        result = int_div(n);
     }
     else
     {
-        rezultat.numarator=0;
-        rezultat.numitor=0;
+        result.numerator=0;
+        result.denominator=0;
     }
-    rezultat = simplificare(rezultat);
-    return rezultat;
+    result = simplification(result);
+    return result;
 }
-struct perecheCantor
+struct CantorPair
 {
     long long x,y;
 };
-long long bijectieCantor(perecheCantor n)
+long long CantorBijection(CantorPair n)
 {
-    long long suma=n.x+n.y;
-    return (suma*(suma+1))/2+n.y;
+    long long sum=n.x+n.y;
+    return (sum*(sum+1))/2+n.y;
 }
-perecheCantor bijectieCantor(long long n)
+CantorPair CantorBijection(long long n)
 {
-    perecheCantor n1;
+    CantorPair n1;
     long long p=0;
     while((p*(p+1))/2<=n)
         p++;
@@ -399,14 +399,14 @@ perecheCantor bijectieCantor(long long n)
     n1.x=p-n1.y;
     return n1;
 }
-struct Hexazecimal
+struct Hexadecimal
 {
     long long a;
     unsigned long long b,c,d;
 };
-Hexazecimal citire_hexa()
+Hexadecimal CinHexadecimal()
 {
-    Hexazecimal n;
+    Hexadecimal n;
     cout<<"0xAB.CD (-2^63 <= A <= 2^63 - 1; 0 <= B, C, D <= 2^64 - 1)"<<endl<<"A = ";
     cin>>n.a;
     cout<<"B = ";
@@ -417,7 +417,7 @@ Hexazecimal citire_hexa()
     cin>>n.d;
     return n;
 }
-void afisare_hexa(Hexazecimal n)
+void CoutHexadecimal(Hexadecimal n)
 {
     cout<<n.a<<" * 2^64 + "<<n.b<<" * 2^0 + "<<n.c<<" * 2^-64 + "<<n.d<<" * 2^-128 = \n";
     cout << showbase      /// afiseaza prefixul 0x          | show the 0x prefix
@@ -434,12 +434,12 @@ void CalcAnswer(string s)
     Answer = s;
     cout << s;
 }
-long double CitireNrReal()
+long double CinRealNumber()
 {
     string n;
-    n = NotCaseSensitive(n);
     long double x;
     cin>>n;
+    n = conversion(n);
     if(n=="cinf")
         x=stold("inf");
     else
@@ -468,33 +468,33 @@ int main()
     bool ok = 1;                                           /// Daca ok este 1, programul va rula, daca ok este 0, programul se va incheia | If ok=1, the program will run. If not, the program will stop
     string s;
     ifstream fin("memory.txt");
-    int partitii;
-    fin>>partitii;
-    string nume_partitie[partitii];
-    unsigned long long mem_totala[partitii],mem_libera[partitii],MEM_TOTALA=0,MEM_LIBERA=0;
+    int partitions;
+    fin>>partitions;
+    string PartitionName[partitions];
+    unsigned long long total_memory[partitions],free_memory[partitions],TOTAL_MEMORY=0,FREE_MEMORY=0;
     cout<<fixed;
-    for(int i=0;i<partitii;i++)
+    for(int i=0;i<partitions;i++)
     {
-        fin>>nume_partitie[i]>>mem_totala[i]>>mem_libera[i];
-        int nr_caractere=nume_partitie[i].length();
-        for(int j=1;j<=11-nr_caractere;j++)
-            nume_partitie[i].append(" ");
-        MEM_TOTALA+=mem_totala[i];
-        MEM_LIBERA+=mem_libera[i];
+        fin>>PartitionName[i]>>total_memory[i]>>free_memory[i];
+        int string_length=PartitionName[i].length();
+        for(int j=1;j<=11-string_length;j++)
+            PartitionName[i].append(" ");
+        TOTAL_MEMORY+=total_memory[i];
+        FREE_MEMORY+=free_memory[i];
     }
-    for(int i=0;i<partitii-1;i++)
-        for(int j=i+1;j<partitii;j++)
-            if(mem_libera[i]<mem_libera[j])
+    for(int i=0;i<partitions-1;i++)
+        for(int j=i+1;j<partitions;j++)
+            if(free_memory[i]<free_memory[j])
             {
-                swap(mem_libera[i],mem_libera[j]);
-                swap(mem_totala[i],mem_totala[j]);
-                swap(nume_partitie[i],nume_partitie[j]);
+                swap(free_memory[i],free_memory[j]);
+                swap(total_memory[i],total_memory[j]);
+                swap(PartitionName[i],PartitionName[j]);
             }
     while(ok==1)
     {
         cout<<"Type 'help' for instructions! \n";
         cout<<"Introduceti 'ajutor' pentru instructiuni! \n";
-        afisare_linii();
+        show_lines();
         if(language == 1)
             cout<<"Meniu principal: ";                     /// Suntem in meniul principal
         else
@@ -512,14 +512,14 @@ int main()
             long double x;
             unsigned int n;
             cout<<"x = ";
-            x=CitireNrReal();
+            x=CinRealNumber();
             cout<<"n = ";
             cin>>n;
             long double v[n+1];
             for(unsigned int i=n;i<=n;i--)
             {
                 cout<<"a["<<i<<"] = ";
-                v[i]=CitireNrReal();
+                v[i]=CinRealNumber();
                 if(i==0)
                     break;
             }
@@ -549,10 +549,10 @@ int main()
             complex<long double> c=0.0+1i;
             cout<<c<<endl;
             long double mic = nextafter((long double)0.0, (long double)1.0);    /// https://stackoverflow.com/questions/39746861/is-dbl-min-the-smallest-positive-double
-            AfisareNrReal(mic,10*1000);
+            CoutRealNumber(mic,10*1000);
             cout<<endl;
-            complex<__int128> aa(5,4);AfisareNrComplex(aa+aa);cout<<endl;
-            complex<long double>a2(6/.0,7),a3(1/.0,3); AfisareNrComplex(a2);cout<<endl<<(a2 == a3)<<endl;AfisareNrComplex(a3);cout<<endl;
+            complex<__int128> aa(5,4);CoutComplexNumber(aa+aa);cout<<endl;
+            complex<long double>a2,a3(1/.0,3);a2=complex<long double>(6/.0,7); CoutComplexNumber(a2);cout<<endl<<(a2 == a3)<<endl;CoutComplexNumber(a3);cout<<endl;
         }
         else if(s=="ascii")                                /// Apelam functia ce va afisa toate caracterele ASCII | Calling the function which shows all ASCII characters
             ascii();
@@ -564,13 +564,13 @@ int main()
             cin>>c;
             cout<<"Octava: ";
             cin>>n;
-            cout<<frecventa(c,n)<<" Hz"<<endl;
+            cout<<frequency(c,n)<<" Hz"<<endl;
         }
         else if(s=="pi-e")
         {
             cout<<"pi - e =  "<<pi<<endl;
             cout<<"       -  "<<e <<endl;
-            cout<<"       =  "<<operatie(pi,e,"-")<<endl;
+            cout<<"       =  "<<operation(pi,e,"-")<<endl;
             cout<<"       ~= "<<stold(pi)-stold(e)<<endl;  /// Aici afisam rezultatul scaderii lui pi la e | This shows result of pi - e
         }
         else if(s=="no"||s=="no."||s=="number")
@@ -578,7 +578,7 @@ int main()
             string n;
             cout<<"Enter the real number: ";
             cin>>n;
-            n = convertire(n);
+            n = conversion(n);
             float       real_float      =stof (n);
             double      real_double     =stod (n);
             long double real_long_double=stold(n);
@@ -611,7 +611,7 @@ int main()
             string n;
             cout<<"Introduceti numarul real: ";
             cin>>n;
-            n = convertire(n);
+            n = conversion(n);
             float       real_float      =stof (n);
             double      real_double     =stod (n);
             long double real_long_double=stold(n);
@@ -641,9 +641,9 @@ int main()
         }
         else if(s == "div" || s == "division" || s == "impartire")
         {
-            Fractie n;
-            n = CitireFractie();
-            FormaStiintifica x = div_int(n);                                 /// Apelez functia care returneaza forma stiintifica a rezultatului real al lui x/y
+            Fraction n;
+            n = CinFraction();
+            ScientificForm x = div_int(n);                                   /// Apelez functia care returneaza forma stiintifica a rezultatului real al lui x/y
                                                                              /// Calling the funtion which returns scientific form of real result of x/y
             show_floated_int(x);                                             /// Afiseaza forma stiinfica a numarului real: coeficient  * 10^exponent
         }                                                                    /// Shows the scientific form of  real number: coefficient * 10^exponent
@@ -663,26 +663,26 @@ int main()
             cin>>b;
             cout<<"c = ";
             cin>>c;
-            SolutiiComplexe solutie=ecuatie(a,b,c);
-            AfisareNrReal(a);
+            ComplexSolutions solution=equation(a,b,c);
+            CoutRealNumber(a);
             cout<<" * x^2 + ";
-            AfisareNrReal(b);
+            CoutRealNumber(b);
             cout<<" * x^1 + ";
-            AfisareNrReal(c);
+            CoutRealNumber(c);
             cout<<" * x^0 = 0"<<endl;
             cout<<"x[1] = ";
-            AfisareNrComplex(solutie.x1);
+            CoutComplexNumber(solution.x1);
             cout<<endl;
             cout<<"x[2] = ";
-            AfisareNrComplex(solutie.x2);
+            CoutComplexNumber(solution.x2);
             cout<<endl;
         }
         else if(s=="calculator"||s=="calc")                /// TODO: Operatori noi: ^, sqrt(), log() | New operators: ^, sqrt(), log()
         {
             string a,b,operator_;
             cin>>a>>operator_>>b;
-            a=convertire(a);
-            b=convertire(b);
+            a=conversion(a);
+            b=conversion(b);
             if(operator_=="+")
             {
                 if(a=="cinf"&&b=="cinf")
@@ -699,7 +699,7 @@ int main()
                     CalcAnswer(b);
                 else
                 {
-                    Answer = operatie(a,b,"+");
+                    Answer = operation(a,b,"+");
                     cout<<Answer<<" ~= "<<stold(a)+stold(b);
                 }
             }
@@ -721,7 +721,7 @@ int main()
                     CalcAnswer("inf");
                 else
                 {
-                    Answer = operatie(a,b,"-");
+                    Answer = operation(a,b,"-");
                     cout<<Answer<<" ~= "<<stold(a)-stold(b);
                 }
             }
@@ -792,33 +792,33 @@ int main()
         }
         else if(s=="hexadecimal"||s=="hex"||s=="hexa")
         {
-            Hexazecimal n;
-            n=citire_hexa();
-            afisare_hexa(n);
+            Hexadecimal n;
+            n=CinHexadecimal();
+            CoutHexadecimal(n);
         }
         else if(s=="disk"||s=="memory"||s=="partition"||s=="partitions"||s=="partitii"||s=="memorie"||s=="disc")
         {
             cout<<endl<<"Nume partitie | Memorie totala | Memorie libera | Memorie utilizata | Procent utilizat"<<endl<<endl;
-            for(int i=0;i<partitii;i++)
+            for(int i=0;i<partitions;i++)
             {
-                unsigned long long mem_utilizata=mem_totala[i]-mem_libera[i];
-                cout<<nume_partitie[i]<<" | ";
-                afisare_memorie(mem_totala[i]);
-                afisare_memorie(mem_libera[i]);
-                afisare_memorie(mem_utilizata);
-                cout<<(long double)mem_utilizata/mem_totala[i]*100<<'%'<<endl;
+                unsigned long long used_memory=total_memory[i]-free_memory[i];
+                cout<<PartitionName[i]<<" | ";
+                display_memory(total_memory[i]);
+                display_memory(free_memory[i]);
+                display_memory(used_memory);
+                cout<<(long double)used_memory/total_memory[i]*100<<'%'<<endl;
             }
             cout    <<endl<<"Total       | ";
-            afisare_memorie(MEM_TOTALA);
-            afisare_memorie(MEM_LIBERA);
-            afisare_memorie(MEM_TOTALA-MEM_LIBERA);
-            cout<<(long double)(MEM_TOTALA-MEM_LIBERA)/MEM_TOTALA*100<<'%'<<endl;
+            display_memory(TOTAL_MEMORY);
+            display_memory(FREE_MEMORY);
+            display_memory(TOTAL_MEMORY-FREE_MEMORY);
+            cout<<(long double)(TOTAL_MEMORY-FREE_MEMORY)/TOTAL_MEMORY*100<<'%'<<endl;
         }
         else if(s=="complex")                              /// TODO: complex<string>
         {
             complex<long double> c;
-            c = CitireNrComplex();
-            AfisareNrComplex(c);
+            c = CinComplexNumber();
+            CoutComplexNumber(c);
             cout<<endl;
         }
         else if(s=="bijectie"||s=="cantor")
@@ -829,11 +829,11 @@ int main()
 
                 Cantor's bijection algorithm taught by Professor Gabriel Istrate at the Faculty of Mathematics and Computer Science in Bucharest, at the Computability and Complexity seminar
             */
-            perecheCantor n;
+            CantorPair n;
             cin>>n.x>>n.y;
-            long long n1=bijectieCantor(n);
+            long long n1=CantorBijection(n);
             cout<<n1<<": ";
-            n=bijectieCantor(n1);
+            n=CantorBijection(n1);
             cout<<n.x<<' '<<n.y<<endl;
         }
         else if(s=="hello")
@@ -845,24 +845,24 @@ int main()
         {
             int n;
             cin>>n;
-            FormaStiintifica f;
+            ScientificForm f;
             f = factorial(n);
             show_floated_int(f);
         }
         else if(s=="fractie" || s=="fraction")
         {
-            FormaStiintifica f;
-            f = CitireFormaStiintifica();
-            Fractie fr = int_div(f);
-            AfisareFractie(fr);
+            ScientificForm f;
+            f = CinScientificForm();
+            Fraction fr = int_div(f);
+            CoutFraction(fr);
             cout<<endl;
         }
-        else if(s=="polinomialraport"||s=="polinomial_raport"||s=="raport"||s=="poli"||s=="polinomial"||s=="poly"||s=="polynomial")
+        else if(s=="polinomialraport"||s=="polinomial_ratio"||s=="raport"||s=="poli"||s=="polinomial"||s=="poly"||s=="polynomial"||s=="ratio")
         {
-            long double x,numarator,numitor;
+            long double x,numerator,denominator;
             unsigned int n1,n2;
             cout<<"x = ";
-            x=CitireNrReal();
+            x=CinRealNumber();
             cout<<"n[1] = ";
             cin>>n1;
             cout<<"n[2] = ";
@@ -871,64 +871,64 @@ int main()
             for(unsigned int i=n1;i<=n1;i--)
             {
                 cout<<"a["<<i<<"] = ";
-                a[i]=CitireNrReal();
+                a[i]=CinRealNumber();
                 if(i==0)
                     break;
             }
             for(unsigned int i=n2;i<=n2;i--)
             {
                 cout<<"b["<<i<<"] = ";
-                b[i]=CitireNrReal();
+                b[i]=CinRealNumber();
                 if(i==0)
                     break;
             }
             cout<<"( ";
             for(unsigned int i=n1;i>0;i--)
             {
-                AfisareNrReal(a[i]);
+                CoutRealNumber(a[i]);
                 cout<<" * x^"<<i<<" + ";
             }
-            AfisareNrReal(a[0]);
+            CoutRealNumber(a[0]);
             cout<<" * x^0 ) / ( ";
             for(unsigned int i=n2;i>0;i--)
             {
-                AfisareNrReal(b[i]);
+                CoutRealNumber(b[i]);
                 cout<<" * x^"<<i<<" + ";
             }
-            AfisareNrReal(b[0]);
+            CoutRealNumber(b[0]);
             cout<<" * x^0 ) = ";
-            numarator=f(x,n1,a);
-            numitor  =f(x,n2,b);
-            while( (1/numarator==0 && 1/numitor==0) || (numarator==0 && numitor==0) )
+            numerator=f(x,n1,a);
+            denominator  =f(x,n2,b);
+            while( (1/numerator==0 && 1/denominator==0) || (numerator==0 && denominator==0) )
             {
                 bool ok1 = lHospital(a,n1);
                 bool ok2 = lHospital(b,n2);
-                numarator=f(x,n1,a);
-                numitor  =f(x,n2,b);
+                numerator=f(x,n1,a);
+                denominator  =f(x,n2,b);
                 if(ok1==0 && ok2==0)
                     break;
             }
-            AfisareNrReal(numarator);
+            CoutRealNumber(numerator);
             cout<<" / ";
-            AfisareNrReal(numitor);
+            CoutRealNumber(denominator);
             cout<<" = ";
-            AfisareNrReal(numarator/numitor);
+            CoutRealNumber(numerator/denominator);
             cout<<endl;
         }
         else if(s=="fractii"||s=="fractions")
         {
-            Fractie a, b;
+            Fraction a, b;
             string operator_;
-            a=CitireFractie();
+            a=CinFraction();
             cin>>operator_;
-            b=CitireFractie();
-            Fractie rez = operatie(a,b,operator_);
+            b=CinFraction();
+            Fraction rez = operation(a,b,operator_);
             cout<<"( ";
-            AfisareFractie(a);
+            CoutFraction(a);
             cout<<" ) "<<operator_<<" ( ";
-            AfisareFractie(b);
+            CoutFraction(b);
             cout<<" ) = ";
-            AfisareFractie(rez);
+            CoutFraction(rez);
             cout<<endl;
         }
         else if(s=="language")
@@ -983,25 +983,25 @@ int main()
                     cout<<"dezactivat! \n";
             }
         }
-        else if(s=="cmmdc")
+        else if(s=="cmmdc"||s=="gcd") /// Afiseaza Cel mai mare divizor comun | Shows the Greatest common divisor
         {
             __int128 a, b;
-            a = CitireNrIntreg();
-            b = CitireNrIntreg();
-            cout<<CMMDC(a,b)<<endl;
+            a = CinIntNumber();
+            b = CinIntNumber();
+            cout<<GCD(a,b)<<endl;
         }
-        else if(s=="cmmmc")
+        else if(s=="cmmmc"||s=="lcm") /// Afiseaza Cel mai mic multiplu comun | Shows the Least common multiple
         {
             __int128 a, b;
-            a = CitireNrIntreg();
-            b = CitireNrIntreg();
-            cout<<a/CMMDC(a,b)*b<<endl;
+            a = CinIntNumber();
+            b = CinIntNumber();
+            cout<<a/GCD(a,b)*b<<endl;
         }
         else if(language == 1)
             cout<<"Comanda necunoscuta \n";
         else
             cout<<"Unknown command \n";
-        afisare_linii();
+        show_lines();
     }
     return 0; /// Se va inchide programul si se va returna valoarea 0 | The program will close and the value returned will be 0
 }

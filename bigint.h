@@ -29,13 +29,13 @@ operator<<( std::ostream& dest, __int128_t value ) /// https://stackoverflow.com
 }
 string NotCaseSensitive(string s)
 {
-    int nr_caractere=s.length();                  /// Numarul de caractere al comenzii citite de la tastatura | The string length command of the keyboard input
-    for(int i=0;i<nr_caractere;i++)               /// Transformam orice litera mare din comanda in litera mica pentru ca comanda sa nu fie case sensitive
+    int string_length=s.length();                  /// Numarul de caractere al comenzii citite de la tastatura | The string length command of the keyboard input
+    for(int i=0;i<string_length;i++)               /// Transformam orice litera mare din comanda in litera mica pentru ca comanda sa nu fie case sensitive
         if(s[i]>='A' && s[i]<='Z')                /// We convert any uppercase letter in the command to lowercase so that the command to be not case sensitive
             s[i]+=32;
     return s;
 }
-string convertire(string a)
+string conversion(string a)
 {
     a = NotCaseSensitive(a);
     if(a=="pi")
@@ -48,7 +48,7 @@ string convertire(string a)
 }
 __int128 StringToInt(string s)
 {
-    s=convertire(s);
+    s=conversion(s);
     if(s=="inf"||s=="cinf")
         return INT128_MAX;
     else if(s=="-inf")
@@ -73,26 +73,25 @@ __int128 StringToInt(string s)
     }
     return nr;
 }
-__int128 CitireNrIntreg()
+__int128 CinIntNumber()
 {
     __int128 n;
     string a;
     cin>>a;
-    a = convertire(a);
     n = StringToInt(a);
     return n;
 }
-struct FormaStiintifica                            /// Structura reprezinta forma stiintifica a unui numar real (x*10^y), cu coeficientul si exponentul numere intregi de tip __int128
+struct ScientificForm                            /// Structura reprezinta forma stiintifica a unui numar real (x*10^y), cu coeficientul si exponentul numere intregi de tip __int128
 {                                                  /// This structure returns scientific form of a real number  (x*10^y), with coefficient and exponent which are __int128 integers
-    __int128 coeficient, exponent;
+    __int128 coefficient, exponent;
 };
-struct Fractie
+struct Fraction
 {
-    __int128 numarator, numitor;
+    __int128 numerator, denominator;
 };
-FormaStiintifica float_to_int(long double f)       /// Returneaza forma stiintifica a unui numar real | Return scientific form of a real number
+ScientificForm float_to_int(long double f)       /// Returneaza forma stiintifica a unui numar real | Return scientific form of a real number
 {
-    FormaStiintifica n;
+    ScientificForm n;
     n.exponent=0;
     while(f!=(__int128)f                           /// Ca sa extragem zecimalele din numarul real intr-un intreg | To extract decimals from real number to a integer
           && f*10<=INT128_MAX && f*10>=INT128_MIN) /// Ca sa nu dea underflow sau overflow                       | To not get overflow or underflow
@@ -103,12 +102,12 @@ FormaStiintifica float_to_int(long double f)       /// Returneaza forma stiintif
     if(f==1/0.0||f==-1/0.0)
     {
         n.exponent=INT128_MAX-1;
-        n.coeficient=1;
+        n.coefficient=1;
     }
     else if(f!=f)
     {
         n.exponent=INT128_MAX;
-        n.coeficient=0;
+        n.coefficient=0;
     }
     else
     {
@@ -118,53 +117,53 @@ FormaStiintifica float_to_int(long double f)       /// Returneaza forma stiintif
             if(n.exponent != INT128_MAX)
                 n.exponent++;
         }
-        n.coeficient=f;
+        n.coefficient=f;
     }
-    while(n.coeficient%10==0 && n.coeficient!=0)   /// Daca numarul n e de forma 100*10^2, structura repetitiva va incerca sa faca sa fie de forma 1*10^4
+    while(n.coefficient%10==0 && n.coefficient!=0)   /// Daca numarul n e de forma 100*10^2, structura repetitiva va incerca sa faca sa fie de forma 1*10^4
     {                                              /// If n number is like 100*10^2, the repetitive structure tries to be like 1*10^4
         if(n.exponent != INT128_MAX)
             n.exponent++;
-        n.coeficient /= 10;
+        n.coefficient /= 10;
     }
     return n;
 }
-void show_floated_int(FormaStiintifica n)          /// Afiseaza forma stiinfica a numarului real      | Shows scientific form of real number
+void show_floated_int(ScientificForm n)          /// Afiseaza forma stiinfica a numarului real      | Shows scientific form of real number
 {
     __int128 p=1,x,ct=0;
     if(n.exponent==INT128_MAX)                     /// In loc de x*10^y este x impartit la 0          | Instead of x*10^y is x over 0
     {
-        if(n.coeficient==0)
+        if(n.coefficient==0)
             cout<<0/0.0;
         else
             cout<<"cinf";
     }
     else if(n.exponent==INT128_MAX-1)              /// In loc de x*10^y este x inmultit cu infinit    | Instead of x*10^y is x times infinity
     {
-        if(n.coeficient==0)
+        if(n.coefficient==0)
             cout<<0;
         else
-            cout<<n.coeficient/0.0;
+            cout<<n.coefficient/0.0;
     }
     else if(n.exponent==INT128_MIN)                /// In loc de x*10^y este x impartit la infinit    | Instead of x*10^y is x over infinity
     {
-        if(n.coeficient==0)
+        if(n.coefficient==0)
             cout<<0;
-        else if(n.coeficient<0)
+        else if(n.coefficient<0)
             cout<<"-0.0";
-        else if(n.coeficient>0)
+        else if(n.coefficient>0)
             cout<<"0.0";
     }
     else if(n.exponent<0)
     {
-        if(n.coeficient<0)
+        if(n.coefficient<0)
             cout<<'-';
         for(__int128 i=-1; i>=n.exponent; i--)
             p=p*10;
-        if(n.coeficient<0)
-            cout<<-n.coeficient/p<<'.';
+        if(n.coefficient<0)
+            cout<<-n.coefficient/p<<'.';
         else
-            cout<<n.coeficient/p<<'.';
-        x=n.coeficient%p;
+            cout<<n.coefficient/p<<'.';
+        x=n.coefficient%p;
         while(x!=0)
         {
             x=x/10;
@@ -172,18 +171,18 @@ void show_floated_int(FormaStiintifica n)          /// Afiseaza forma stiinfica 
         }
         for(__int128 i=n.exponent;i<ct;i++)
             cout<<0;
-        if(n.coeficient<0)
-            cout<<-n.coeficient%p;
+        if(n.coefficient<0)
+            cout<<-n.coefficient%p;
         else
-            cout<<n.coeficient%p;
+            cout<<n.coefficient%p;
     }
     else if(n.exponent>=0)
     {
-        cout<<n.coeficient;
+        cout<<n.coefficient;
         for(__int128 i=1; i<=n.exponent; i++)
             cout<<0;
     }
-    cout<<" = "<<n.coeficient;
+    cout<<" = "<<n.coefficient;
     if(n.exponent==INT128_MAX)
         cout<<" * cinf"<<endl;
     else if(n.exponent==INT128_MAX-1)
@@ -193,7 +192,7 @@ void show_floated_int(FormaStiintifica n)          /// Afiseaza forma stiinfica 
     else
         cout<<" * 10 ^ "<<n.exponent<<endl;
 }
-bool InitializareFactorial = 0;                    /// Aceasta variabila retine daca valorile factorialelor au fost atribuite (1) sau nu (0)
+bool FactorialInitialization = 0;                  /// Aceasta variabila retine daca valorile factorialelor au fost atribuite (1) sau nu (0)
                                                    /// This variable stores if the factorial values were assigned (1) or not (0)
 
 int NrMaxFact = 33;                                /// Cel mai mare numar caruia pot sa ii calculez factorialul (33) | The biggest number that I can calculate its factorial (33)
@@ -201,9 +200,9 @@ int NrMaxFact = 33;                                /// Cel mai mare numar caruia
 __int128 FactorialVector[33 + 1];                  /// Vectorul care stocheaza factorialul fiecarui numar natural mai mic sau egal cu NrMaxFact (de la 0 la NrMaxFact sunt NrMaxFact + 1 elemente)
                                                    /// The vector which store factorial of each natural number between 0 and NrMaxFact (in total are NrMaxFact + 1 elements)
 
-FormaStiintifica factorial(int n)                  /// Functia care returneaza factorialul unui numar si umple cu valori vectorului FactorialVector pe baza factorialului fiecarui numar
+ScientificForm factorial(int n)                    /// Functia care returneaza factorialul unui numar si umple cu valori vectorului FactorialVector pe baza factorialului fiecarui numar
 {                                                  /// The function which returns factorial of a number and put values on FactorialVector based on factorial of each number
-    if(InitializareFactorial == 0)
+    if(FactorialInitialization == 0)
     {
         __int128 p=1;                              /// p este factorialul indicelui i curent | p is the factorial for current index (i)
         FactorialVector[0]=1;
@@ -212,12 +211,12 @@ FormaStiintifica factorial(int n)                  /// Functia care returneaza f
             p=p*i;
             FactorialVector[i]=p;
         }
-        InitializareFactorial = 1;
+        FactorialInitialization = 1;
     }
-    FormaStiintifica nr;
+    ScientificForm nr;
     if(n>=0 && n<=NrMaxFact)
     {
-        nr.coeficient = FactorialVector[n];        /// https://zeptomath.com/calculators/factorial.php
+        nr.coefficient = FactorialVector[n];        /// https://zeptomath.com/calculators/factorial.php
         nr.exponent = 0;
     }
     else if(n>NrMaxFact)
@@ -232,49 +231,49 @@ FormaStiintifica factorial(int n)                  /// Functia care returneaza f
     }
     else
     {
-        nr.coeficient = 1;                         /// Returneaza infinitul complex (cinf = 1/0) in cazul factorialului unui numar negativ
+        nr.coefficient = 1;                        /// Returneaza infinitul complex (cinf = 1/0) in cazul factorialului unui numar negativ
         nr.exponent = INT128_MAX;                  /// Returns complex infinity (cinf = 1/0) if we want to return a factorial of a negative number
     }
     return nr;
 }
-long double div_to_float(Fractie fr)
+long double div_to_float(Fraction fr)
 {
     long double nr;
-    if(fr.numarator == INT128_MAX)
-        nr = (1/0.0)/fr.numitor;
-    else if(fr.numarator == INT128_MIN)
-        nr = (-1/0.0)/fr.numitor;
-    else if(fr.numitor == INT128_MAX)
-        nr = fr.numarator/(1/0.0);
-    else if(fr.numitor == INT128_MIN)
-        nr = fr.numarator/(-1/0.0);
+    if(fr.numerator == INT128_MAX)
+        nr = (1/0.0)/fr.denominator;
+    else if(fr.numerator == INT128_MIN)
+        nr = (-1/0.0)/fr.denominator;
+    else if(fr.denominator == INT128_MAX)
+        nr = fr.numerator/(1/0.0);
+    else if(fr.denominator == INT128_MIN)
+        nr = fr.numerator/(-1/0.0);
     else
     {
-        if(fr.numarator == 0 && fr.numitor != 0)
+        if(fr.numerator == 0 && fr.denominator != 0)
         {
             if(language == 0)
                 cout<<"Precision loss! 0 converted to 0.0 \n";
             else
                 cout<<"Precizie pierduta! 0 convertit la 0.0 \n";
         }
-        else if(fr.numitor == 0 && fr.numarator != 0)
+        else if(fr.denominator == 0 && fr.numerator != 0)
         {
             if(language == 0)
                 cout<<"Precision loss! cinf converted to inf \n";
             else
                 cout<<"Precizie pierduta! cinf convertit la inf \n";
         }
-        nr = (long double)fr.numarator/fr.numitor;
+        nr = (long double)fr.numerator/fr.denominator;
     }
     return nr;
 }
-FormaStiintifica div_int(Fractie fr)               /// In aceasta functie vrem sa returnam forma stiintifica a rezultatului real al lui x/y | This function returns scientific form of real result x/y
+ScientificForm div_int(Fraction fr)               /// In aceasta functie vrem sa returnam forma stiintifica a rezultatului real al lui x/y | This function returns scientific form of real result x/y
 {
     long double nr;
-    FormaStiintifica n;
-    if(fr.numarator != 0 && fr.numitor == 0)
+    ScientificForm n;
+    if(fr.numerator != 0 && fr.denominator == 0)
     {
-        n.coeficient = 1;
+        n.coefficient = 1;
         n.exponent = INT128_MAX;
         return n;
     }
@@ -282,82 +281,82 @@ FormaStiintifica div_int(Fractie fr)               /// In aceasta functie vrem s
     n  = float_to_int(nr);
     return n;
 }
-Fractie int_div(FormaStiintifica n)
+Fraction int_div(ScientificForm n)
 {
-    Fractie f;
-    f.numarator = n.coeficient;
-    f.numitor = 1;
+    Fraction f;
+    f.numerator = n.coefficient;
+    f.denominator = 1;
     if(n.exponent == INT128_MAX)
     {
-        f.numitor=0;
-        if(n.coeficient == 0)
-            f.numarator = 0;
-        else if(n.coeficient != 0)
-            f.numarator = 1;
+        f.denominator=0;
+        if(n.coefficient == 0)
+            f.numerator = 0;
+        else if(n.coefficient != 0)
+            f.numerator = 1;
         return f;
     }
-    else if(n.coeficient == 0)
+    else if(n.coefficient == 0)
     {
-        f.numarator = 0;
-        f.numitor = 1;
+        f.numerator = 0;
+        f.denominator = 1;
         return f;
     }
     else if(n.exponent == INT128_MAX - 1)
     {
-        f.numarator = INT128_MAX;
-        f.numitor = sgn(n.coeficient);
+        f.numerator   = INT128_MAX;
+        f.denominator = sgn(n.coefficient);
         return f;
     }
     else if(n.exponent == INT128_MIN)
     {
-        f.numitor = INT128_MAX;
-        f.numarator = sgn(n.coeficient);
+        f.denominator = INT128_MAX;
+        f.numerator   = sgn(n.coefficient);
         return f;
     }
     while(n.exponent<0)
     {
-        if(f.numitor <= (INT128_MAX - 1) / 10 && f.numitor >= (INT128_MIN + 1) / 10)
-            f.numitor*=10;
-        else if(f.numarator / 10 != 0)
-            f.numarator/=10;
+        if(f.denominator <= (INT128_MAX - 1) / 10 && f.denominator >= (INT128_MIN + 1) / 10)
+            f.denominator  *= 10;
+        else if(f.numerator / 10 != 0)
+            f.numerator    /= 10;
         else
         {
-            f.numitor = INT128_MAX;
-            f.numarator = sgn(n.coeficient);
+            f.denominator = INT128_MAX;
+            f.numerator   = sgn(n.coefficient);
             return f;
         }
         n.exponent+=1;
     }
     while(n.exponent>0)
     {
-        if(f.numarator <= (INT128_MAX - 1) / 10 && f.numarator >= (INT128_MIN + 1) / 10)
-            f.numarator*=10;
-        else if(f.numitor / 10 != 0)
-            f.numitor/=10;
+        if(f.numerator <= (INT128_MAX - 1) / 10 && f.numerator >= (INT128_MIN + 1) / 10)
+            f.numerator*=10;
+        else if(f.denominator / 10 != 0)
+            f.denominator/=10;
         else
         {
-            f.numarator = INT128_MAX;
-            f.numitor = sgn(n.coeficient);
+            f.numerator   = INT128_MAX;
+            f.denominator = sgn(n.coefficient);
             return f;
         }
         n.exponent-=1;
     }
     return f;
 }
-FormaStiintifica CitireFormaStiintifica()
+ScientificForm CinScientificForm()
 {
-    FormaStiintifica f;
-    f.coeficient = CitireNrIntreg();
-    f.exponent   = CitireNrIntreg();
-    while(f.coeficient%10==0 && f.coeficient!=0)   /// Daca numarul n e de forma 100*10^2, structura repetitiva va incerca sa faca sa fie de forma 1*10^4
+    ScientificForm f;
+    f.coefficient = CinIntNumber();
+    f.exponent   = CinIntNumber();
+    while(f.coefficient%10==0 && f.coefficient!=0)   /// Daca numarul n e de forma 100*10^2, structura repetitiva va incerca sa faca sa fie de forma 1*10^4
     {                                              /// If n number is like 100*10^2, the repetitive structure tries to be like 1*10^4
         if(f.exponent < INT128_MAX-1 && f.exponent > INT128_MIN)
             f.exponent++;
-        f.coeficient/=10;
+        f.coefficient/=10;
     }
     return f;
 }
-__int128 CMMDC (__int128 a, __int128 b)            /// https://www.pbinfo.ro/articole/73/cmmdc-si-cmmmc-algoritmul-lui-euclid
+__int128 GCD (__int128 a, __int128 b)            /// https://www.pbinfo.ro/articole/73/cmmdc-si-cmmmc-algoritmul-lui-euclid
 {
     if(a==0 || b==0)
     {
@@ -374,117 +373,117 @@ __int128 CMMDC (__int128 a, __int128 b)            /// https://www.pbinfo.ro/art
     }
     return a;
 }
-Fractie simplificare(Fractie n)
+Fraction simplification(Fraction n)
 {
     bool ok = 0;
-    if(n.numarator * n.numitor == 0)
+    if(n.numerator * n.denominator == 0)
     {
-        if(n.numarator != 0)
-            n.numarator = 1;
-        else if(n.numitor != 0)
-            n.numitor = 1;
+        if(n.numerator != 0)
+            n.numerator = 1;
+        else if(n.denominator != 0)
+            n.denominator = 1;
         return n;
     }
-    else if(n.numarator == INT128_MAX || n.numarator == INT128_MIN || n.numitor == INT128_MAX || n.numitor == INT128_MIN)
+    else if(n.numerator == INT128_MAX || n.numerator == INT128_MIN || n.denominator == INT128_MAX || n.denominator == INT128_MIN)
     {
-        if(n.numarator == n.numitor)
+        if(n.numerator == n.denominator)
         {
-            n.numarator = 1;
-            n.numitor = 1;
+            n.numerator = 1;
+            n.denominator = 1;
         }
-        else if(n.numarator == -n.numitor)
+        else if(n.numerator == -n.denominator)
         {
-            n.numarator = -1;
-            n.numitor = 1;
+            n.numerator = -1;
+            n.denominator = 1;
         }
-        else if(n.numarator == INT128_MAX)
-            n.numitor = sgn(n.numitor);
-        else if(n.numarator == INT128_MIN)
+        else if(n.numerator == INT128_MAX)
+            n.denominator = sgn(n.denominator);
+        else if(n.numerator == INT128_MIN)
         {
-            n.numitor = -sgn(n.numitor);
-            n.numarator = INT128_MAX;
+            n.denominator = -sgn(n.denominator);
+            n.numerator   = INT128_MAX;
         }
-        else if(n.numitor == INT128_MAX)
-            n.numarator = sgn(n.numarator);
-        else if(n.numitor == INT128_MIN)
+        else if(n.denominator == INT128_MAX)
+            n.numerator = sgn(n.numerator);
+        else if(n.denominator == INT128_MIN)
         {
-            n.numarator = -sgn(n.numarator);
-            n.numitor = INT128_MAX;
+            n.numerator   = -sgn(n.numerator);
+            n.denominator = INT128_MAX;
         }
         return n;
     }
-    else if(n.numarator > 0 && n.numitor > 0)
+    else if(n.numerator > 0 && n.denominator > 0)
     {
-        n.numarator = -n.numarator;
-        n.numitor   = -n.numitor;
+        n.numerator   = -n.numerator;
+        n.denominator = -n.denominator;
     }
-    else if(n.numarator > 0)
+    else if(n.numerator > 0)
     {
         ok = 1;
-        n.numarator = -n.numarator;
+        n.numerator = -n.numerator;
     }
-    else if(n.numitor > 0)
+    else if(n.denominator > 0)
     {
         ok = 1;
-        n.numitor = -n.numitor;
+        n.denominator = -n.denominator;
     }
-    __int128 cmmdc = CMMDC(n.numarator,n.numitor);
-    n.numarator /= cmmdc;
-    n.numitor   /= cmmdc;
-    if(n.numarator != (INT128_MIN+1) && ok == 1)
+    __int128 gcd = GCD(n.numerator,n.denominator);
+    n.numerator   /= gcd;
+    n.denominator /= gcd;
+    if(n.numerator != (INT128_MIN+1) && ok == 1)
     {
-        n.numarator = -n.numarator;
+        n.numerator = -n.numerator;
         ok = 0;
     }
-    else if(n.numitor != (INT128_MIN+1) && ok == 1)
+    else if(n.denominator != (INT128_MIN+1) && ok == 1)
     {
-        n.numitor = -n.numitor;
+        n.denominator = -n.denominator;
         ok = 0;
     }
     return n;
 }
-void AfisareFractie(Fractie f)
+void CoutFraction(Fraction f)
 {
-    if(f.numitor == INT128_MIN)
-        cout<<f.numarator<<" / -inf";
-    else if(f.numitor == INT128_MAX)
-        cout<<f.numarator<<" / inf";
-    else if(f.numarator == INT128_MIN)
-        cout<<"-inf / "<<f.numitor;
-    else if(f.numarator == INT128_MAX)
-        cout<<"inf / "<<f.numitor;
+    if(f.denominator == INT128_MIN)
+        cout<<f.numerator<<" / -inf";
+    else if(f.denominator == INT128_MAX)
+        cout<<f.numerator<<" / inf";
+    else if(f.numerator == INT128_MIN)
+        cout<<"-inf / "<<f.denominator;
+    else if(f.numerator == INT128_MAX)
+        cout<<"inf / "<<f.denominator;
     else
-        cout<<f.numarator<<" / "<<f.numitor;
+        cout<<f.numerator<<" / "<<f.denominator;
 }
-Fractie CitireFractie()
+Fraction CinFraction()
 {
-    Fractie n;
-    n.numarator = CitireNrIntreg();
-    n.numitor   = CitireNrIntreg();
-    n = simplificare(n);
+    Fraction n;
+    n.numerator   = CinIntNumber();
+    n.denominator = CinIntNumber();
+    n = simplification(n);
     if(debug == 1)
     {
         if(language == 0)
             cout<<"The fraction from the input is: ";
         else
             cout<<"Fractia citita este: ";
-        AfisareFractie(n);
+        CoutFraction(n);
         cout<<endl;
     }
     return n;
 }
-void AcelasiNumitor(Fractie &a, Fractie &b)
+void SameDenominator(Fraction &a, Fraction &b)
 {
-    if( a.numitor != 0 && b.numitor != 0
-       && !(a.numarator == INT128_MAX || a.numarator == INT128_MIN || a.numitor == INT128_MAX || a.numitor == INT128_MIN)
-       && !(b.numarator == INT128_MAX || b.numarator == INT128_MIN || b.numitor == INT128_MAX || b.numitor == INT128_MIN) )
+    if( a.denominator != 0 && b.denominator != 0
+       && !(a.numerator == INT128_MAX || a.numerator == INT128_MIN || a.denominator == INT128_MAX || a.denominator == INT128_MIN)
+       && !(b.numerator == INT128_MAX || b.numerator == INT128_MIN || b.denominator == INT128_MAX || b.denominator == INT128_MIN) )
     {
-        __int128 cmmdc = CMMDC(a.numitor,b.numitor);
-        __int128 factor1 = a.numitor/cmmdc;
-        __int128 factor2 = b.numitor/cmmdc;
-        a.numarator *= factor2;
-        a.numitor   *= factor2;
-        b.numarator *= factor1;
-        b.numitor   *= factor1;
+        __int128 gcd = GCD(a.denominator,b.denominator);
+        __int128 factor1 = a.denominator/gcd;
+        __int128 factor2 = b.denominator/gcd;
+        a.numerator   *= factor2;
+        a.denominator *= factor2;
+        b.numerator   *= factor1;
+        b.denominator *= factor1;
     }
 }
