@@ -19,6 +19,9 @@
 #define LONGLONG_MIN (__int128)LLONG_MIN
 #define INT128_MAX ( ((LONGLONG_MAX+1)*(LONGLONG_MAX+1)-1)*2+1 )
 #define INT128_MIN ( LONGLONG_MIN * -LONGLONG_MIN * 2 )              /// __int128 nu poate retine -INT128_MIN | __int128 can't store -INT128_MIN
+#define INF  INT128_MAX                                              /// Plus Infinit      | Plus Infinity    | 1 / 0.0
+#define CINF INT128_MIN                                              /// Infinitul Complex | Complex Infinity | 1 / 0
+#define MINF (INT128_MIN+1)                                          /// Minus Infinit     | Minus Infinity   | 1 / -0.0
 
 #define pi "3.141592653589793238462643383279502884197"                                                              /// Definim constanta pi | Define constant pi
 #define e  "2.7182818284590452353602874713526624977572470936999595749669676277240766303535475945713821785251664274" /// Definim constanta e  | Define constant e
@@ -30,6 +33,14 @@ string Answer = "0";                                /// Ultimul rezultat al calc
 template <typename T> int sgn(T val) {              /// https://stackoverflow.com/questions/1903954/is-there-a-standard-sign-function-signum-sgn-in-c-c
     return (T(0) < val) - (val < T(0));
 }
+struct ScientificForm                               /// Structura reprezinta forma stiintifica a unui numar real (x*10^y), cu coeficientul si exponentul numere intregi de tip __int128
+{                                                   /// This structure returns scientific form of a real number  (x*10^y), with coefficient and exponent which are __int128 integers
+    __int128 coefficient, exponent;
+};
+struct Fraction
+{
+    __int128 numerator, denominator;
+};
 int main2()
 {
 	vector<complex<long double>> v;                 /// Numere complexe si functii vectoriale | Complex numbers and vectorial functions

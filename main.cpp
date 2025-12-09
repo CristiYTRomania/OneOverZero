@@ -1,4 +1,7 @@
-/// OneOverZero | Tested on GDB Online (C++ 23) and CodeBlocks 20.03 (Windows 10 22H2 si Ubuntu 22.04.5 LTS) | Testat pe GDB Online (C++ 23) si pe CodeBlocks 20.03 (Windows 10 22H2 and Ubuntu 22.04.5 LTS)
+/// OneOverZero
+
+/// Tested on GDB Online (C++ 23), Programiz Online C++ Compiler   and CodeBlocks 20.03 (Windows 10 22H2 si  Ubuntu 22.04.5 LTS)
+/// Testat pe GDB Online (C++ 23), Programiz Online C++ Compiler si pe CodeBlocks 20.03 (Windows 10 22H2 and Ubuntu 22.04.5 LTS)
 
 /// TODO: vectori de fractii si hexa (de forma ab.cd);             log(fractie),  log(hexa), e^fractie,  e^hexa
 /// TODO: fraction vectors and hexadecimal number vectors (ab.cd); log(fraction), log(hexa), e^fraction, e^hexa
@@ -22,17 +25,37 @@ void CoutRealNumber(long double r, unsigned int n = 6)
     else
         cout<<setprecision(n)<<r<<setprecision(6);
 }
+long double CinRealNumber()
+{
+    string n;
+    long double x;
+    cin>>n;
+    n = conversion(n);
+    if(n=="cinf")
+    {
+        if(language == 1)
+            cout<<"Precizie pierduta! cinf convertit la inf";
+        else
+            cout<<"Precision loss! cinf converted to inf";
+        cout<<endl;
+        x=stold("inf");
+    }
+    else
+        x=stold(n);
+    return x;
+}
 complex<long double> CinComplexNumber()
 {
     long double a,b;
     cout<<"a = ";
-    cin>>a;
+    a = CinRealNumber();
     cout<<"b = ";
-    cin>>b;
+    b = CinRealNumber();
     complex<long double> n(a,b);
     return n;
 }
-void CoutComplexNumber(complex<auto> n)
+template<typename T>
+void CoutComplexNumber(complex<T> n)
 {
     CoutRealNumber(real(n));
     cout<<" + ";
@@ -51,13 +74,21 @@ void ascii()                                      /// Afiseaza toate caracterele
         cout<<"char("<<i<<") = "<<char(i)<<"\n";
     }
 }
-auto shift_bits(auto n, long long p)              /// Aceasta functie va shifta bitii unui numar in mod circular | This function will shift the bits in circular way
+template<typename T>
+auto circular_shift_bits(T n, long long p)        /// Aceasta functie va shifta bitii unui numar in mod circular | This function will shift the bits in circular way
 {
+    if(typeid(n)==typeid(bool))
+        return n;
+    else if(typeid(n)==typeid(double)||typeid(n)==typeid(float)||typeid(n)==typeid(long double))
+    {
+        cout<<"Incompatible type: "<<typeid(n).name()<<endl;
+        return n;
+    }
     int dimension = sizeof(n) * 8;
     bool b;
-    while(p>0)
+    while(p>dimension)
         p-=dimension;
-    while(p<0)
+    while(p<-dimension)
         p+=dimension;
     while(p>0)                                    /// Shiftare circulara la dreapta cu un pas | Circular shifting to the right with one step
     {
@@ -159,7 +190,7 @@ void math_game(bool language)                     /// Acesta este un joc in roma
             cout<<"Unknown command \n";
     }
 }
-long double f(long double x, unsigned int n, long double v[])    /// Returnam rezultatul unui polinom de grad n, x si coeficienti cunoscuti | Returning the result of a grade n polynomial, x and known coefficients
+long double f(long double x, unsigned int n, long double v[])  /// Returnam rezultatul unui polinom de grad n, x si coeficienti cunoscuti | Returning the result of a grade n polynomial, x and known coefficients
 {
     long double s=0,p=1;
     for(unsigned int i=0;i<=n;i++)
@@ -299,8 +330,8 @@ Fraction operation(Fraction a, Fraction b, string operator_="+")
         SameDenominator(a,b);
         if(a.denominator != 0 && b.denominator != 0)
         {
-            result.numerator = a.numerator + b.numerator;
-            result.denominator   = a.denominator;
+            result.numerator   = a.numerator + b.numerator;
+            result.denominator = a.denominator;
         }
         else if(a.denominator == 0 && b.denominator == 0)
         {
@@ -323,8 +354,8 @@ Fraction operation(Fraction a, Fraction b, string operator_="+")
         SameDenominator(a,b);
         if(a.denominator != 0 && b.denominator != 0)
         {
-            result.numerator = a.numerator - b.numerator;
-            result.denominator   = a.denominator;
+            result.numerator   = a.numerator - b.numerator;
+            result.denominator = a.denominator;
         }
         else if(a.denominator == 0 && b.denominator == 0)
         {
@@ -344,23 +375,23 @@ Fraction operation(Fraction a, Fraction b, string operator_="+")
     }
     else if(operator_=="*")
     {
-        result.numerator = a.numerator * b.numerator;
-        result.denominator   = a.denominator   * b.denominator;
+        result.numerator   = a.numerator * b.numerator;
+        result.denominator = a.denominator   * b.denominator;
     }
     else if(operator_=="/")
     {
-        result.numerator = a.numerator * b.denominator;
-        result.denominator   = a.denominator   * b.numerator;
+        result.numerator   = a.numerator * b.denominator;
+        result.denominator = a.denominator   * b.numerator;
     }
     else if(operator_=="^")
     {
         long double exponent = 1.0/b.denominator,
-                    power1 = pow(a.numerator,b.numerator),
-                    power2 = pow(a.denominator,  b.numerator),
-                    numerator   = pow(power1, exponent),
-                    denominator = pow(power2, exponent),
-                    ratio  = numerator / denominator;
-        ScientificForm n = float_to_int(ratio);
+                    power1 = pow((long double)a.numerator,  (long double)b.numerator),
+                    power2 = pow((long double)a.denominator,(long double)b.numerator),
+                    numerator   = pow((long double)power1,  (long double)exponent),
+                    denominator = pow((long double)power2,  (long double)exponent),
+                    ratio_ = numerator / denominator;
+        ScientificForm n = float_to_int(ratio_);
         result = int_div(n);
     }
     else
@@ -425,18 +456,6 @@ void CalcAnswer(string s)
 {
     Answer = s;
     cout << s;
-}
-long double CinRealNumber()
-{
-    string n;
-    long double x;
-    cin>>n;
-    n = conversion(n);
-    if(n=="cinf")
-        x=stold("inf");
-    else
-        x=stold(n);
-    return x;
 }
 bool lHospital(long double v[], unsigned int n)
 {
@@ -535,7 +554,7 @@ int main()
             cout<<"-inf -> Negative Infinity (1/-0.0)"<<endl;
             cout<<"cinf -> Complex  Infinity (1/0)"<<endl;
             cout<<" nan -> Not A Number      (0/0)"<<endl;
-            cout<<"112 is a integer ("<<typeid(112).name()<<")"<<endl;
+
             complex<string> a((string)"4",(string)"5");
             cout<<a<<endl;
             complex<long double> c=0.0+1i;
@@ -639,12 +658,12 @@ int main()
                                                                              /// Calling the funtion which returns scientific form of real result of x/y
             show_floated_int(x);                                             /// Afiseaza forma stiinfica a numarului real: coeficient  * 10^exponent
         }                                                                    /// Shows the scientific form of  real number: coefficient * 10^exponent
-        else if(s=="shift")
+        else if(s=="shift"||s=="circular"||s=="circularshift"||s=="circular_shift")
         {
-            long long n,p;
+            long long n, p;
             cin>>n>>p;
-            n=shift_bits(n,p);                             /// Aici vrem sa shiftam la dreapta cu p biti numarul n | Here we want to shift the number n with p bits to the right
-            cout<<n<<" ("<<sizeof(shift_bits(n,p))<<" bytes)"<<endl;
+            n=circular_shift_bits(n,p);                    /// Aici vrem sa shiftam la dreapta cu p biti numarul n | Here we want to shift the number n with p bits to the right
+            cout<<n<<" ("<<sizeof(circular_shift_bits(n,p))<<" bytes)"<<endl;
         }
         else if(s=="ecuatie"||s=="equation")
         {
@@ -975,14 +994,14 @@ int main()
                     cout<<"dezactivat! \n";
             }
         }
-        else if(s=="cmmdc"||s=="gcd") /// Afiseaza Cel mai mare divizor comun | Shows the Greatest common divisor
+        else if(s=="cmmdc"||s=="gcd")                      /// Afiseaza Cel mai mare divizor comun | Shows the Greatest common divisor
         {
             __int128 a, b;
             a = CinIntNumber();
             b = CinIntNumber();
             cout<<GCD(a,b)<<endl;
         }
-        else if(s=="cmmmc"||s=="lcm") /// Afiseaza Cel mai mic multiplu comun | Shows the Least common multiple
+        else if(s=="cmmmc"||s=="lcm")                      /// Afiseaza Cel mai mic multiplu comun | Shows the Least common multiple
         {
             __int128 a, b;
             a = CinIntNumber();
