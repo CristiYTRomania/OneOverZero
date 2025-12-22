@@ -868,7 +868,7 @@ int main()
             CoutFraction(fr);
             cout<<endl;
         }
-        else if(s=="polinomialratio"||s=="polinomial_ratio"||s=="raport"||s=="poli"||s=="polinomial"||s=="poly"||s=="polynomial"||s=="ratio"||s=="polinomialraport"||s=="polinomial_raport")
+        else if(s=="polynomialratio"||s=="polynomial_ratio"||s=="raport"||s=="poli"||s=="polinomial"||s=="poly"||s=="polynomial"||s=="ratio"||s=="polinomialraport"||s=="polinomial_raport")
         {
             long double x,numerator,denominator;
             unsigned int n1,n2;
@@ -1013,6 +1013,8 @@ int main()
         else
             cout<<"Unknown command \n";
         show_lines();
+        /// (std::cout<<7<<std::endl && std::cout<<8<<std::endl) && system("clear") && system("cls"); /// https://stackoverflow.com/questions/74654004/how-to-let-user-erase-previous-input-and-output-in-c
+        /// "clear" on Linux and "cls" on Windows
     }
     return 0; /// Se va inchide programul si se va returna valoarea 0 | The program will close and the value returned will be 0
 }
