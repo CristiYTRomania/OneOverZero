@@ -1,16 +1,20 @@
 /// OneOverZero
 
-/// Tested on GDB Online (C++ 23), Programiz Online C++ Compiler   and CodeBlocks 20.03 (Windows 10 22H2 si  Ubuntu 22.04.5 LTS)
-/// Testat pe GDB Online (C++ 23), Programiz Online C++ Compiler si pe CodeBlocks 20.03 (Windows 10 22H2 and Ubuntu 22.04.5 LTS)
+/// Tested on GDB Online (C++ 23)   and CodeBlocks 20.03 (Windows 10 22H2 si  Ubuntu 24.04.3 LTS)
+/// Testat pe GDB Online (C++ 23) si pe CodeBlocks 20.03 (Windows 10 22H2 and Ubuntu 24.04.3 LTS)
 
 /// TODO: vectori de fractii si hexa (de forma ab.cd);             log(fractie),  log(hexa), e^fractie,  e^hexa
 /// TODO: fraction vectors and hexadecimal number vectors (ab.cd); log(fraction), log(hexa), e^fraction, e^hexa
 
-#include "bigint.h"                               /// Integrarea operatorului de afisare pentru intregul pe 128 de biti | Cout operator integration of 128-bit integer
+#include "bigint.h"
 
-using namespace std;                              /// Pentru cin si cout | For cin and cout -> C++
+using namespace std;
 
 int level = 1;
+void ClearTerminal() /// "clear" on Linux and "cls" on Windows
+{
+    system("clear") && system("cls"); /// https://stackoverflow.com/questions/74654004/how-to-let-user-erase-previous-input-and-output-in-c
+}
 struct ComplexSolutions
 {
     complex<long double> x1,x2;
@@ -1013,8 +1017,8 @@ int main()
         else
             cout<<"Unknown command \n";
         show_lines();
-        /// (std::cout<<7<<std::endl && std::cout<<8<<std::endl) && system("clear") && system("cls"); /// https://stackoverflow.com/questions/74654004/how-to-let-user-erase-previous-input-and-output-in-c
-        /// "clear" on Linux and "cls" on Windows
+        if(s=="clear"||s=="cls")
+            ClearTerminal();
     }
     return 0; /// Se va inchide programul si se va returna valoarea 0 | The program will close and the value returned will be 0
 }
