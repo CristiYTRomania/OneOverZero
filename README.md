@@ -2,6 +2,12 @@
 
 Acesta este proiectul meu din C++ | This is my project on C++ | Jitescu Silviu-Cristian
 
+## Compatibilitate | Compatibility
+
+🇷🇴 Programul poate rula pe [OnlineGDB](https://www.onlinegdb.com) (C++ 23), pe [Programiz](https://www.programiz.com/cpp-programming/online-compiler/) și pe [CodeBlocks](https://www.codeblocks.org/downloads/binaries/) 20.03 (Windows 10 22H2 și Ubuntu 24.04.3 LTS)
+
+🇬🇧 This program can run on [OnlineGDB](https://www.onlinegdb.com) (C++ 23), on [Programiz](https://www.programiz.com/cpp-programming/online-compiler/) and on [CodeBlocks](https://www.codeblocks.org/downloads/binaries/) 20.03 (Windows 10 22H2 and Ubuntu 24.04.3 LTS)
+
 ## Funcția factorial | Factorial function
 
 🇷🇴 Funcția factorial poate avea un parametru întreg de la `0` la `33` pentru a returna rezultatul exact, mai mare decât `33` pentru a returna rezultatul cu precizie pierdută, sau mai mic decât `0` pentru a returna `cinf` (infinitul complex -> $\tilde{\infty}$ = $\frac{1}{0}$ )
