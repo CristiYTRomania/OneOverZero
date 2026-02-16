@@ -9,7 +9,7 @@ Acesta este proiectul meu din C++ | Jitescu Silviu-Cristian
 
 ## Compatibilitate
 
-Programul a fost testat pe [OnlineGDB](https://www.onlinegdb.com) (C++ 23), pe [Programiz](https://www.programiz.com/cpp-programming/online-compiler/), pe [CodeBlocks](https://www.codeblocks.org/downloads/binaries/) 20.03 (Windows 10 22H2 și Ubuntu 22.04.5 LTS) și pe CodeBlocks svn 13046 (Ubuntu 24.04.x LTS)
+Codul sursă a fost testat pe [OnlineGDB](https://www.onlinegdb.com) (C++ 23), pe [Programiz](https://www.programiz.com/cpp-programming/online-compiler/), pe [CodeBlocks](https://www.codeblocks.org/downloads/binaries/) 20.03 (Windows 10 22H2 și Ubuntu 22.04.5 LTS) și pe CodeBlocks svn 13046 (Ubuntu 24.04.x LTS)
 
 ## Executabile
 
