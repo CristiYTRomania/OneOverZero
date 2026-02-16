@@ -1,19 +1,11 @@
-/// OneOverZero
-
-/// Tested on GDB Online (C++ 23)   and CodeBlocks 20.03 (Windows 10 22H2 si  Ubuntu 24.04.3 LTS)
-/// Testat pe GDB Online (C++ 23) si pe CodeBlocks 20.03 (Windows 10 22H2 and Ubuntu 24.04.3 LTS)
-
-/// TODO: vectori de fractii si hexa (de forma ab.cd);             log(fractie),  log(hexa), e^fractie,  e^hexa
-/// TODO: fraction vectors and hexadecimal number vectors (ab.cd); log(fraction), log(hexa), e^fraction, e^hexa
-
 #include "bigint.h"
 
 using namespace std;
 
 int level = 1;
-void ClearTerminal() /// "clear" on Linux and "cls" on Windows
+void ClearTerminal()
 {
-    system("clear") && system("cls"); /// https://stackoverflow.com/questions/74654004/how-to-let-user-erase-previous-input-and-output-in-c
+    system("clear") && system("cls");
 }
 struct ComplexSolutions
 {
