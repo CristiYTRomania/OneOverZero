@@ -9,7 +9,7 @@ This is my project on C++ | Jitescu Silviu-Cristian
 
 ## Compatibility
 
-This program has been tested on [OnlineGDB](https://www.onlinegdb.com) (C++ 23), on [Programiz](https://www.programiz.com/cpp-programming/online-compiler/), on [CodeBlocks](https://www.codeblocks.org/downloads/binaries/) 20.03 (Windows 10 22H2 and Ubuntu 22.04.5 LTS) and on CodeBlocks svn 13046 (Ubuntu 24.04.x LTS)
+The source code has been tested on [OnlineGDB](https://www.onlinegdb.com) (C++ 23), on [Programiz](https://www.programiz.com/cpp-programming/online-compiler/), on [CodeBlocks](https://www.codeblocks.org/downloads/binaries/) 20.03 (Windows 10 22H2 and Ubuntu 22.04.5 LTS) and on CodeBlocks svn 13046 (Ubuntu 24.04.x LTS)
 
 ## Executables
 
@@ -36,6 +36,8 @@ $$ x = NaN \\ ( x = {0 \over 0} ) $$
 
 ## Bibliography
 
+[Adding multiple README files](https://www.codestudy.net/blog/add-multiple-readme-on-github-repo/#1-understanding-githubs-default-readme-behavior)
+
 [Clear terminal]( https://stackoverflow.com/questions/74654004/how-to-let-user-erase-previous-input-and-output-in-c)
 
 - "clear" on Linux
@@ -44,7 +46,5 @@ $$ x = NaN \\ ( x = {0 \over 0} ) $$
 [Complex Infinity](https://www.wolframalpha.com/input?i=1%2F0)
 
 [Writing in LaTeX code](https://github.blog/news-insights/product-news/math-support-in-markdown/)
-
-[Adding multiple README files](https://www.codestudy.net/blog/add-multiple-readme-on-github-repo/#1-understanding-githubs-default-readme-behavior)
 
 The description is not done.
