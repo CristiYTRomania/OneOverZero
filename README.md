@@ -4,9 +4,9 @@ Acesta este proiectul meu din C++ | This is my project on C++ | Jitescu Silviu-C
 
 ## Compatibilitate | Compatibility
 
-🇷🇴 Programul poate rula pe [OnlineGDB](https://www.onlinegdb.com) (C++ 23), pe [Programiz](https://www.programiz.com/cpp-programming/online-compiler/) și pe [CodeBlocks](https://www.codeblocks.org/downloads/binaries/) 20.03 (Windows 10 22H2 și Ubuntu 24.04.3 LTS)
+🇷🇴 Programul a fost testat pe [OnlineGDB](https://www.onlinegdb.com) (C++ 23), pe [Programiz](https://www.programiz.com/cpp-programming/online-compiler/), pe [CodeBlocks](https://www.codeblocks.org/downloads/binaries/) 20.03 (Windows 10 22H2 și Ubuntu 22.04.5 LTS) și pe CodeBlocks svn 13046 (Ubuntu 24.04.3 LTS și Ubuntu 24.04.4 LTS)
 
-🇬🇧 This program can run on [OnlineGDB](https://www.onlinegdb.com) (C++ 23), on [Programiz](https://www.programiz.com/cpp-programming/online-compiler/) and on [CodeBlocks](https://www.codeblocks.org/downloads/binaries/) 20.03 (Windows 10 22H2 and Ubuntu 24.04.3 LTS)
+🇬🇧 This program has been tested on [OnlineGDB](https://www.onlinegdb.com) (C++ 23), on [Programiz](https://www.programiz.com/cpp-programming/online-compiler/), on [CodeBlocks](https://www.codeblocks.org/downloads/binaries/) 20.03 (Windows 10 22H2 and Ubuntu 22.04.5 LTS) and on CodeBlocks svn 13046 (Ubuntu 24.04.3 LTS and Ubuntu 24.04.4 LTS)
 
 ## Funcția factorial | Factorial function
 
