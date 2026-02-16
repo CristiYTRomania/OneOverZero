@@ -4,9 +4,14 @@ Acesta este proiectul meu din C++ | This is my project on C++ | Jitescu Silviu-C
 
 ## Compatibilitate | Compatibility
 
-🇷🇴 Programul a fost testat pe [OnlineGDB](https://www.onlinegdb.com) (C++ 23), pe [Programiz](https://www.programiz.com/cpp-programming/online-compiler/), pe [CodeBlocks](https://www.codeblocks.org/downloads/binaries/) 20.03 (Windows 10 22H2 și Ubuntu 22.04.5 LTS) și pe CodeBlocks svn 13046 (Ubuntu 24.04.3 LTS și Ubuntu 24.04.4 LTS)
+🇷🇴 Programul a fost testat pe [OnlineGDB](https://www.onlinegdb.com) (C++ 23), pe [Programiz](https://www.programiz.com/cpp-programming/online-compiler/), pe [CodeBlocks](https://www.codeblocks.org/downloads/binaries/) 20.03 (Windows 10 22H2 și Ubuntu 22.04.5 LTS) și pe CodeBlocks svn 13046 (Ubuntu 24.04.x LTS)
 
-🇬🇧 This program has been tested on [OnlineGDB](https://www.onlinegdb.com) (C++ 23), on [Programiz](https://www.programiz.com/cpp-programming/online-compiler/), on [CodeBlocks](https://www.codeblocks.org/downloads/binaries/) 20.03 (Windows 10 22H2 and Ubuntu 22.04.5 LTS) and on CodeBlocks svn 13046 (Ubuntu 24.04.3 LTS and Ubuntu 24.04.4 LTS)
+🇬🇧 This program has been tested on [OnlineGDB](https://www.onlinegdb.com) (C++ 23), on [Programiz](https://www.programiz.com/cpp-programming/online-compiler/), on [CodeBlocks](https://www.codeblocks.org/downloads/binaries/) 20.03 (Windows 10 22H2 and Ubuntu 22.04.5 LTS) and on CodeBlocks svn 13046 (Ubuntu 24.04.x LTS)
+
+## Executabile | Executables
+
+- codeblocks (Poate rula pe Linux folosind comanda ./codeblocks in terminal | Can run on Linux by using ./codeblocks command in terminal)
+- codeblocks.exe (Poate rula pe Windows folosind aplicația Git Bash | Can run on Windows by using Git Bash app)
 
 ## Funcția factorial | Factorial function
 
@@ -35,6 +40,11 @@ Atunci când $a, b = 0$, există o soluție *neobișnuită* pentru $x$ la ecuaț
 $$ x = NaN \\ ( x = {0 \over 0} ) $$
 
 ## Bibliografie | Bibliography
+
+[Curățarea terminalului | Clear terminal]( https://stackoverflow.com/questions/74654004/how-to-let-user-erase-previous-input-and-output-in-c)
+
+- "clear" pe Linux | "clear" on Linux
+- "cls" pe Windows | "cls" on Windows
 
 [Infinitul complex | Complex Infinity](https://www.wolframalpha.com/input?i=1%2F0)
 
