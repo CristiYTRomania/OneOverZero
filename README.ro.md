@@ -36,6 +36,8 @@ $$ x = NaN \\ ( x = {0 \over 0} ) $$
 
 ## Bibliografie
 
+[Adăugarea mai multor fișiere README](https://www.codestudy.net/blog/add-multiple-readme-on-github-repo/#1-understanding-githubs-default-readme-behavior)
+
 [Curățarea terminalului]( https://stackoverflow.com/questions/74654004/how-to-let-user-erase-previous-input-and-output-in-c)
 
 - "clear" pe Linux
@@ -44,7 +46,5 @@ $$ x = NaN \\ ( x = {0 \over 0} ) $$
 [Infinitul complex](https://www.wolframalpha.com/input?i=1%2F0)
 
 [Scrierea în cod LaTeX](https://github.blog/news-insights/product-news/math-support-in-markdown/)
-
-[Adăugarea mai multor fișiere README](https://www.codestudy.net/blog/add-multiple-readme-on-github-repo/#1-understanding-githubs-default-readme-behavior)
 
 Descrierea încă nu este terminată.
