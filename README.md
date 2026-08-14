@@ -13,8 +13,8 @@ The source code has been tested on [OnlineGDB](https://www.onlinegdb.com) (C++ 2
 
 ## Executables
 
-- codeblocks (Can run on Linux by using ./codeblocks command in terminal)
-- codeblocks.exe (Can run on Windows by using Git Bash app)
+- 1over0_Linux (Can run on Linux by using ./1over0_Linux command in terminal)
+- 1over0_Windows.exe (Can run on Windows by double-clicking the executable)
 
 ## Factorial function
 

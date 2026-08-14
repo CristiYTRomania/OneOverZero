@@ -1,49 +1,84 @@
-#include<iostream>
-#include<vector>
-#include<climits>
-#include<complex>
-#include<iomanip>
-#include<iterator>
-#include<algorithm>
-#include<bits/stdc++.h>                                              /// Aici se afla toate bibliotecile        | Here are all the libraries
-#include<cstdlib>                                                    /// Pentru atoi() | For atoi() -> Convert string to integer, atof(), rand(), srand() etc.
-#include<climits>                                                    /// Pentru INT_MIN, INT_MAX, LONG_MIN etc. | For INT_MIN, INT_MAX, LONG_MIN etc.
-#include<iostream>                                                   /// Pentru cin si cout                     | For cin and cout         -> C++
-#include<stdio.h>                                                    /// Pentru printf() si scanf()             | For printf() and scanf() -> C
-#include<ctime>                                                      /// Pentru setarea seed-ului timpului actual pentru randomizer dinamic | For setting the actual time seed for dynamic randomizer
-#include<cmath>                                                      /// Pentru functii matematice precum functia putere si modulul unui numar | For math functions like power and module functions
-#include<complex>                                                    /// Numere complexe cu coeficienti reali         | Complex numbers with real coefficients
-#include<fstream>                                                    /// Pentru a citi din fisiere si a scrie in ele  | To read and write files
-
+#include<bits/stdc++.h>
 #define LONGLONG_MAX (__int128)LLONG_MAX                             /// https://stackoverflow.com/questions/18439520/is-there-a-128-bit-integer-in-c
 #define LONGLONG_MIN (__int128)LLONG_MIN
 #define INT128_MAX ( ((LONGLONG_MAX+1)*(LONGLONG_MAX+1)-1)*2+1 )
-#define INT128_MIN ( LONGLONG_MIN * -LONGLONG_MIN * 2 )              /// __int128 nu poate retine -INT128_MIN | __int128 can't store -INT128_MIN
-#define INF  INT128_MAX                                              /// Plus Infinit      | Plus Infinity    | 1 / 0.0
-#define CINF INT128_MIN                                              /// Infinitul Complex | Complex Infinity | 1 / 0
-#define MINF (INT128_MIN+1)                                          /// Minus Infinit     | Minus Infinity   | 1 / -0.0
-
-#define pi "3.141592653589793238462643383279502884197"                                                              /// Definim constanta pi | Define constant pi
-#define e  "2.7182818284590452353602874713526624977572470936999595749669676277240766303535475945713821785251664274" /// Definim constanta e  | Define constant e
-
+#define INT128_MIN ( LONGLONG_MIN * -LONGLONG_MIN * 2 )
+#define INF  INT128_MAX
+#define CINF INT128_MIN
+#define MINF (INT128_MIN+1)
+#define PI    attribute_variable(pi)
+#define Euler attribute_variable(e)
+#define Pi "3.141592653589793238462643383279502884197..."
+#define E  "2.7182818284590452353602874713526624977572470936999595749669676277240766303535475945713821785251664274..."
 bool debug = 0, language = 0;
 using namespace std;
-string Answer = "0";                                /// Ultimul rezultat al calculatorului virtual | The last answer of the virtual calculator
-
+string Answer = "0";
 template <typename T> int sgn(T val) {              /// https://stackoverflow.com/questions/1903954/is-there-a-standard-sign-function-signum-sgn-in-c-c
     return (T(0) < val) - (val < T(0));
 }
-struct ScientificForm                               /// Structura reprezinta forma stiintifica a unui numar real (x*10^y), cu coeficientul si exponentul numere intregi de tip __int128
-{                                                   /// This structure returns scientific form of a real number  (x*10^y), with coefficient and exponent which are __int128 integers
-    __int128 coefficient, exponent;
-};
-struct Fraction
+string NotCaseSensitive(string s)
 {
-    __int128 numerator, denominator;
-};
+    int string_length=s.length();
+    for(int i=0;i<string_length;i++)
+        if(s[i]>='A' && s[i]<='Z')
+            s[i]+=32;
+    return s;
+}
+string conversion(string a)
+{
+    a = NotCaseSensitive(a);
+    if(a=="pi")
+        a="3.141592653589793238462643383279502884197";
+    else if(a=="e")
+        a="2.7182818284590452353602874713526624977572470936999595749669676277240766303535475945713821785251664274";
+    else if(a=="a" || a=="ans" || a=="answer" || a=="rez" || a=="rezultat")
+        a=Answer;
+    else if(a=="infinity")
+        a="inf";
+    else if(a=="-infinity")
+        a="-inf";
+    else if(a=="complex_infinity"||a=="cinfinity"||a=="complexinfinity")
+        a="cinf";
+    else if(a=="english"||a=="engleza")
+        a="en";
+    else if(a=="romanian"||a=="romana")
+        a="ro";
+    return a;
+}
+long double CinRealNumber(string language="en")
+{
+    string n;
+    long double x;
+    cin>>n;
+    n = conversion(n);
+    if(n=="cinf")
+    {
+        if(language == "ro")
+            cout<<"Precizie pierduta! cinf convertit la inf";
+        else
+            cout<<"Precision loss! cinf converted to inf";
+        cout<<endl;
+        x=stold("inf");
+    }
+    else
+        x=stold(n);
+    return x;
+}
+void ascii()
+{
+    for(int i=0;i<=511;i++)
+    {
+        if(i==27||i==283)
+        {
+            cout<<"char("<<i<<") = ESC\n";
+            continue;
+        }
+        cout<<"char("<<i<<") = "<<char(i)<<"\n";
+    }
+}
 int main2()
 {
-	vector<complex<long double>> v;                 /// Numere complexe si functii vectoriale | Complex numbers and vectorial functions
+	vector<complex<long double>> v;
 	complex<long double>sum = 0;
 	vector<complex<long double>>::iterator it;
 	v.push_back((long double)0);

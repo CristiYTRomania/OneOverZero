@@ -13,8 +13,8 @@ Codul sursă a fost testat pe [OnlineGDB](https://www.onlinegdb.com) (C++ 23), p
 
 ## Executabile
 
-- codeblocks (Poate rula pe Linux folosind comanda ./codeblocks in terminal)
-- codeblocks.exe (Poate rula pe Windows folosind aplicația Git Bash)
+- 1over0_Linux (Poate rula pe Linux folosind comanda ./1over0_Linux în terminal)
+- 1over0_Windows.exe (Poate rula pe Windows dând dublu clic pe executabil)
 
 ## Funcția factorial
 

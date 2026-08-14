@@ -1,45 +1,11 @@
-#include "bigint.h"
-
+#include "variable.h"
+#include "games.h"
+#include "piano.h"
 using namespace std;
-
-int level = 1;
-void ClearTerminal()
-{
-    system("clear") && system("cls");
-}
 struct ComplexSolutions
 {
     complex<long double> x1,x2;
 };
-void CoutRealNumber(long double r, unsigned int n = 6)
-{
-    __int128 i = floor(r);
-    if(r == i)
-        cout<<i;
-    else if(r >= INT128_MAX || r <= INT128_MIN)
-        cout<<setprecision(0)<<r<<setprecision(6);
-    else
-        cout<<setprecision(n)<<r<<setprecision(6);
-}
-long double CinRealNumber()
-{
-    string n;
-    long double x;
-    cin>>n;
-    n = conversion(n);
-    if(n=="cinf")
-    {
-        if(language == 1)
-            cout<<"Precizie pierduta! cinf convertit la inf";
-        else
-            cout<<"Precision loss! cinf converted to inf";
-        cout<<endl;
-        x=stold("inf");
-    }
-    else
-        x=stold(n);
-    return x;
-}
 complex<long double> CinComplexNumber()
 {
     long double a,b;
@@ -58,20 +24,8 @@ void CoutComplexNumber(complex<T> n)
     CoutRealNumber(imag(n));
     cout<<" * i";
 }
-void ascii()                                      /// Afiseaza toate caracterele ASCII | Shows all ASCII characters
-{
-    for(int i=0;i<=511;i++)
-    {
-        if(i==27||i==283)
-        {
-            cout<<"char("<<i<<") = ESC\n";
-            continue;
-        }
-        cout<<"char("<<i<<") = "<<char(i)<<"\n";
-    }
-}
 template<typename T>
-auto circular_shift_bits(T n, long long p)        /// Aceasta functie va shifta bitii unui numar in mod circular | This function will shift the bits in circular way
+auto circular_shift_bits(T n, long long p)
 {
     if(typeid(n)==typeid(bool))
         return n;
@@ -86,7 +40,7 @@ auto circular_shift_bits(T n, long long p)        /// Aceasta functie va shifta 
         p-=dimension;
     while(p<-dimension)
         p+=dimension;
-    while(p>0)                                    /// Shiftare circulara la dreapta cu un pas | Circular shifting to the right with one step
+    while(p>0)
     {
         b=n%2;
         n=n>>1;
@@ -96,7 +50,7 @@ auto circular_shift_bits(T n, long long p)        /// Aceasta functie va shifta 
             n=n |  ((long long)1<<(dimension-1));
         p--;
     }
-    while(p<0)                                    /// Shiftare circulara la stanga  cu un pas | Circular shifting to the left  with one step
+    while(p<0)
     {
         b=(n>>(dimension-1))&1;
         n=n<<1;
@@ -105,88 +59,7 @@ auto circular_shift_bits(T n, long long p)        /// Aceasta functie va shifta 
     }
     return n;
 }
-void show_lines()
-{
-    for(int i=1;i<=75;i++)
-        cout<<"-";
-    cout<<endl;
-}
-void math_game(bool language)                     /// Acesta este un joc in romana si engleza in care va trebui sa punem raspunsul corect pentru niste operatii aritmetice
-{                                                 /// This is a game in Romanian in English in which you need to put the right answer for arithmetic oprations
-    srand(time(0));
-    int n,x,y,total,correct,lives;
-    string s;
-    while(level>=1 and level<=6)
-    {
-        correct=0;
-        if(level>=1 and level<=5)
-            total=5;
-        else if(level==6)
-            total=6;
-        show_lines();
-        if(language==1)
-            cout<<"Nivelul ";
-        else if(language==0)
-            cout<<"Level ";
-        cout<<level<<endl;
-        cout<<"Help options: \n"<<"'play' for playing; \n"<<"'quit' (or 'exit') for quitting the game. \n";
-        show_lines();
-        cin>>s;
-        s=NotCaseSensitive(s);
-        if(s=="quit" or s=="exit")
-            break;
-        else if(s=="play")
-        {
-            lives = 3;
-            while(correct<total && lives > 0)
-            {
-                if(level>=0 and level<=5)
-                {
-                    x=rand()%(level*2+1);
-                    y=rand()%(level*2+1);
-                }
-                else if(level==6)
-                {
-                    x=rand()%21;
-                    y=rand()%21;
-                }
-                cout<<x<<" + "<<y<<" = ";
-                cin>>n;
-                if(x+y==n)
-                {
-                    correct++;
-                    cout<<"Correct answer! (";
-                    if(lives<3)
-                        lives++;
-                }
-                else
-                {
-                    cout<<"Wrong answer! (";
-                    lives--;
-                }
-                cout<<correct<<"/"<<total<<")\n";
-                cout<<"Lives: "<<lives<<endl;
-            }
-            if(correct==total)
-            {
-                if(level<6)
-                {
-                    level++;
-                    cout<<"You reached level "<<level<<"! \n";
-                }
-                else
-                    cout<<"Level 7 coming soon! \n";
-            }
-            else
-                cout<<"Good luck next time! \n";
-        }
-        else if(language==1)
-            cout<<"Comanda necunoscuta \n";
-        else
-            cout<<"Unknown command \n";
-    }
-}
-long double f(long double x, unsigned int n, long double v[])  /// Returnam rezultatul unui polinom de grad n, x si coeficienti cunoscuti | Returning the result of a grade n polynomial, x and known coefficients
+long double f(long double x, unsigned int n, long double v[])
 {
     long double s=0,p=1;
     for(unsigned int i=0;i<=n;i++)
@@ -198,23 +71,6 @@ long double f(long double x, unsigned int n, long double v[])  /// Returnam rezu
             break;
     }
     return s;
-}
-double frequency(string c, long long n)           /// Functia care returneaza frecventa unei note muzicale | This functions returns musical note's frequency
-{
-    double p=pow(2,n-7),f=0/0.0;
-         if(c=="A" ||c=="a")f=3520*p;
-    else if(c=="G#"||c=="g#"||c=="Ab"||c=="ab")f=3322*p;
-    else if(c=="G" ||c=="g")f=3136*p;
-    else if(c=="F#"||c=="f#"||c=="Gb"||c=="gb")f=2960*p;
-    else if(c=="F" ||c=="f" ||c=="E#"||c=="e#")f=2794*p;
-    else if(c=="E" ||c=="e" ||c=="Fb"||c=="fb")f=2637*p;
-    else if(c=="D#"||c=="d#"||c=="Eb"||c=="eb")f=2489*p;
-    else if(c=="D" ||c=="d")f=2349*p;
-    else if(c=="C#"||c=="c#"||c=="Db"||c=="db")f=2217*p;
-    else if(c=="C" ||c=="c" ||c=="B#"||c=="b#")f=2093*p;
-    else if(c=="B" ||c=="b" ||c=="Cb"||c=="cb")f=3951*p;
-    else if(c=="A#"||c=="a#"||c=="Bb"||c=="bb")f=3729*p;
-    return f;
 }
 void display_memory(unsigned long long n)
 {
@@ -245,10 +101,10 @@ ComplexSolutions equation(long double a,long double b,long double c)
         solution.x1=solution.x2=0/0.0;
     return solution;
 }
-string operation(string a="0", string b="0", string operator_="-")             /// Pentru a+b si a-b | For a+b and a-b
-{                                                 /// TODO: In cazul in care a-b,a,b>=0 | When a-b,a,b>=0 (Nu am implementat 0,(3) si +-inf/cinf/nan | Didn't implement 0.3 with 3 repeating and +-inf/cinf/nan)
-    string result,chr;                            /// TODO: Am uitat sa sterg 0 de la stanga si de la dreapta la final | I forgot to delete 0 from the left and the right (01.110)
-    unsigned long long point1 = a.find("."), point2 = b.find(".");             /// TODO: As putea pune if-urile cu nan, inf si cinf in functie | I can put the ifs with nan, inf and cinf in this function
+string operation(string a="0", string b="0", string operator_="-")
+{                      /// TODO: In cazul in care a-b,a,b>=0 | When a-b,a,b>=0 (Nu am implementat 0,(3) si +-inf/cinf/nan | Didn't implement 0.3 with 3 repeating and +-inf/cinf/nan)
+    string result,chr; /// TODO: Am uitat sa sterg 0 de la stanga si de la dreapta la final | I forgot to delete 0 from the left and the right (01.110)
+    unsigned long long point1 = a.find("."), point2 = b.find("."); /// TODO: As putea pune if-urile cu nan, inf si cinf in functie | I can put the ifs with nan, inf and cinf in this function
     if(point1==string::npos)
         a.append(".0"), point1 = a.find(".");
     if(point2==string::npos)
@@ -318,9 +174,9 @@ string operation(string a="0", string b="0", string operator_="-")             /
     else
         return "nan";
 }
-Fraction operation(Fraction a, Fraction b, string operator_="+")
+FractionOld operation(FractionOld a, FractionOld b, string operator_="+")
 {
-    Fraction result;
+    FractionOld result;
     if(operator_=="+")
     {
         SameDenominator(a,b);
@@ -472,7 +328,6 @@ bool lHospital(long double v[], unsigned int n)
 }
 int main()
 {
-    bool ok = 1;                                           /// Daca ok este 1, programul va rula, daca ok este 0, programul se va incheia | If ok=1, the program will run. If not, the program will stop
     string s;
     ifstream fin("memory.txt");
     int partitions;
@@ -497,15 +352,11 @@ int main()
                 swap(total_memory[i],total_memory[j]);
                 swap(PartitionName[i],PartitionName[j]);
             }
-    while(ok==1)
+    StartProgram(0);
+    while(1)
     {
-        cout<<"Type 'help' for instructions! \n";
-        cout<<"Introduceti 'ajutor' pentru instructiuni! \n";
-        show_lines();
-        if(language == 1)
-            cout<<"Meniu principal: ";                     /// Suntem in meniul principal
-        else
-            cout<<"Main menu: ";                           /// We are in the main menu
+        cout<<endl;
+        cout<<"> ";
         cin>>s;
         s = NotCaseSensitive(s);
         if(s=="game")                                      /// Jocul de matematica in limba engleza | Math game in English  language
@@ -513,7 +364,7 @@ int main()
         else if(s=="joc")                                  /// Jocul de matematica in limba romana  | Math game in Romanian language
             math_game(1);
         else if(s=="quit" or s=="exit" or s=="iesire")     /// Iesire din program                   | Exiting the program
-            ok=0;
+            break;
         else if(s=="f" or s=="function" or s=="functie")   /// Apelarea functiei polinomiale        | Calling polynomial function
         {
             long double x;
@@ -561,25 +412,10 @@ int main()
             complex<__int128> aa(5,4);CoutComplexNumber(aa+aa);cout<<endl;
             complex<long double>a2,a3(1/.0,3);a2=complex<long double>(6/.0,7); CoutComplexNumber(a2);cout<<endl<<(a2 == a3)<<endl;CoutComplexNumber(a3);cout<<endl;
         }
-        else if(s=="ascii")                                /// Apelam functia ce va afisa toate caracterele ASCII | Calling the function which shows all ASCII characters
+        else if(s=="ascii")
             ascii();
-        else if(s=="frecventa" or s=="frequency")          /// Apelam functia care returneaza frecventa unei note muzicale citite de la tastatura
-        {                                                  /// Calling the function which returns musical note's frequency, which is read from the keyboard
-            long long n;
-            string c;
-            cout<<"Nota din octava: ";
-            cin>>c;
-            cout<<"Octava: ";
-            cin>>n;
-            cout<<frequency(c,n)<<" Hz"<<endl;
-        }
-        else if(s=="pi-e")
-        {
-            cout<<"pi - e =  "<<pi<<endl;
-            cout<<"       -  "<<e <<endl;
-            cout<<"       =  "<<operation(pi,e,"-")<<endl;
-            cout<<"       ~= "<<stold(pi)-stold(e)<<endl;  /// Aici afisam rezultatul scaderii lui pi la e | This shows result of pi - e
-        }
+        else if(s=="frecventa" or s=="frequency")
+            frequency();
         else if(s=="no"||s=="no."||s=="number")
         {
             string n;
@@ -648,7 +484,7 @@ int main()
         }
         else if(s == "div" || s == "division" || s == "impartire")
         {
-            Fraction n;
+            FractionOld n;
             n = CinFraction();
             ScientificForm x = div_int(n);                                   /// Apelez functia care returneaza forma stiintifica a rezultatului real al lui x/y
                                                                              /// Calling the funtion which returns scientific form of real result of x/y
@@ -860,7 +696,7 @@ int main()
         {
             ScientificForm f;
             f = CinScientificForm();
-            Fraction fr = int_div(f);
+            FractionOld fr = int_div(f);
             CoutFraction(fr);
             cout<<endl;
         }
@@ -924,12 +760,12 @@ int main()
         }
         else if(s=="fractii"||s=="fractions")
         {
-            Fraction a, b;
+            FractionOld a, b;
             string operator_;
             a=CinFraction();
             cin>>operator_;
             b=CinFraction();
-            Fraction rez = operation(a,b,operator_);
+            FractionOld rez = operation(a,b,operator_);
             cout<<"( ";
             CoutFraction(a);
             cout<<" ) "<<operator_<<" ( ";
@@ -990,27 +826,38 @@ int main()
                     cout<<"dezactivat! \n";
             }
         }
-        else if(s=="cmmdc"||s=="gcd")                      /// Afiseaza Cel mai mare divizor comun | Shows the Greatest common divisor
+        else if(s=="cmmdc"||s=="gcd")
         {
             __int128 a, b;
             a = CinIntNumber();
             b = CinIntNumber();
             cout<<GCD(a,b)<<endl;
         }
-        else if(s=="cmmmc"||s=="lcm")                      /// Afiseaza Cel mai mic multiplu comun | Shows the Least common multiple
+        else if(s=="cmmmc"||s=="lcm")
         {
             __int128 a, b;
             a = CinIntNumber();
             b = CinIntNumber();
             cout<<a/GCD(a,b)*b<<endl;
         }
-        else if(language == 1)
-            cout<<"Comanda necunoscuta \n";
+        else if(s=="clear"||s=="cls")
+        {
+            StartProgram(1);
+        }
+        else if(s=="variabila")
+        {
+            show_variable(attribute_variable("ro"));
+            cout<<endl;
+        }
+        else if(s=="variable" || s=="var")
+        {
+            show_variable(attribute_variable("en"));
+            cout<<endl;
+        }
         else
-            cout<<"Unknown command \n";
-        show_lines();
-        if(s=="clear"||s=="cls")
-            ClearTerminal();
+        {
+            cout<<CinRealNumber();
+        }
     }
-    return 0; /// Se va inchide programul si se va returna valoarea 0 | The program will close and the value returned will be 0
+    return 0;
 }

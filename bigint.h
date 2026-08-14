@@ -1,5 +1,3 @@
-#include <cstdint>
-#include <iomanip>
 #include "define.h"
 using namespace std;
 std::ostream&
@@ -26,31 +24,6 @@ operator<<( std::ostream& dest, __int128_t value ) /// https://stackoverflow.com
         }
     }
     return dest;
-}
-string NotCaseSensitive(string s)
-{
-    int string_length=s.length();                  /// Numarul de caractere al comenzii citite de la tastatura | The string length command of the keyboard input
-    for(int i=0;i<string_length;i++)               /// Transformam orice litera mare din comanda in litera mica pentru ca comanda sa nu fie case sensitive
-        if(s[i]>='A' && s[i]<='Z')                 /// We convert any uppercase letter in the command to lowercase so that the command to be not case sensitive
-            s[i]+=32;
-    return s;
-}
-string conversion(string a)
-{
-    a = NotCaseSensitive(a);
-    if(a=="pi")
-        a=pi;
-    else if(a=="e")
-        a=e;
-    else if(a=="a" || a=="ans" || a=="answer" || a=="rez" || a=="rezultat")
-        a=Answer;
-    else if(a=="infinity")
-        a="inf";
-    else if(a=="-infinity")
-        a="-inf";
-    else if(a=="complex_infinity"||a=="cinfinity"||a=="complexinfinity")
-        a="cinf";
-    return a;
 }
 __int128 StringToInt(string s)
 {
@@ -81,6 +54,24 @@ __int128 StringToInt(string s)
     }
     return nr;
 }
+struct ScientificForm
+{
+    __int128 coefficient, exponent;
+};
+struct FractionOld
+{
+    __int128 numerator, denominator;
+};
+void CoutRealNumber(long double r, unsigned int n = 6)
+{
+    __int128 i = floor(r);
+    if(r == i && r != 0)
+        cout<<i;
+    else if(r >= INT128_MAX || r <= INT128_MIN)
+        cout<<setprecision(0)<<r<<setprecision(6);
+    else
+        cout<<setprecision(n)<<r<<setprecision(6);
+}
 __int128 GCD (__int128 a, __int128 b)              /// https://www.pbinfo.ro/articole/73/cmmdc-si-cmmmc-algoritmul-lui-euclid
 {
     if(a==0 || b==0)
@@ -98,7 +89,7 @@ __int128 GCD (__int128 a, __int128 b)              /// https://www.pbinfo.ro/art
     }
     return a;
 }
-Fraction simplification(Fraction n)
+FractionOld simplification(FractionOld n)
 {
     bool ok = 0;
     if(n.numerator * n.denominator == 0)
@@ -286,7 +277,7 @@ bool FactorialInitialization = 0;                  /// Aceasta variabila retine 
 
 int MaxNumberFact = 33;                            /// Cel mai mare numar caruia pot sa ii calculez factorialul (33) | The biggest number that I can calculate its factorial (33)
 
-__int128 FactorialVector[33 + 1];                  /// Vectorul care stocheaza factorialul fiecarui numar natural mai mic sau egal cu MaxNumberFact (de la 0 la MaxNumberFact sunt MaxNumberFact + 1 elemente)
+__int128 FactorialVector[33 + 1];       /// Vectorul care stocheaza factorialul fiecarui numar natural mai mic sau egal cu MaxNumberFact (de la 0 la MaxNumberFact sunt MaxNumberFact + 1 elemente)
                                                    /// The vector which store factorial of each natural number between 0 and MaxNumberFact (in total are MaxNumberFact + 1 elements)
 
 ScientificForm factorial(int n)                    /// Functia care returneaza factorialul unui numar si umple cu valori vectorului FactorialVector pe baza factorialului fiecarui numar
@@ -325,7 +316,7 @@ ScientificForm factorial(int n)                    /// Functia care returneaza f
     }
     return nr;
 }
-long double div_to_float(Fraction fr)
+long double div_to_float(FractionOld fr)
 {
     long double nr;
     fr = simplification(fr);
@@ -357,7 +348,7 @@ long double div_to_float(Fraction fr)
     }
     return nr;
 }
-ScientificForm div_int(Fraction fr)                /// In aceasta functie vrem sa returnam forma stiintifica a rezultatului real al lui x/y | This function returns scientific form of real result x/y
+ScientificForm div_int(FractionOld fr)
 {
     long double nr;
     ScientificForm n;
@@ -371,9 +362,9 @@ ScientificForm div_int(Fraction fr)                /// In aceasta functie vrem s
     n  = float_to_int(nr);
     return n;
 }
-Fraction int_div(ScientificForm n)
+FractionOld int_div(ScientificForm n)
 {
-    Fraction f;
+    FractionOld f;
     f.numerator = n.coefficient;
     f.denominator = 1;
     if(n.exponent == CINF)
@@ -446,7 +437,7 @@ ScientificForm CinScientificForm()
     }
     return f;
 }
-void CoutFraction(Fraction f)
+void CoutFraction(FractionOld f)
 {
     f = simplification(f);
     if(f.denominator == MINF)
@@ -471,9 +462,9 @@ void CoutIntNumber(__int128 n)
     else
         cout<<n;
 }
-Fraction CinFraction()
+FractionOld CinFraction()
 {
-    Fraction n;
+    FractionOld n;
     n.numerator   = CinIntNumber();
     n.denominator = CinIntNumber();
     n = simplification(n);
@@ -488,7 +479,7 @@ Fraction CinFraction()
     }
     return n;
 }
-void SameDenominator(Fraction &a, Fraction &b)
+void SameDenominator(FractionOld &a, FractionOld &b)
 {
     if( a.denominator != 0 && b.denominator != 0
        && !(a.numerator == INF || a.numerator <= MINF || a.denominator == INF || a.denominator <= MINF)
